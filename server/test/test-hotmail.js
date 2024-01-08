@@ -14,7 +14,7 @@ async function init({ chromePath, url }) {
   });
   const context = await browser.createIncognitoBrowserContext();
   const fbPage = await context.newPage();
-  fbPage.setViewport({ width: 1280, height: 900 });
+  fbPage.setViewport({ width: 300, height: 300 });
   await fbPage.goto(url);
   return { browser, fbPage, waitFor };
 }
