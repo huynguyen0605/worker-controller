@@ -84,6 +84,7 @@
     "antd": "^4.4.2",
     "axios": "^1.6.2",
     "beautify-json": "^1.0.1",
+    "cheerio": "^1.0.0-rc.12",
     "prop-types": "^15.7.2",
     "proxy-chain": "^2.4.0",
     "puppeteer-extra": "^3.3.6",
