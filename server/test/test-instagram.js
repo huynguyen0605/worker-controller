@@ -85,21 +85,20 @@ async function checkValidName(page) {
       // Wait until the element is present in the DOM
       const elementPresent = await page.waitForSelector(
         'body > div:nth-child(2) > div > div > div:nth-child(2) > div > div > div:nth-child(1) > section > main > div > div > div:nth-child(1) > div:nth-child(2) > form > div:nth-child(6) > div > div > span',
-        { timeout },
+        { timeout: 5000 },
       );
 
       // If the element is present, perform your actions here
       if (elementPresent) {
         const button = await page.waitForSelector(
           'body > div:nth-child(2) > div > div > div:nth-child(2) > div > div > div:nth-child(1) > section > main > div > div > div:nth-child(1) > div:nth-child(2) > form > div:nth-child(6) > div > div > div > button',
-          { timeout: 20000 },
+          { timeout: 5000 },
         );
         await button.click();
         await page.waitForTimeout(2000);
       }
     } catch (error) {
-      // Handle the case when the element is not found within the specified timeout
-      console.log('Element is no longer present. Exiting the loop.');
+      console.log('checkValidName: ', error);
       break;
     }
   }
@@ -184,23 +183,11 @@ async function getInstVeriCodeDouble(mailName, domain, oldCode) {
 
 /* =========================================== */
 
-
-// # 38.154.227.167:5868:mpdthaat:9bixgazxdtt6
-// # 185.199.229.156:7492:mpdthaat:9bixgazxdtt6
-// # 185.199.228.220:7300:mpdthaat:9bixgazxdtt6
-// # 185.199.231.45:8382:mpdthaat:9bixgazxdtt6
-// # 188.74.210.207:6286:mpdthaat:9bixgazxdtt6
-// # 188.74.183.10:8279:mpdthaat:9bixgazxdtt6
-// # 188.74.210.21:6100:mpdthaat:9bixgazxdtt6
-// # 45.155.68.129:8133:mpdthaat:9bixgazxdtt6
-// # 154.95.36.199:6893:mpdthaat:9bixgazxdtt6
-// # 45.94.47.66:8110:mpdthaat:9bixgazxdtt6
 async function init({ chromePath, url, proxyServer }) {
   let totalDownloadedSize = 0;
   // const oldProxyUrl = 'http://rsjfyami:y1psgav7cwfd@185.199.228.220:7300';
   const oldProxyUrl = 'http://mpdthaat:9bixgazxdtt6@45.94.47.66:8110'
   const newProxyUrl = await proxyChain.anonymizeProxy(oldProxyUrl);
-  // const newProxyUrl = "45.94.47.66:8110:mpdthaat:9bixgazxdtt6";
   const browser = await puppeteer.launch({
     executablePath: chromePath,
     headless: false,
@@ -210,7 +197,6 @@ async function init({ chromePath, url, proxyServer }) {
   // =================
 
   const page = await browser.newPage();
-  page.setViewport({ width: 1280, height: 800 });
   await page.goto(url);
   // Enable request interception
   await page.setRequestInterception(true);
@@ -252,34 +238,38 @@ async function init({ chromePath, url, proxyServer }) {
   await page.click(
     'body div:nth-child(2) > div > div > div:nth-child(2) > div > div > div:nth-child(1) > section > main > div > div > div:nth-child(1) div:nth-child(2) > form > div:nth-child(9) > div > button',
   );
-  await page.waitForTimeout(8000);
 
   // =================
 
-  await checkValidName(page);
   await page.waitForTimeout(8000);
+  await checkValidName(page);
+  await page.waitForTimeout(80000);
 
   // =================
 
   // Birthday verification
-  await page.select(
-    'body > div:nth-child(19) > div > div > div > div > div > section > main > div > div > div > div > div:nth-child(5) > div > div > span > span:nth-child(1) > select',
-    '5',
-  );
-  await page.select(
-    'body > div:nth-child(19) > div > div > div > div > div > section > main > div > div > div > div > div:nth-child(5) > div > div > span > span:nth-child(2) > select',
-    '10',
-  );
-  await page.select(
-    'body > div:nth-child(19) > div > div > div > div > div > section > main > div > div > div > div > div:nth-child(5) > div > div > span > span:nth-child(3) > select',
-    '27',
-  );
+  
+  // select date
+  await page.click('body > div:nth-child(2) > div > div > div:nth-child(2) > div > div > div:nth-child(1) > section > main > div > div > div:nth-child(1) > div > div:nth-child(4) > div > div > span > span:nth-child(1) > select');
+  await page.waitForSelector('body > div:nth-child(2) > div > div > div:nth-child(2) > div > div > div:nth-child(1) > section > main > div > div > div:nth-child(1) > div > div:nth-child(4) > div > div > span > span:nth-child(1) > select > option:nth-child(1)', { visible: true, timeout: 1000 });
+  await page.click('body > div:nth-child(2) > div > div > div:nth-child(2) > div > div > div:nth-child(1) > section > main > div > div > div:nth-child(1) > div > div:nth-child(4) > div > div > span > span:nth-child(1) > select');
+
+  // Select month
+  await page.click('body > div:nth-child(2) > div > div > div:nth-child(2) > div > div > div:nth-child(1) > section > main > div > div > div:nth-child(1) > div > div:nth-child(4) > div > div > span > span:nth-child(2) > select');
+  await page.waitForSelector('body > div:nth-child(2) > div > div > div:nth-child(2) > div > div > div:nth-child(1) > section > main > div > div > div:nth-child(1) > div > div:nth-child(4) > div > div > span > span:nth-child(2) > select > option:nth-child(10)', { visible: true, timeout: 1000 });
+  await page.click('body > div:nth-child(2) > div > div > div:nth-child(2) > div > div > div:nth-child(1) > section > main > div > div > div:nth-child(1) > div > div:nth-child(4) > div > div > span > span:nth-child(2) > select > option:nth-child(10)');
+
+  // Select year
+  await page.click('body > div:nth-child(2) > div > div > div:nth-child(2) > div > div > div:nth-child(1) > section > main > div > div > div:nth-child(1) > div > div:nth-child(4) > div > div > span > span:nth-child(3) > select');
+  await page.waitForSelector('body > div:nth-child(2) > div > div > div:nth-child(2) > div > div > div:nth-child(1) > section > main > div > div > div:nth-child(1) > div > div:nth-child(4) > div > div > span > span:nth-child(3) > select > option:nth-child(10)', { visible: true, timeout: 1000 });
+  await page.click('body > div:nth-child(2) > div > div > div:nth-child(2) > div > div > div:nth-child(1) > section > main > div > div > div:nth-child(1) > div > div:nth-child(4) > div > div > span > span:nth-child(3) > select > option:nth-child(10)');
 
   await page.click(
-    'body > div:nth-child(19) > div > div > div > div > div > section > main > div > div > div > div > div:nth-child(7) > button',
+    'body > div:nth-child(2) > div > div > div:nth-child(2) > div > div > div:nth-child(1) > section > main > div > div > div:nth-child(1) > div > div:nth-child(6) > button',
   );
   await page.waitForTimeout(3000);
 
+  // get info 
   const fMail = fake_email.split('@');
   const mailName = fMail[0];
   const domain = fMail[1];
@@ -289,10 +279,13 @@ async function init({ chromePath, url, proxyServer }) {
   await page.waitForTimeout(10000);
 
   // Accepting the notifications.
-  await page.click('body > div:nth-child(38) > div > div > div > div > div > button:nth-child(2)');
-  await page.waitForTimeout(2000);
+  await page.click('html > body > div:nth-child(4) > div > div > div > div:nth-child(3) > button:nth-child(2)');
+  await page.waitForTimeout(20000);
 
   // Logout
+  await page.click('#react-root > section > nav > div:nth-child(2) > div > div > div:nth-child(3) > div > div:nth-child(5) > span > img');
+  await page.click('#react-root > section > nav > div:nth-child(2) > div > div > div:nth-child(3) > div > div:nth-child(5) > div:nth-child(2) > div:nth-child(2) > div:nth-child(2) > div:nth-child(2) > div');
+
   await page.click(
     '#react-root > section > nav > div:nth-child(2) > div > div > div:nth-child(3) > div > div:nth-child(5) > span > img',
   );
@@ -335,7 +328,7 @@ async function init({ chromePath, url, proxyServer }) {
 (async () => {
   // for(let i = 0; i <= 1000; i++ ) {
   await init({
-    chromePath: 'C://Program Files/Google/Chrome/Application/chrome.exe',
+    chromePath: 'C:\Users\nguye\OneDrive\Documents\Projects\instagram-auto-create-account\chromedriver.exe',
     url: 'https://www.instagram.com/accounts/emailsignup/',
     proxyServer: 'http://rsjfyami:y1psgav7cwfd@38.154.227.167:5868',
   });
