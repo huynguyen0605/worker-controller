@@ -9,8 +9,12 @@ const Process = () => {
   const [form] = Form.useForm();
   const getData = useCallback(() => {
     (async () => {
-      const cls = await doGet('/processes', { page: 1, pageSize: 100 });
-      setProcesses(cls.data);
+      try {
+        const cls = await doGet('/processes', { page: 1, pageSize: 100 });
+        setProcesses(cls.data);
+      } catch (error) {
+        console.log('get processes error', error.message);
+      }
     })();
   }, []);
   useEffect(() => {
@@ -18,8 +22,12 @@ const Process = () => {
   }, []);
 
   useEffect(async () => {
-    const ints = await doGet('/interactions', { page: 1, pageSize: 1000 });
-    setInteractions(ints.data);
+    try {
+      const ints = await doGet('/interactions', { page: 1, pageSize: 1000 });
+      setInteractions(ints.data);
+    } catch (error) {
+      console.log('get interactions error', error.message);
+    }
   }, []);
 
   const [selectingInteraction, setSelectingInteraction] = useState();

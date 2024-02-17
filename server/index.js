@@ -1,41 +1,14 @@
 const express = require('express');
-const sqlite3 = require('sqlite3').verbose();
 const bodyParser = require('body-parser');
 
 const app = express();
 const port = 3000;
 
-// Create or open a SQLite database
-const db = new sqlite3.Database('database.db');
-
-db.serialize(() => {
-  db.run(`CREATE TABLE IF NOT EXISTS interactions (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      name TEXT,
-      content TEXT,
-      params TEXT
-  )`);
-
-  db.run(`CREATE TABLE IF NOT EXISTS processes (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      name TEXT,
-      interactions TEXT
-  )`);
-
-  db.run(`CREATE TABLE IF NOT EXISTS clients (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      name TEXT
-  )`);
-
-  db.run(`CREATE TABLE IF NOT EXISTS configurations (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      process_id INTEGER,
-      client_id INTEGER,
-      FOREIGN KEY(process_id) REFERENCES processes(id),
-      FOREIGN KEY(client_id) REFERENCES clients(id)
-  )`);
-});
-
+const mongoose = require('mongoose');
+(async () => {
+  console.log('huynvq::===========>connect mongo');
+  await mongoose.connect('mongodb://127.0.0.1:27017/worker-management');
+})();
 // Middleware to parse JSON requests
 app.use(bodyParser.json());
 
@@ -46,9 +19,9 @@ app.use((req, res, next) => {
   next();
 });
 
-require('./routes/clients')(app, db);
-require('./routes/interactions')(app, db);
-require('./routes/processes')(app, db);
+require('./routes/clients')(app);
+require('./routes/interactions')(app);
+require('./routes/processes')(app);
 
 // Start the server
 app.listen(port, () => {
