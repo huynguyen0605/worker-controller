@@ -7,106 +7,101 @@ const Process = () => {
   const [processes, setProcesses] = useState([]);
   const [interactions, setInteractions] = useState([]);
   const [form] = Form.useForm();
-  const getData = useCallback(() => {
-    (async () => {
-      try {
-        const cls = await doGet('/processes', { page: 1, pageSize: 100 });
-        setProcesses(cls.data);
-      } catch (error) {
-        console.log('get processes error', error.message);
-      }
-    })();
-  }, []);
   useEffect(() => {
+    async function getData() {
+      const cls = await doGet('/processes', { page: 1, pageSize: 100 });
+      setProcesses(cls.data);
+    }
     getData();
   }, []);
 
-  useEffect(async () => {
-    try {
+  useEffect(() => {
+    async function getData() {
       const ints = await doGet('/interactions', { page: 1, pageSize: 1000 });
       setInteractions(ints.data);
-    } catch (error) {
-      console.log('get interactions error', error.message);
     }
+    getData();
   }, []);
 
   const [selectingInteraction, setSelectingInteraction] = useState();
 
   return (
     <PageLayout title="Quy trình">
-      <Form
-        form={form}
-        onFinish={async (values) => {
-          await doPost('/processes', values);
-          await getData();
-          form.resetFields();
-        }}
-      >
-        <Space direction="row">
-          <Form.Item name="name">
-            <Input placeholder="Tên quy trình" />
-          </Form.Item>
-          <Form.Item name="interactions">
-            <Select
-              value={selectingInteraction}
-              onChange={(value) => setSelectingInteraction(value)}
-              style={{ width: 200 }}
-            >
-              {interactions.map((interaction) => (
-                <Select.Option key={interaction.name} value={interaction.id}>
-                  {interaction.name}
-                </Select.Option>
-              ))}
-            </Select>
-          </Form.Item>
-          <Button type="primary" onClick={() => form.submit()}>
-            Thêm
-          </Button>
-        </Space>
-      </Form>
+      <>
+        <Form
+          form={form}
+          onFinish={async (values) => {
+            await doPost('/processes', values);
+            await getData();
+            form.resetFields();
+          }}
+        >
+          <Space direction="row">
+            <Form.Item name="name">
+              <Input placeholder="Tên quy trình" />
+            </Form.Item>
+            <Form.Item name="interactions">
+              <Select
+                value={selectingInteraction}
+                onChange={(value) => setSelectingInteraction(value)}
+                style={{ width: 200 }}
+              >
+                {interactions.map((interaction) => (
+                  <Select.Option key={interaction.name} value={interaction.id}>
+                    {interaction.name}
+                  </Select.Option>
+                ))}
+              </Select>
+            </Form.Item>
+            <Button type="primary" onClick={() => form.submit()}>
+              Thêm
+            </Button>
+          </Space>
+        </Form>
 
-      <Table
-        columns={[
-          {
-            title: 'STT',
-            align: 'center',
-            width: 90,
-            render: (value, record, index) => index + 1,
-          },
-          {
-            title: 'Tên',
-            align: 'left',
-            render: (value, record, index) => record.name,
-          },
-          {
-            title: 'Danh sách thao tác',
-            align: 'left',
-            render: (value, record, index) => record.interactions,
-          },
-          {
-            title: 'Thao tác',
-            align: 'left',
-            render: (value, record, index) => {
-              return (
-                <Space>
-                  <Button
-                    type="ghost"
-                    danger
-                    onClick={async () => {
-                      await doDelete(`/processes/${record.id}`);
-                      await getData();
-                    }}
-                  >
-                    Xóa
-                  </Button>
-                </Space>
-              );
+        <Table
+          columns={[
+            {
+              title: 'STT',
+              align: 'center',
+              width: 90,
+              render: (value, record, index) => index + 1,
             },
-          },
-        ]}
-        rowKey={'id'}
-        dataSource={processes}
-      />
+            {
+              title: 'Tên',
+              align: 'left',
+              render: (value, record, index) => record.name,
+            },
+            {
+              title: 'Danh sách thao tác',
+              align: 'left',
+              render: (value, record, index) => record.interactions,
+            },
+            {
+              title: 'Thao tác',
+              align: 'left',
+              render: (value, record, index) => {
+                return (
+                  <Space>
+                    <Button
+                      type="ghost"
+                      danger
+                      onClick={async () => {
+                        await doDelete(`/processes/${record.id}`);
+                        await getData();
+                      }}
+                    >
+                      Xóa
+                    </Button>
+                  </Space>
+                );
+              },
+            },
+          ]}
+          rowKey={'_id'}
+          dataSource={processes}
+        />
+      </>
     </PageLayout>
   );
 };
