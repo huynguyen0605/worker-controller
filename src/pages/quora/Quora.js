@@ -65,6 +65,12 @@ const Quora = () => {
               key: 'keyword',
             },
             {
+              title: 'Số lượng comment',
+              dataIndex: 'number_of_comment',
+              width: 100,
+              key: 'number_of_comment',
+            },
+            {
               title: 'Nội dung câu hỏi',
               dataIndex: 'title',
               key: 'title',
@@ -106,21 +112,25 @@ const Quora = () => {
             {
               title: 'Reply',
               width: 600,
-              render: (value, record) => (
-                <Form form={form} onFinish={(values) => handleReply(record._id, values.content)}>
-                  <Form.Item name="content">
-                    <Input.TextArea
-                      placeholder="Nhập phản hồi"
-                      autoSize={{ minRows: 3, maxRows: 20 }}
-                    />
-                  </Form.Item>
-                  <Form.Item>
-                    <Button type="primary" htmlType="submit">
-                      Phản hồi
-                    </Button>
-                  </Form.Item>
-                </Form>
-              ),
+              render: (value, record) => {
+                return record?.reply ? (
+                  <div>{record?.reply}</div>
+                ) : (
+                  <Form form={form} onFinish={(values) => handleReply(record._id, values.content)}>
+                    <Form.Item name="content">
+                      <Input.TextArea
+                        placeholder="Nhập phản hồi"
+                        autoSize={{ minRows: 3, maxRows: 20 }}
+                      />
+                    </Form.Item>
+                    <Form.Item>
+                      <Button type="primary" htmlType="submit">
+                        Phản hồi
+                      </Button>
+                    </Form.Item>
+                  </Form>
+                );
+              },
             },
             // Add more columns as needed
             {

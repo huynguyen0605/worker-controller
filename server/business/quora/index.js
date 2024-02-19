@@ -1,4 +1,5 @@
 const Quora = require('./model');
+const Job = require('../jobs/model');
 
 const quoras = (app) => {
   app.get('/api/quoras', async (req, res) => {
@@ -46,7 +47,35 @@ const quoras = (app) => {
 
   app.post('/api/quoras-reply/:id', async (req, res) => {
     try {
-    } catch (error) {}
+      const { id } = req.params;
+      const { content } = req.body;
+      const quora = await Quora.findById(id);
+
+      const {
+        keyword,
+        title,
+        url,
+        status,
+        number_of_upvote,
+        number_of_comment,
+        client_id,
+        client_name,
+      } = quora;
+
+      await Job.create({
+        name: `${url}`,
+        status: 'iddle',
+        code: `console.log('hello world') ${content}`,
+        client_id,
+        client_name,
+      });
+
+      await Quora.findByIdAndUpdate(id, { reply: content });
+
+      res.status(200).json(true);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
   });
 
   // PUT (update) Quora by ID
