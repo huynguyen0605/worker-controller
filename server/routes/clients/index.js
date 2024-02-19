@@ -12,7 +12,7 @@ async function updateClients() {
       { $set: { available: true } },
     );
 
-    console.log(`${result} clients updated to available=true.`);
+    console.log(`${result.modifiedCount} clients updated to available=true.`);
   } catch (error) {
     console.error('Error updating clients:', error);
   }

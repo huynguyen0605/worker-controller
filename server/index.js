@@ -22,6 +22,8 @@ app.use((req, res, next) => {
 require('./routes/clients')(app);
 require('./routes/interactions')(app);
 require('./routes/processes')(app);
+require('./business/jobs')(app);
+require('./business/quora')(app);
 
 // Start the server
 app.listen(port, () => {
