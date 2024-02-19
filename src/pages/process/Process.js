@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { Table, Form, Input, Space, Button, Select } from 'antd';
+import { Table, Form, Input, Space, Button, Select, Tag } from 'antd';
 import PageLayout from '../../layout/PageLayout';
 import { doGet, doPost, doDelete } from '../../service';
 
@@ -7,12 +7,12 @@ const Process = () => {
   const [processes, setProcesses] = useState([]);
   const [interactions, setInteractions] = useState([]);
   const [form] = Form.useForm();
+  async function getDataProcess() {
+    const cls = await doGet('/processes', { page: 1, pageSize: 100 });
+    setProcesses(cls.data);
+  }
   useEffect(() => {
-    async function getData() {
-      const cls = await doGet('/processes', { page: 1, pageSize: 100 });
-      setProcesses(cls.data);
-    }
-    getData();
+    getDataProcess();
   }, []);
 
   useEffect(() => {
@@ -25,29 +25,26 @@ const Process = () => {
 
   const [selectingInteraction, setSelectingInteraction] = useState();
 
+  const handleFormSubmit = async (values) => {
+    const { interactions, ...restValues } = values;
+
+    await doPost('/processes', { ...restValues, interactions: interactions });
+    await getDataProcess();
+    form.resetFields();
+  };
+
   return (
     <PageLayout title="Quy trình">
       <>
-        <Form
-          form={form}
-          onFinish={async (values) => {
-            await doPost('/processes', values);
-            await getData();
-            form.resetFields();
-          }}
-        >
+        <Form form={form} onFinish={handleFormSubmit}>
           <Space direction="row">
             <Form.Item name="name">
               <Input placeholder="Tên quy trình" />
             </Form.Item>
             <Form.Item name="interactions">
-              <Select
-                value={selectingInteraction}
-                onChange={(value) => setSelectingInteraction(value)}
-                style={{ width: 200 }}
-              >
+              <Select mode="multiple" style={{ width: '200px' }} placeholder="Chọn thao tác">
                 {interactions.map((interaction) => (
-                  <Select.Option key={interaction.name} value={interaction.id}>
+                  <Select.Option key={interaction._id} value={interaction._id}>
                     {interaction.name}
                   </Select.Option>
                 ))}
@@ -75,7 +72,34 @@ const Process = () => {
             {
               title: 'Danh sách thao tác',
               align: 'left',
-              render: (value, record, index) => record.interactions,
+              render: (value, record, index) => {
+                return (
+                  <div>
+                    {record.interactions ? (
+                      record.interactions.map((interaction) => interaction.name).join('|')
+                    ) : (
+                      <></>
+                    )}
+                  </div>
+                );
+              },
+            },
+            {
+              title: 'Tag',
+              align: 'left',
+              render: (value, record, index) => {
+                return (
+                  <div>
+                    {record?.is_primary ? (
+                      <>
+                        <Tag style={{ background: 'green', color: 'white' }}>Mặc định</Tag>
+                      </>
+                    ) : (
+                      <></>
+                    )}
+                  </div>
+                );
+              },
             },
             {
               title: 'Thao tác',
@@ -84,11 +108,20 @@ const Process = () => {
                 return (
                   <Space>
                     <Button
+                      type="primary"
+                      onClick={async () => {
+                        await doPost(`/default-process?process_id=${record._id}`);
+                        await getDataProcess();
+                      }}
+                    >
+                      Đặt làm mặc định
+                    </Button>
+                    <Button
                       type="ghost"
                       danger
                       onClick={async () => {
-                        await doDelete(`/processes/${record.id}`);
-                        await getData();
+                        await doDelete(`/processes/${record._id}`);
+                        await getDataProcess();
                       }}
                     >
                       Xóa

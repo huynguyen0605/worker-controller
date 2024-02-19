@@ -1,5 +1,35 @@
 const Processes = require('./model');
 const processes = (app) => {
+  app.get('/api/default-process', async (req, res) => {
+    try {
+      const defaultProcess = await Processes.findOne({
+        is_primary: true,
+      }).populate('interactions');
+
+      return res.json(defaultProcess);
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+  app.post('/api/default-process', async (req, res) => {
+    try {
+      const { process_id } = req.query;
+      await Processes.updateMany(
+        {
+          is_primary: true,
+        },
+        {
+          is_primary: false,
+        },
+      );
+      await Processes.findByIdAndUpdate(process_id, {
+        is_primary: true,
+      });
+      res.json(true);
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  });
   // Get paginated list of processes
   app.get('/api/processes', async (req, res) => {
     const { page, pageSize } = req.query;
@@ -40,7 +70,9 @@ const processes = (app) => {
         return;
       }
 
+      console.log('huynvq::======>create process');
       const newProcesses = await Processes.create({ name, interactions });
+      console.log('huynvq::======>created process', newProcesses);
       res.json({ id: newProcesses._id });
     } catch (err) {
       res.status(500).json({ error: err.message });

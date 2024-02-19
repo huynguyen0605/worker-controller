@@ -1,18 +1,40 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import PageLayout from '../../layout/PageLayout';
-import { doGet, doPost, doDelete } from '../../service';
-import { Table, Form, Input, Space, Button } from 'antd';
+import { doGet, doPost, doPut, doDelete } from '../../service';
+import { Table, Form, Input, Space, Button, Modal } from 'antd';
 
 const Interaction = () => {
   const [interactions, setInteractions] = useState([]);
   const [form] = Form.useForm();
+  async function getData() {
+    const cls = await doGet('/interactions', { page: 1, pageSize: 100 });
+    setInteractions(cls.data);
+  }
   useEffect(() => {
-    async function getData() {
-      const cls = await doGet('/interactions', { page: 1, pageSize: 100 });
-      setInteractions(cls.data);
-    }
     getData();
   }, []);
+
+  const [editingInteraction, setEditingInteraction] = useState(null);
+  const handleEditClick = (record) => {
+    setEditingInteraction(record);
+    form.setFieldsValue(record);
+  };
+  const handleEditCancel = () => {
+    setEditingInteraction(null);
+    form.resetFields();
+  };
+
+  const handleEditSubmit = async () => {
+    try {
+      const values = await form.validateFields();
+      await doPut(`/interactions/${editingInteraction._id}`, values);
+      await getData();
+      handleEditCancel();
+    } catch (error) {
+      console.error('Validation failed', error);
+    }
+  };
+
   return (
     <PageLayout title="Thao tác">
       <>
@@ -69,11 +91,14 @@ const Interaction = () => {
               render: (value, record, index) => {
                 return (
                   <Space>
+                    <Button type="primary" onClick={() => handleEditClick(record)}>
+                      Sửa
+                    </Button>
                     <Button
                       type="ghost"
                       danger
                       onClick={async () => {
-                        await doDelete(`/interactions/${record.id}`);
+                        await doDelete(`/interactions/${record._id}`);
                         await getData();
                       }}
                     >
@@ -88,6 +113,24 @@ const Interaction = () => {
           dataSource={interactions}
         />
       </>
+      <Modal
+        title="Sửa thao tác"
+        visible={!!editingInteraction}
+        onCancel={handleEditCancel}
+        onOk={handleEditSubmit}
+      >
+        <Form form={form} initialValues={editingInteraction}>
+          <Form.Item name="name" label="Tên thao tác">
+            <Input />
+          </Form.Item>
+          <Form.Item name="content" label="Code thao tác">
+            <Input />
+          </Form.Item>
+          <Form.Item name="params" label="Danh sách tham số bổ sung">
+            <Input />
+          </Form.Item>
+        </Form>
+      </Modal>
     </PageLayout>
   );
 };

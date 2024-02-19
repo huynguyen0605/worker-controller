@@ -11,6 +11,9 @@ export const doGet = async (path, params) => {
 export const doPost = async (path, body) => {
   return await axios.post(`${baseUrl}${path}`, body);
 };
+export const doPut = async (path, body) => {
+  return await axios.put(`${baseUrl}${path}`, body);
+};
 
 export const doDelete = async (path, body) => {
   return await axios.delete(`${baseUrl}${path}`, body);

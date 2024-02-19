@@ -6,11 +6,11 @@ import { Table, Form, Input, Space, Button } from 'antd';
 const Client = () => {
   const [clients, setClients] = useState([]);
   const [form] = Form.useForm();
+  async function getData() {
+    const cls = await doGet('/clients', { page: 1, pageSize: 100 });
+    setClients(cls.data);
+  }
   useEffect(() => {
-    async function getData() {
-      const cls = await doGet('/clients', { page: 1, pageSize: 100 });
-      setClients(cls.data);
-    }
     getData();
   }, []);
   return (
@@ -58,7 +58,7 @@ const Client = () => {
                       type="ghost"
                       danger
                       onClick={async () => {
-                        await doDelete(`/clients/${record.id}`);
+                        await doDelete(`/clients/${record._id}`);
                         await getData();
                       }}
                     >
