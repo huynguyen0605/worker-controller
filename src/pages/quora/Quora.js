@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Table, Form, Input, Space, Button, message, Modal, Tag } from 'antd';
 import PageLayout from '../../layout/PageLayout';
 import { doGet, doPost, doDelete } from '../../service'; // Adjust the path based on your project structure
+import TextEditor from '../../components/TextEditor';
 
 const Quora = () => {
   const [quoras, setQuoras] = useState([]);
@@ -19,10 +20,10 @@ const Quora = () => {
   const handleReply = async (quoraId, replyContent) => {
     try {
       await doPost(`/quoras-reply/${quoraId}`, { content: replyContent });
-      message.success('Reply posted successfully!');
+      message.success('Reply thành công');
       await getQuoras();
     } catch (error) {
-      message.error('Failed to post reply. Please try again.');
+      message.error('Reply lỗi ' + error.message);
     }
   };
 
@@ -40,7 +41,7 @@ const Quora = () => {
       formAdd.resetFields();
       setIsModalVisible(false);
     } catch (error) {
-      message.error(error.message);
+      message.error('Lưu lỗi ' + error.message);
     }
   };
 
@@ -118,10 +119,11 @@ const Quora = () => {
                 ) : (
                   <Form form={form} onFinish={(values) => handleReply(record._id, values.content)}>
                     <Form.Item name="content">
-                      <Input.TextArea
+                      <TextEditor placeholder="Nhập phản hồi" />
+                      {/* <Input.TextArea
                         placeholder="Nhập phản hồi"
                         autoSize={{ minRows: 3, maxRows: 20 }}
-                      />
+                      /> */}
                     </Form.Item>
                     <Form.Item>
                       <Button type="primary" htmlType="submit">

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Layout, Menu } from 'antd';
+import { Divider, Layout, Menu, Space, Tag } from 'antd';
 import { Link } from 'react-router-dom';
 import {
   HomeOutlined,
@@ -8,6 +8,8 @@ import {
   ContactsOutlined,
   WechatOutlined,
   SisternodeOutlined,
+  AccountBookOutlined,
+  TagOutlined,
 } from '@ant-design/icons';
 import './MainLayout.less';
 
@@ -62,12 +64,12 @@ export default class MainLayout extends React.Component {
                 <span className="menu-item-link">Quy trình</span>
               </Link>
             </Menu.Item>
-            <Menu.Item key="3">
-              <Link to="/configuration">
-                <ContactsOutlined />
-                <span className="menu-item-link">Cấu hình</span>
-              </Link>
-            </Menu.Item>
+
+            <Space direction="horizontal">
+              <Divider />
+              Nghiệp vụ
+              <Divider />
+            </Space>
             <Menu.Item key="4">
               <Link to="/job">
                 <SisternodeOutlined />
@@ -78,6 +80,18 @@ export default class MainLayout extends React.Component {
               <Link to="/quora">
                 <WechatOutlined />
                 <span className="menu-item-link">Quora</span>
+              </Link>
+            </Menu.Item>
+            <Menu.Item key="6">
+              <Link to="/account">
+                <AccountBookOutlined />
+                <span className="menu-item-link">Tài khoản</span>
+              </Link>
+            </Menu.Item>
+            <Menu.Item key="7">
+              <Link to="/tag">
+                <TagOutlined />
+                <span className="menu-item-link">Tag</span>
               </Link>
             </Menu.Item>
           </Menu>

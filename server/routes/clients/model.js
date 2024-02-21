@@ -4,6 +4,11 @@ const ClientSchema = new mongoose.Schema(
   {
     name: { type: String },
     available: { type: Boolean, default: true },
+    process: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'processes',
+      unique: true, // Ensures that each client has at most one associated process
+    },
   },
   {
     timestamps: true,
