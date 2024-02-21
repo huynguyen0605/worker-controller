@@ -8,7 +8,7 @@ const Quora = () => {
   const [quoras, setQuoras] = useState([]);
 
   async function getQuoras() {
-    const response = await doGet('/quoras', { page: 1, pageSize: 10 }); // Adjust the API endpoint and parameters as needed
+    const response = await doGet('/quoras', { page: 1, pageSize: 1000 }); // Adjust the API endpoint and parameters as needed
     setQuoras(response.data);
   }
 

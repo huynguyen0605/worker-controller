@@ -45,6 +45,17 @@ const quoras = (app) => {
     }
   });
 
+  app.post('/api/quoras-bulk', async (req, res) => {
+    const quoraData = req.body;
+
+    try {
+      const quora = await Quora.insertMany(quoraData);
+      res.status(201).json(quora);
+    } catch (error) {
+      res.status(400).json({ error: error.message });
+    }
+  });
+
   app.post('/api/quoras-reply/:id', async (req, res) => {
     try {
       const { id } = req.params;
