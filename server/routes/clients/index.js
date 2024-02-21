@@ -1,10 +1,13 @@
+const Interaction = require('../interactions/model');
 const Client = require('./model');
 const cron = require('node-cron');
 
 /**update to true if client idle for 20 minutes */
 async function updateClients() {
   try {
-    const tenMinutesAgo = new Date(Date.now() - 20 * 60 * 1000);
+    const tenMinutesAgo = new Date(Date.now() - 5 * 60 * 1000);
+
+    console.log('tenMinutesAgo', tenMinutesAgo);
 
     // Update clients where available is false and updatedAt is more than 10 minutes old
     const result = await Client.updateMany(
@@ -19,7 +22,7 @@ async function updateClients() {
 }
 
 // Schedule the update to run every 10 minutes
-cron.schedule('*/10 * * * *', () => {
+cron.schedule('*/1 * * * *', () => {
   console.log('Running client update job...');
   updateClients();
 });
@@ -30,27 +33,32 @@ const clients = (app) => {
       const { name: queryName } = req.query;
       let name = 'default';
       if (queryName) name = queryName;
+      const cleanedName = name.replace(/\d+$/, '');
 
       const client = await Client.findOne({
-        name: { $regex: `^${name}\\d*$` },
+        name: { $regex: `^${cleanedName}\\d*$` },
         available: true,
       });
       if (!client) {
         //find lastest name client exists
+
+        console.log('cleanedName', cleanedName);
+
         const largestClient = await Client.findOne(
-          { name: { $regex: `^${name}\\d*$` } },
+          { name: { $regex: `^${cleanedName}\\d*$` } },
           {},
           { sort: { name: -1 } },
         );
-        let newClientName = `${name}`;
+        let newClientName = `${cleanedName}`;
         if (largestClient) {
           // If there are existing clients with the same prefix, extract the number and increment it
-          const existingNumber = parseInt(largestClient.name.replace(name, ''), 10) || 0;
-          newClientName = `${name}${existingNumber + 1}`;
+          const existingNumber = parseInt(largestClient.name.replace(cleanedName, ''), 10) || 0;
+          newClientName = `${cleanedName}${existingNumber + 1}`;
         }
-        const newClient = await Client.create({ name: newClientName });
+        const newClient = await Client.create({ name: newClientName, available: false });
         res.json(newClient);
       } else {
+        await client.updateOne({ available: false });
         res.json(client);
       }
     } catch (error) {
@@ -73,13 +81,40 @@ const clients = (app) => {
     }
   });
 
+  app.get('/api/client-by-name', async (req, res) => {
+    try {
+      const { clientName } = req.query;
+      const client = await Client.findOne({ name: clientName }).populate('process');
+
+      if (client) {
+        if (client.process) {
+          const interactions = await Interaction.find({
+            _id: { $in: client.process.interactions },
+          });
+
+          // Now 'interactions' contains the populated data for the interactions
+          client.process.interactions = interactions;
+        }
+        res.json(client);
+      } else {
+        console.log(`============>/api/client-by-name client not found ${name}`);
+        res.status(500).json({ error: `Không tìm thấy client ${name}` });
+      }
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
   // Get paginated list of clients
   app.get('/api/clients', async (req, res) => {
     const { page, pageSize } = req.query;
     const offset = (page - 1) * pageSize;
 
     try {
-      const clients = await Client.find().skip(offset).limit(parseInt(pageSize));
+      const clients = await Client.find()
+        .populate('process')
+        .skip(offset)
+        .limit(parseInt(pageSize));
       res.json(clients);
     } catch (err) {
       res.status(500).json({ error: err.message });
@@ -115,6 +150,21 @@ const clients = (app) => {
       res.json({ id: newClient._id });
     } catch (err) {
       res.status(500).json({ error: err.message });
+    }
+  });
+
+  app.put('/api/clients/:id', async (req, res) => {
+    const { id } = req.params;
+    const data = req.body;
+
+    try {
+      const updated = await Client.findByIdAndUpdate(id, data, { new: true });
+      if (!updated) {
+        return res.status(404).json({ error: 'Client not found' });
+      }
+      res.json(updated);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
     }
   });
 };

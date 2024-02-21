@@ -23,8 +23,6 @@ const Process = () => {
     getData();
   }, []);
 
-  const [selectingInteraction, setSelectingInteraction] = useState();
-
   const handleFormSubmit = async (values) => {
     const { interactions, ...restValues } = values;
 
@@ -76,7 +74,7 @@ const Process = () => {
                 return (
                   <div>
                     {record.interactions ? (
-                      record.interactions.map((interaction) => interaction.name).join('|')
+                      record.interactions.map((interaction) => interaction.name).join('🫡🫡')
                     ) : (
                       <></>
                     )}

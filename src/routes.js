@@ -6,9 +6,10 @@ import RouteWithSubRoutes from './RouteWithSubRoutes';
 const Interaction = lazy(() => import('pages/interaction/Interaction'));
 const Process = lazy(() => import('pages/process/Process'));
 const Client = lazy(() => import('pages/client/Client'));
-const Configuration = lazy(() => import('pages/configuration/Configuration.js'));
 const Quora = lazy(() => import('pages/quora/Quora.js'));
 const Job = lazy(() => import('pages/job/Job.js'));
+const Account = lazy(() => import('pages/account/Account.js'));
+const Tag = lazy(() => import('pages/tag/Tag.js'));
 
 const routes = [
   {
@@ -24,16 +25,20 @@ const routes = [
     component: Process,
   },
   {
-    path: '/configuration',
-    component: Configuration,
-  },
-  {
     path: '/job',
     component: Job,
   },
   {
     path: '/quora',
     component: Quora,
+  },
+  {
+    path: '/account',
+    component: Account,
+  },
+  {
+    path: '/tag',
+    component: Tag,
   },
 ];
 

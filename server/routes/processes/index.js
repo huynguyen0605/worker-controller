@@ -1,3 +1,4 @@
+const Client = require('../clients/model');
 const Processes = require('./model');
 const processes = (app) => {
   app.get('/api/default-process', async (req, res) => {
