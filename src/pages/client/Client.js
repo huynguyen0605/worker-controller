@@ -43,6 +43,7 @@ const Client = () => {
         </Form>
 
         <Table
+          bordered
           pagination={{
             pageSize: 20,
           }}

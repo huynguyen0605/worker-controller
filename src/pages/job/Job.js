@@ -22,6 +22,7 @@ const Jobs = () => {
     <PageLayout title="Job List">
       <>
         <Table
+          bordered
           columns={[
             {
               title: 'Name',

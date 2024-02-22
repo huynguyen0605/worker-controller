@@ -40,7 +40,8 @@ const processes = (app) => {
       const processes = await Processes.find()
         .populate('interactions')
         .skip(offset)
-        .limit(parseInt(pageSize));
+        .limit(parseInt(pageSize))
+        .sort({ sort: 'asc' });
       res.json(processes);
     } catch (err) {
       res.status(500).json({ error: err.message });

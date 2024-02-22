@@ -63,6 +63,7 @@ const Interaction = () => {
         </Form>
 
         <Table
+          bordered
           columns={[
             {
               title: 'STT',
@@ -84,6 +85,26 @@ const Interaction = () => {
               title: 'Danh sách tham số bổ sung',
               align: 'left',
               render: (value, record, index) => record.params,
+            },
+            {
+              title: 'Sort',
+              align: 'left',
+              width: 90,
+              render: (value, record, index) => {
+                return (
+                  <Input
+                    defaultValue={record.sort}
+                    onPressEnter={async (e) => {
+                      await doPut(`/interactions/${record._id}`, {
+                        ...record,
+                        sort: e.target.value,
+                      });
+                      await getData();
+                      message.success('Cập nhật thứ tự thành công');
+                    }}
+                  />
+                );
+              },
             },
             {
               title: 'Thao tác',

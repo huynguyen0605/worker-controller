@@ -8,10 +8,8 @@ async function init({ chromePath, url }) {
     });
   };
   const browser = await puppeteer.launch({
-    // defaultViewport: { width: 500, height: 500 },
     executablePath: chromePath,
     headless: false,
-    // args:["--window-size=500,500"],
   });
   const page = await browser.newPage();
   await page.goto(url);
@@ -19,21 +17,18 @@ async function init({ chromePath, url }) {
 }
 
 async function syncQuoraQuestion({ page, waitFor }) {
-  /* ==================== login ==================== */
   const email = 'alexgootvn@gmail.com';
   const password = 'Loginquora1';
-  // enter email
   const emailSelector = 'input[id="email"]';
   await page.waitForSelector(emailSelector);
   await page.type(emailSelector, email);
-  // enter password
   const passwordSelector = 'input[id="password"]';
   await page.waitForSelector(passwordSelector);
   await page.type(passwordSelector, password);
-  // click login button
-  const loginBtnSelector = '#root > div > div:nth-child(2) > div > div > div > div > div > div:nth-child(2) > div:nth-child(2) > div:nth-child(4) > button';
+  const loginBtnSelector =
+    '#root > div > div:nth-child(2) > div > div > div > div > div > div:nth-child(2) > div:nth-child(2) > div:nth-child(4) > button';
   const loginBtn = await page.$(loginBtnSelector);
-  while(true) {
+  while (true) {
     const isDisabled = await page.evaluate((button) => button.disabled, loginBtn);
     if (!isDisabled) {
       await page.click(loginBtnSelector);
@@ -43,32 +38,27 @@ async function syncQuoraQuestion({ page, waitFor }) {
     }
   }
   await page.click(loginBtnSelector);
-  
-  /* ==================== wait page loading ==================== */
   const waitPageLoading = async () => {
     await page.waitForSelector('#mainContent');
     await waitFor(5000);
-    const scrollDuration = 10 * 1000; // 10 seconds in milliseconds
-    const scrollInterval = 1000; // Scroll every 1 second
+    const scrollDuration = 10 * 1000;
+    const scrollInterval = 1000;
     const startTime = Date.now();
     let currentTime = startTime;
     while (currentTime - startTime < scrollDuration) {
       await page.evaluate(() => {
         window.scrollBy(0, window.innerHeight);
       });
-      await page.waitForTimeout(scrollInterval);
+      waitFor(scrollInterval);
       currentTime = Date.now();
     }
-  }
-  
-  /* ==================== sync question ==================== */
+  };
   const syncQuestion = async () => {
     const newFeedWrapperSelector = '#mainContent > div > div';
     const newFeedWrapper = await page.$(newFeedWrapperSelector);
     if (newFeedWrapper) {
       const childElements = await newFeedWrapper.$$('div');
       const newFeedChildrens = [];
-      // get newfeed component
       for (const childElement of childElements) {
         const isDirectChild = await page.evaluate(
           (childElement, newFeedWrapperSelector) => {
@@ -77,24 +67,24 @@ async function syncQuoraQuestion({ page, waitFor }) {
             return parentElement === newFeedWrapper;
           },
           childElement,
-          newFeedWrapperSelector
+          newFeedWrapperSelector,
         );
         if (isDirectChild) {
           newFeedChildrens.push(childElement);
         }
       }
-      
-      if(Array.isArray(newFeedChildrens) && newFeedChildrens.length > 0) {
+
+      if (Array.isArray(newFeedChildrens) && newFeedChildrens.length > 0) {
         for (let i = 0; i < newFeedChildrens.length; i++) {
-          if(i === newFeedChildrens.length - 1) {
-            const refreshButton = await page.$x("//button[contains(., 'Refresh Page')]");
-            if (refreshButton.length > 0) {
-              await refreshButton[0].click();
+          if (i === newFeedChildrens.length - 1) {
+            const refreshButton = await newFeedChildrens[i].$('button');
+            if (refreshButton) {
+              await refreshButton.click();
             }
           } else {
             const newFeedChildElements = [];
             const questionChilds = await newFeedChildrens[i].$$('div div:nth-child(2) div');
-            if(questionChilds) {
+            if (questionChilds) {
               for (const questionChild of questionChilds) {
                 const isDirectChild = await page.evaluate(
                   (questionChild, newFeedWrapperSelector) => {
@@ -103,20 +93,19 @@ async function syncQuoraQuestion({ page, waitFor }) {
                     return parentElement === wrapperElement;
                   },
                   questionChild,
-                  newFeedChildrens[i]
+                  newFeedChildrens[i],
                 );
                 if (isDirectChild) {
                   newFeedChildElements.push(questionChild);
                 }
               }
             }
-    
-            let listQuestionElementsData = []; 
-            if(newFeedChildElements[1]) {
+            let listQuestionElementsData = [];
+            if (newFeedChildElements[1]) {
               const getListQuestionElement = async (clickMore) => {
                 const listQuestionElements = [];
                 const listQuestion = await newFeedChildElements[1].$$('div');
-                if(listQuestion) {
+                if (listQuestion) {
                   for (const itemQuestion of listQuestion) {
                     const isDirectChild = await page.evaluate(
                       (itemQuestion, itemQuestionWrapperSelector) => {
@@ -124,78 +113,75 @@ async function syncQuoraQuestion({ page, waitFor }) {
                         return parentElement === itemQuestionWrapperSelector;
                       },
                       itemQuestion,
-                      newFeedChildElements[1]
+                      newFeedChildElements[1],
                     );
                     if (isDirectChild) {
-                      listQuestionElements.push(itemQuestion)
+                      listQuestionElements.push(itemQuestion);
                     }
                   }
                 }
-                if(listQuestionElements.length > 0 && clickMore) {
+                if (listQuestionElements.length > 0 && clickMore) {
                   const btnMoreWrapper = listQuestionElements[listQuestionElements.length - 1];
                   const btnMore = await btnMoreWrapper.$('button');
-                  if(btnMore) {
+                  if (btnMore) {
                     await btnMore.click();
                   }
                 }
-                if(listQuestionElements.length > 0 && !clickMore) {
+                if (listQuestionElements.length > 0 && !clickMore) {
                   return listQuestionElements;
                 }
-              }
+              };
               await getListQuestionElement(true);
               listQuestionElementsData = await getListQuestionElement(false);
             }
-            
+
             const listQuestionObj = [];
-            if(listQuestionElementsData.length > 0) {
-              for(let i=0; i<listQuestionElementsData.length; i++) {
+            if (listQuestionElementsData.length > 0) {
+              for (let i = 0; i < listQuestionElementsData.length; i++) {
                 const linkElement = await listQuestionElementsData[i].$('a');
-                if(linkElement) {
-                  const linkContent = await page.evaluate(element => element.getAttribute('href'), linkElement);
-                  const textContent = await page.evaluate(linkElement => linkElement.textContent.trim(), linkElement);
+                if (linkElement) {
+                  const linkContent = await page.evaluate(
+                    (element) => element.getAttribute('href'),
+                    linkElement,
+                  );
+                  const textContent = await page.evaluate(
+                    (linkElement) => linkElement.textContent.trim(),
+                    linkElement,
+                  );
                   const questionObj = {
                     linkContent,
-                    textContent
-                  }
-                  if(textContent !== 'View all')
-                    listQuestionObj.push(questionObj)
+                    textContent,
+                  };
+                  if (textContent !== 'View all') listQuestionObj.push(questionObj);
                 }
               }
             }
-            
-            console.log("listQuestionObj: ", listQuestionObj)
-            // logic lưu câu hỏi
+
+            console.log('listQuestionObj: ', listQuestionObj);
           }
-  
-          await waitFor(10000);
         }
       }
     }
-  }
-
-  /* ==================== START ==================== */
-  while(true) {
+  };
+  while (true) {
     await waitPageLoading();
     await syncQuestion();
   }
 }
 
 async function replyQuoraQuestion({ page, waitFor, questionUrl, answer }) {
-  /* ==================== login ==================== */
   const email = 'alexgootvn@gmail.com';
   const password = 'Loginquora1';
-  // enter email
   const emailSelector = 'input[id="email"]';
   await page.waitForSelector(emailSelector);
   await page.type(emailSelector, email);
-  // enter password
   const passwordSelector = 'input[id="password"]';
   await page.waitForSelector(passwordSelector);
   await page.type(passwordSelector, password);
-  // click login button
-  const loginBtnSelector = '#root > div > div:nth-child(2) > div > div > div > div > div > div:nth-child(2) > div:nth-child(2) > div:nth-child(4) > button';
+  const loginBtnSelector =
+    '#root > div > div:nth-child(2) > div > div > div > div > div > div:nth-child(2) > div:nth-child(2) > div:nth-child(4) > button';
   const loginBtn = await page.$(loginBtnSelector);
-  while(true) {
+  while (true) {
     const isDisabled = await page.evaluate((button) => button.disabled, loginBtn);
     if (!isDisabled) {
       await page.click(loginBtnSelector);
@@ -205,31 +191,27 @@ async function replyQuoraQuestion({ page, waitFor, questionUrl, answer }) {
     }
   }
   await page.click(loginBtnSelector);
-
-  /* ==================== wait page loading ==================== */
   await page.waitForSelector('#mainContent');
   await waitFor(3000);
   await page.goto(questionUrl);
   await waitFor(3000);
-  
-  /* ==================== handle reply ==================== */
   const handleReply = async (editBtn, hasDelete) => {
     await editBtn.click();
     const elementHandle = await page.waitForSelector('[data-placeholder="Write your answer"]');
-    if(hasDelete) {
+    if (hasDelete) {
       await elementHandle.click({ clickCount: 3 });
       await elementHandle.press('Backspace');
     }
     await elementHandle.type(answer);
     const submitBtn = await page.$x("//button[contains(., 'Post')]");
-    if(submitBtn[0]) {
+    if (submitBtn[0]) {
       await submitBtn[0].click();
     }
     const doneBtn = await page.$x("//button[contains(., 'Done')]");
-    if(doneBtn[0]) {
+    if (doneBtn[0]) {
       await doneBtn[0].click();
     }
-  }
+  };
   const answerButton = await page.$x("//button[contains(., 'Answer')]");
   const editDraftButton = await page.$x("//button[contains(., 'Edit draft')]");
   if (answerButton.length > 0) {
@@ -242,16 +224,14 @@ async function replyQuoraQuestion({ page, waitFor, questionUrl, answer }) {
 (async () => {
   const { page, waitFor } = await init({
     chromePath: 'C://Program Files/Google/Chrome/Application/chrome.exe',
-    // url: 'https://www.quora.com/answer'
-    url: 'https://www.quora.com/'
+    url: 'https://www.quora.com/',
   });
-
-  // await syncQuoraQuestion({ page, waitFor });
-  await replyQuoraQuestion({ 
-    page, 
-    waitFor, 
-    questionUrl: "https://www.quora.com/What-does-CD-mean-in-texting-slang",
-    answer: "In texting slang, 'CD' typically stands for 'Cross Dresser.' However, it's important to note that 'CD' can have various meanings depending on the context and the individuals involved in the conversation. It's always a good idea to clarify the meaning with the person you're communicating with if there's any ambiguity."
+  await replyQuoraQuestion({
+    page,
+    waitFor,
+    questionUrl: 'https://www.quora.com/What-does-CD-mean-in-texting-slang',
+    answer:
+      "In texting slang, 'CD' typically stands for 'Cross Dresser.' However, it's important to note that 'CD' can have various meanings depending on the context and the individuals involved in the conversation. It's always a good idea to clarify the meaning with the person you're communicating with if there's any ambiguity.",
   });
 })();
 

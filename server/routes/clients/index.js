@@ -114,7 +114,8 @@ const clients = (app) => {
       const clients = await Client.find()
         .populate('process')
         .skip(offset)
-        .limit(parseInt(pageSize));
+        .limit(parseInt(pageSize))
+        .sort({ sort: 'asc' });
       res.json(clients);
     } catch (err) {
       res.status(500).json({ error: err.message });

@@ -1,3 +1,4 @@
+const Client = require('../../routes/clients/model');
 const Account = require('./model');
 const accounts = (app) => {
   // Get all accounts
@@ -10,6 +11,18 @@ const accounts = (app) => {
     }
   });
 
+  app.get('/api/account-by-client', async (req, res) => {
+    try {
+      const { clientName } = req.query;
+      const client = await Client.findOne({ name: clientName });
+      const accounts = await Account.find({
+        client_assigned_to: client._id,
+      });
+      res.json(accounts);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  });
   // Get a single account by ID
   app.get('/api/accounts/:id', async (req, res) => {
     try {
