@@ -10,10 +10,8 @@ async function init({ chromePath, url }) {
     });
   };
   const browser = await puppeteer.launch({
-    // defaultViewport: { width: 500, height: 500 },
     executablePath: chromePath,
     headless: false,
-    // args:["--window-size=500,500"],
   });
   const page = await browser.newPage();
   await page.goto(url);
@@ -31,7 +29,7 @@ async function loginQuora({ page, waitFor }) {
   await page.type(passwordSelector, password);
   const loginBtnSelector = '#root > div > div:nth-child(2) > div > div > div > div > div > div:nth-child(2) > div:nth-child(2) > div:nth-child(4) > button';
   const loginBtn = await page.$(loginBtnSelector);
-  while(true) {
+  while (true) {
     const isDisabled = await page.evaluate((button) => button.disabled, loginBtn);
     if (!isDisabled) {
       await page.click(loginBtnSelector);
@@ -56,7 +54,7 @@ async function syncQuoraQuestion({ page, waitFor }) {
       await page.evaluate(() => {
         window.scrollBy(0, window.innerHeight);
       });
-      await page.waitForTimeout(scrollInterval);
+      waitFor(scrollInterval);
       currentTime = Date.now();
     }
   }
@@ -74,7 +72,7 @@ async function syncQuoraQuestion({ page, waitFor }) {
             return parentElement === newFeedWrapper;
           },
           childElement,
-          newFeedWrapperSelector
+          newFeedWrapperSelector,
         );
         if (isDirectChild) {
           newFeedChildrens.push(childElement);
@@ -90,7 +88,7 @@ async function syncQuoraQuestion({ page, waitFor }) {
           } else {
             const newFeedChildElements = [];
             const questionChilds = await newFeedChildrens[i].$$('div div:nth-child(2) div');
-            if(questionChilds) {
+            if (questionChilds) {
               for (const questionChild of questionChilds) {
                 const isDirectChild = await page.evaluate(
                   (questionChild, newFeedWrapperSelector) => {
@@ -99,7 +97,7 @@ async function syncQuoraQuestion({ page, waitFor }) {
                     return parentElement === wrapperElement;
                   },
                   questionChild,
-                  newFeedChildrens[i]
+                  newFeedChildrens[i],
                 );
                 if (isDirectChild) {
                   newFeedChildElements.push(questionChild);
@@ -111,7 +109,7 @@ async function syncQuoraQuestion({ page, waitFor }) {
               const getListQuestionElement = async (clickMore) => {
                 const listQuestionElements = [];
                 const listQuestion = await newFeedChildElements[1].$$('div');
-                if(listQuestion) {
+                if (listQuestion) {
                   for (const itemQuestion of listQuestion) {
                     const isDirectChild = await page.evaluate(
                       (itemQuestion, itemQuestionWrapperSelector) => {
@@ -119,40 +117,45 @@ async function syncQuoraQuestion({ page, waitFor }) {
                         return parentElement === itemQuestionWrapperSelector;
                       },
                       itemQuestion,
-                      newFeedChildElements[1]
+                      newFeedChildElements[1],
                     );
                     if (isDirectChild) {
-                      listQuestionElements.push(itemQuestion)
+                      listQuestionElements.push(itemQuestion);
                     }
                   }
                 }
-                if(listQuestionElements.length > 0 && clickMore) {
+                if (listQuestionElements.length > 0 && clickMore) {
                   const btnMoreWrapper = listQuestionElements[listQuestionElements.length - 1];
                   const btnMore = await btnMoreWrapper.$('button');
-                  if(btnMore) {
+                  if (btnMore) {
                     await btnMore.click();
                   }
                 }
-                if(listQuestionElements.length > 0 && !clickMore) {
+                if (listQuestionElements.length > 0 && !clickMore) {
                   return listQuestionElements;
                 }
-              }
+              };
               await getListQuestionElement(true);
               listQuestionElementsData = await getListQuestionElement(false);
             }
             const listQuestionObj = [];
-            if(listQuestionElementsData.length > 0) {
-              for(let i=0; i<listQuestionElementsData.length; i++) {
+            if (listQuestionElementsData.length > 0) {
+              for (let i = 0; i < listQuestionElementsData.length; i++) {
                 const linkElement = await listQuestionElementsData[i].$('a');
-                if(linkElement) {
-                  const linkContent = await page.evaluate(element => element.getAttribute('href'), linkElement);
-                  const textContent = await page.evaluate(linkElement => linkElement.textContent.trim(), linkElement);
+                if (linkElement) {
+                  const linkContent = await page.evaluate(
+                    (element) => element.getAttribute('href'),
+                    linkElement,
+                  );
+                  const textContent = await page.evaluate(
+                    (linkElement) => linkElement.textContent.trim(),
+                    linkElement,
+                  );
                   const questionObj = {
                     linkContent,
-                    textContent
-                  }
-                  if(textContent !== 'View all')
-                    listQuestionObj.push(questionObj)
+                    textContent,
+                  };
+                  if (textContent !== 'View all') listQuestionObj.push(questionObj);
                 }
               }
             }
@@ -177,7 +180,7 @@ async function replyQuoraQuestion({ page, waitFor, questionUrl, answer }) {
   const handleReply = async (editBtn, hasDelete) => {
     await editBtn.click();
     const elementHandle = await page.waitForSelector('[data-placeholder="Write your answer"]');
-    if(hasDelete) {
+    if (hasDelete) {
       await elementHandle.click({ clickCount: 3 });
       await elementHandle.press('Backspace');
     }

@@ -15,7 +15,11 @@ const interactions = (app) => {
     const offset = (page - 1) * pageSize;
 
     try {
-      const interactions = await Interaction.find().skip(offset).limit(parseInt(pageSize));
+      const interactions = await Interaction.find()
+        .skip(offset)
+        .limit(parseInt(pageSize))
+        .sort({ sort: 'asc' })
+        .sort({ updatedAt: 'desc' });
       res.json(interactions);
     } catch (err) {
       res.status(500).json({ error: err.message });
@@ -56,14 +60,12 @@ const interactions = (app) => {
   // Update an interaction by ID
   app.put('/api/interactions/:id', async (req, res) => {
     const { id } = req.params;
-    const { name, content, params } = req.body;
+    const interactionData = req.body;
 
     try {
-      const updatedInteraction = await Interaction.findByIdAndUpdate(
-        id,
-        { name, content, params },
-        { new: true },
-      );
+      const updatedInteraction = await Interaction.findByIdAndUpdate(id, interactionData, {
+        new: true,
+      });
 
       res.json({ changes: updatedInteraction });
     } catch (err) {

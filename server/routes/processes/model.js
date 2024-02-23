@@ -10,12 +10,14 @@ const ProcessesSchema = new mongoose.Schema(
       },
     ],
     is_primary: { type: Boolean },
+    sort: { type: String },
   },
   {
     timestamps: true,
   },
 );
 
+ProcessesSchema.index({ sort: 1 });
 const Processes = mongoose.model('processes', ProcessesSchema);
 
 module.exports = Processes;

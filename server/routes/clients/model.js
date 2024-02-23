@@ -9,6 +9,7 @@ const ClientSchema = new mongoose.Schema(
       ref: 'processes',
       unique: true, // Ensures that each client has at most one associated process
     },
+    sort: { type: String },
   },
   {
     timestamps: true,
@@ -16,6 +17,7 @@ const ClientSchema = new mongoose.Schema(
 );
 
 ClientSchema.index({ name: 1 });
+ClientSchema.index({ sort: 1 });
 const Client = mongoose.model('clients', ClientSchema);
 
 module.exports = Client;

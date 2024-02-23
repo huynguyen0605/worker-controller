@@ -55,6 +55,7 @@ const Process = () => {
         </Form>
 
         <Table
+          bordered
           columns={[
             {
               title: 'STT',
