@@ -27,7 +27,8 @@ async function loginQuora({ page, waitFor }) {
   const passwordSelector = 'input[id="password"]';
   await page.waitForSelector(passwordSelector);
   await page.type(passwordSelector, password);
-  const loginBtnSelector = '#root > div > div:nth-child(2) > div > div > div > div > div > div:nth-child(2) > div:nth-child(2) > div:nth-child(4) > button';
+  const loginBtnSelector =
+    '#root > div > div:nth-child(2) > div > div > div > div > div > div:nth-child(2) > div:nth-child(2) > div:nth-child(4) > button';
   const loginBtn = await page.$(loginBtnSelector);
   while (true) {
     const isDisabled = await page.evaluate((button) => button.disabled, loginBtn);
@@ -57,7 +58,7 @@ async function syncQuoraQuestion({ page, waitFor }) {
       waitFor(scrollInterval);
       currentTime = Date.now();
     }
-  }
+  };
   const syncQuestion = async () => {
     const newFeedWrapperSelector = '#mainContent > div > div';
     const newFeedWrapper = await page.$(newFeedWrapperSelector);
@@ -78,9 +79,9 @@ async function syncQuoraQuestion({ page, waitFor }) {
           newFeedChildrens.push(childElement);
         }
       }
-      if(Array.isArray(newFeedChildrens) && newFeedChildrens.length > 0) {
+      if (Array.isArray(newFeedChildrens) && newFeedChildrens.length > 0) {
         for (let i = 0; i < newFeedChildrens.length; i++) {
-          if(i === newFeedChildrens.length - 1) {
+          if (i === newFeedChildrens.length - 1) {
             const refreshButton = await newFeedChildrens[i].$('button');
             if (refreshButton) {
               await refreshButton.click();
@@ -104,8 +105,8 @@ async function syncQuoraQuestion({ page, waitFor }) {
                 }
               }
             }
-            let listQuestionElementsData = []; 
-            if(newFeedChildElements[1]) {
+            let listQuestionElementsData = [];
+            if (newFeedChildElements[1]) {
               const getListQuestionElement = async (clickMore) => {
                 const listQuestionElements = [];
                 const listQuestion = await newFeedChildElements[1].$$('div');
@@ -159,13 +160,13 @@ async function syncQuoraQuestion({ page, waitFor }) {
                 }
               }
             }
-            console.log("listQuestionObj: ", listQuestionObj)
+            console.log('listQuestionObj: ', listQuestionObj);
           }
         }
       }
     }
-  }
-  while(true) {
+  };
+  while (true) {
     await waitPageLoading();
     await syncQuestion();
   }
@@ -186,25 +187,49 @@ async function replyQuoraQuestion({ page, waitFor, questionUrl, answer }) {
     }
     await elementHandle.type(answer);
     const submitBtn = await page.evaluateHandle(() => {
-      const xpathResult = document.evaluate("//button[contains(., 'Post')]", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
+      const xpathResult = document.evaluate(
+        "//button[contains(., 'Post')]",
+        document,
+        null,
+        XPathResult.FIRST_ORDERED_NODE_TYPE,
+        null,
+      );
       const button = xpathResult.singleNodeValue;
       return button;
     });
-    if(submitBtn.handle) await submitBtn.click();
+    if (submitBtn.handle) await submitBtn.click();
     const doneBtn = await page.evaluateHandle(() => {
-      const xpathResult = document.evaluate("//button[contains(., 'Done')]", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
+      const xpathResult = document.evaluate(
+        "//button[contains(., 'Done')]",
+        document,
+        null,
+        XPathResult.FIRST_ORDERED_NODE_TYPE,
+        null,
+      );
       const button = xpathResult.singleNodeValue;
       return button;
     });
-    if(doneBtn.handle) await doneBtn.click();
-  }
+    if (doneBtn.handle) await doneBtn.click();
+  };
   const answerButton = await page.evaluateHandle(() => {
-    const xpathResult = document.evaluate("//button[contains(., 'Answer')]", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
+    const xpathResult = document.evaluate(
+      "//button[contains(., 'Answer')]",
+      document,
+      null,
+      XPathResult.FIRST_ORDERED_NODE_TYPE,
+      null,
+    );
     const button = xpathResult.singleNodeValue;
     return button;
   });
   const editDraftButton = await page.evaluateHandle(() => {
-    const xpathResult = document.evaluate("//button[contains(., 'Edit draft')]", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
+    const xpathResult = document.evaluate(
+      "//button[contains(., 'Edit draft')]",
+      document,
+      null,
+      XPathResult.FIRST_ORDERED_NODE_TYPE,
+      null,
+    );
     const button = xpathResult.singleNodeValue;
     return button;
   });
@@ -215,7 +240,7 @@ async function replyQuoraQuestion({ page, waitFor, questionUrl, answer }) {
   }
   await waitFor(5000);
   const url = await page.url();
-  console.log("answer url: ", url);
+  console.log('answer url: ', url);
 }
 
 async function upvoteQuoraAnswer({ page, waitFor, answerUrl }) {
@@ -225,16 +250,28 @@ async function upvoteQuoraAnswer({ page, waitFor, answerUrl }) {
   await page.goto(answerUrl);
   await waitFor(3000);
   const upvoteButton = await page.evaluateHandle(() => {
-    const xpathResult = document.evaluate("//button[contains(., 'Upvote')]", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
+    const xpathResult = document.evaluate(
+      "//button[contains(., 'Upvote')]",
+      document,
+      null,
+      XPathResult.FIRST_ORDERED_NODE_TYPE,
+      null,
+    );
     const button = xpathResult.singleNodeValue;
     return button;
   });
   const upvoteButtonInfo = await page.evaluate(() => {
-    const xpathResult = document.evaluate("//button[contains(., 'Upvote')]", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
+    const xpathResult = document.evaluate(
+      "//button[contains(., 'Upvote')]",
+      document,
+      null,
+      XPathResult.FIRST_ORDERED_NODE_TYPE,
+      null,
+    );
     const button = xpathResult.singleNodeValue;
     return button ? button.outerHTML : null;
   });
-  if (upvoteButton.handle && !upvoteButtonInfo.includes("puppeteer_test_pressed")) {
+  if (upvoteButton.handle && !upvoteButtonInfo.includes('puppeteer_test_pressed')) {
     await upvoteButton.click();
   }
 }
@@ -242,21 +279,22 @@ async function upvoteQuoraAnswer({ page, waitFor, answerUrl }) {
 (async () => {
   const { page, waitFor } = await init({
     chromePath: 'C://Program Files/Google/Chrome/Application/chrome.exe',
-    url: 'https://www.quora.com/answer'
+    url: 'https://www.quora.com/answer',
   });
 
   // await syncQuoraQuestion({ page, waitFor });
-  // await replyQuoraQuestion({ 
-  //   page, 
-  //   waitFor, 
+  // await replyQuoraQuestion({
+  //   page,
+  //   waitFor,
   //   questionUrl: "https://www.quora.com/What-does-H%E1%BA%A3i-quay-xe-mean-in-Vietnamese",
   //   answer: "this is a trend of younger VietNamese"
   // });
   await upvoteQuoraAnswer({
-    page, 
-    waitFor, 
-    answerUrl: "https://www.quora.com/What-is-the-meaning-of-ph%E1%BB%9F-in-Vietnamese/answer/Anh-Nguyen-2749",
-  })
+    page,
+    waitFor,
+    answerUrl:
+      'https://www.quora.com/What-is-the-meaning-of-ph%E1%BB%9F-in-Vietnamese/answer/Anh-Nguyen-2749',
+  });
 })();
 
 // (async () => {
@@ -338,9 +376,9 @@ async function upvoteQuoraAnswer({ page, waitFor, answerUrl }) {
 //     url: 'https://www.quora.com/answer'
 //   });
 
-//   await executeReplyQuoraQuestionString.call(null).call(null, { 
-//     page, 
-//     waitFor, 
+//   await executeReplyQuoraQuestionString.call(null).call(null, {
+//     page,
+//     waitFor,
 //     questionUrl: "https://www.quora.com/How-do-I-spell-Vietnam-using-the-Vietnamese-alphabet",
 //     answer: "In texting slang, 'CD' typically stands for 'Cross Dresser.' However, it's important to note that 'CD' can have various meanings depending on the context and the individuals involved in the conversation. It's always a good idea to clarify the meaning with the person you're communicating with if there's any ambiguity."
 //   });

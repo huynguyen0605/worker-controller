@@ -12,10 +12,9 @@ const QuoraSchema = new mongoose.Schema(
     url: { type: String },
     status: { type: String },
     reply: { type: String },
+    answer_url: { type: String },
     number_of_upvote: { type: String },
     number_of_comment: { type: String },
-    client_id: { type: String },
-    client_name: { type: String },
   },
   {
     timestamps: true,
