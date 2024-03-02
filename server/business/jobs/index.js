@@ -25,8 +25,22 @@ const jobs = (app) => {
     try {
       const { clientName } = req.query;
       const job = await Job.findOne({ client_name: clientName, status: 'iddle' });
-      await Job.findByIdAndUpdate(job._id, { status: 'processing' });
-      return job;
+      console.log('job', job, clientName);
+      if (job) {
+        await Job.findByIdAndUpdate(job._id.toString(), { status: 'processing' });
+        return res.json(job);
+      } else res.status(500).json({ error: 'not found job' });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.get('/api/done-job', async (req, res) => {
+    try {
+      const { id } = req.query;
+      console.log('done job', id);
+      await Job.findByIdAndUpdate(id, { status: 'done' });
+      return true;
     } catch (error) {
       res.status(500).json({ error: error.message });
     }

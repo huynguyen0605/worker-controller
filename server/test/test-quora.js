@@ -43,7 +43,6 @@ async function loginQuora({ page, waitFor }) {
 }
 
 async function syncQuoraQuestion({ page, waitFor }) {
-  await loginQuora({ page, waitFor });
   const waitPageLoading = async () => {
     await page.waitForSelector('#mainContent');
     await waitFor(5000);
@@ -173,7 +172,6 @@ async function syncQuoraQuestion({ page, waitFor }) {
 }
 
 async function replyQuoraQuestion({ page, waitFor, questionUrl, answer }) {
-  await loginQuora({ page, waitFor });
   await page.waitForSelector('#mainContent');
   await waitFor(3000);
   await page.goto(questionUrl);

@@ -2,7 +2,7 @@ const reply = (questionUrl, answer) => {
   return `async function replyQuoraQuestion({ page, waitFor }) {
     await page.waitForSelector('#mainContent');
     await waitFor(3000);
-    await page.goto('${questionUrl}');
+    await page.goto(\`${questionUrl}\`);
     await waitFor(3000);
     const handleReply = async (editBtn, hasDelete) => {
       await editBtn.click();
@@ -11,7 +11,7 @@ const reply = (questionUrl, answer) => {
         await elementHandle.click({ clickCount: 3 });
         await elementHandle.press('Backspace');
       }
-      await elementHandle.type('${answer}');
+      await elementHandle.type(\`${answer}\`);
       const submitBtn = await page.evaluateHandle(() => {
         const xpathResult = document.evaluate(
           "//button[contains(., 'Post')]",

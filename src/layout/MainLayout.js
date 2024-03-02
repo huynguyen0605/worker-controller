@@ -10,6 +10,7 @@ import {
   SisternodeOutlined,
   AccountBookOutlined,
   TagOutlined,
+  LinkOutlined,
 } from '@ant-design/icons';
 import './MainLayout.less';
 
@@ -92,6 +93,12 @@ export default class MainLayout extends React.Component {
               <Link to="/tag">
                 <TagOutlined />
                 <span className="menu-item-link">Tag</span>
+              </Link>
+            </Menu.Item>
+            <Menu.Item key="8">
+              <Link to="/link">
+                <LinkOutlined />
+                <span className="menu-item-link">Link</span>
               </Link>
             </Menu.Item>
           </Menu>

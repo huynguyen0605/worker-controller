@@ -11,6 +11,7 @@ const Accounts = () => {
   const [clients, setClients] = useState([]);
   const [form] = Form.useForm();
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [links, setLinks] = useState([]);
 
   async function getAccounts() {
     try {
@@ -42,10 +43,21 @@ const Accounts = () => {
     }
   }
 
+  async function getLinks() {
+    try {
+      const response = await doGet('/links');
+      setLinks(response.data);
+    } catch (error) {
+      console.error('Error fetching links:', error.message);
+      message.error('Lấy danh sách link lỗi ' + error.message);
+    }
+  }
+
   useEffect(() => {
     getAccounts();
     getTags();
     getClients();
+    getLinks();
   }, []);
 
   const handleDelete = async (accountId) => {
@@ -151,6 +163,31 @@ const Accounts = () => {
                   </Select>
                 );
               },
+            },
+            {
+              title: 'Links', // New column for links
+              key: 'links',
+              render: (value, record, index) => (
+                <Select
+                  mode="multiple"
+                  value={record?.links || []}
+                  style={{ width: 200 }}
+                  placeholder="Chọn links"
+                  onChange={async (value) => {
+                    // Assuming the endpoint to update links is '/updateLinks/:id'
+                    await doPut(`/updateLinks/${record._id}`, { links: value });
+                    await getAccounts();
+                    message.success('Cập nhật links thành công');
+                  }}
+                >
+                  {/* Assuming links is an array fetched from somewhere */}
+                  {links.map((link) => (
+                    <Select.Option key={link._id} value={link._id}>
+                      {link.name}
+                    </Select.Option>
+                  ))}
+                </Select>
+              ),
             },
             {
               title: 'Hành động',
