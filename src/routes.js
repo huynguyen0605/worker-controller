@@ -7,6 +7,7 @@ const Interaction = lazy(() => import('pages/interaction/Interaction'));
 const Process = lazy(() => import('pages/process/Process'));
 const Client = lazy(() => import('pages/client/Client'));
 const Quora = lazy(() => import('pages/quora/Quora.js'));
+const Facebook = lazy(() => import('pages/facebook/Facebook.js'));
 const Job = lazy(() => import('pages/job/Job.js'));
 const Account = lazy(() => import('pages/account/Account.js'));
 const Tag = lazy(() => import('pages/tag/Tag.js'));
@@ -32,6 +33,10 @@ const routes = [
   {
     path: '/quora',
     component: Quora,
+  },
+  {
+    path: '/facebook',
+    component: Facebook,
   },
   {
     path: '/account',
