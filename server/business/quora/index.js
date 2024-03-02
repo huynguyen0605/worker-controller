@@ -57,9 +57,15 @@ const quoras = (app) => {
   app.post('/api/quoras-bulk', async (req, res) => {
     const quoraData = req.body;
 
+    console.log('huynvq::==================>bulk', quoraData);
     try {
-      const quora = await Quora.insertMany(quoraData);
-      res.status(201).json(quora);
+      const urlsToCheck = quoraData.map((quora) => quora.url);
+      const existingQuoras = await Quora.find({ url: { $in: urlsToCheck } });
+      const newQuoras = quoraData.filter((quora) => {
+        return !existingQuoras.some((existingQuora) => existingQuora.url === quora.url);
+      });
+      const insertedQuoras = await Quora.insertMany(newQuoras);
+      res.status(201).json(insertedQuoras);
     } catch (error) {
       res.status(400).json({ error: error.message });
     }

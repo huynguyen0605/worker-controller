@@ -10,6 +10,7 @@ const Quora = lazy(() => import('pages/quora/Quora.js'));
 const Job = lazy(() => import('pages/job/Job.js'));
 const Account = lazy(() => import('pages/account/Account.js'));
 const Tag = lazy(() => import('pages/tag/Tag.js'));
+const Link = lazy(() => import('pages/link/Link.js'));
 
 const routes = [
   {
@@ -39,6 +40,10 @@ const routes = [
   {
     path: '/tag',
     component: Tag,
+  },
+  {
+    path: '/link',
+    component: Link,
   },
 ];
 

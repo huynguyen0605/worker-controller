@@ -26,6 +26,7 @@ require('./business/jobs')(app);
 require('./business/quora')(app);
 require('./business/account')(app);
 require('./business/tag')(app);
+require('./business/links')(app);
 
 // Start the server
 app.listen(port, () => {

@@ -23,6 +23,7 @@ const accounts = (app) => {
       res.status(500).json({ error: error.message });
     }
   });
+
   // Get a single account by ID
   app.get('/api/accounts/:id', async (req, res) => {
     try {

@@ -90,12 +90,22 @@ const clients = (app) => {
 
       if (client) {
         if (client.process) {
-          const interactions = await Interaction.find({
-            _id: { $in: client.process.interactions },
+          const interactionIds = client.process.interactions;
+
+          // Use interactionIds to find interactions in the specified order
+          const interactionsMap = {}; // Map to store interactions based on their ID
+          const interactions = await Interaction.find({ _id: { $in: interactionIds } });
+
+          // Populate the interactionsMap with interactions
+          interactions.forEach((interaction) => {
+            interactionsMap[interaction._id.toString()] = interaction;
           });
 
-          // Now 'interactions' contains the populated data for the interactions
-          client.process.interactions = interactions;
+          // Reorder interactions based on the original order of interactionIds
+          const orderedInteractions = interactionIds.map((id) => interactionsMap[id]);
+
+          // Now 'orderedInteractions' contains the populated data for the interactions in the correct order
+          client.process.interactions = orderedInteractions;
         }
         res.json(client);
       } else {

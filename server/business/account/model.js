@@ -6,6 +6,12 @@ const AccountSchema = new mongoose.Schema(
     info: { type: String },
     client_assigned_to: { type: String },
     tag: { type: [String], default: [] }, // danh sách chủ đề gắn với tài khoản
+    links: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'links',
+      },
+    ],
   },
   {
     timestamps: true,
