@@ -168,6 +168,24 @@ async function syncPostFacebook({ page, pageUrl, browser, waitFor, userId, userP
   }
 }
 
+async function commentPostFacebook({ page, dataReplyPosts, browser, waitFor, userId, userPass, user2fa }) {
+  try {
+    await loginFacebook({ page, browser, waitFor, userId, userPass, user2fa });
+    await waitFor(5000);
+    for(const [index, dataReplyPost] of dataReplyPosts.entries()) {
+      await page.goto(dataReplyPost.url);
+      await waitFor(2000);
+      const inputCommentSelector = 'div[aria-label="Write a comment…"]'
+      const inputComment = await page.$(inputCommentSelector);
+      await inputComment.type(dataReplyPost.comment);
+      const submitBtn = await page.$('#focused-state-composer-submit');
+      await submitBtn.click();
+    }
+  } catch (error) {
+    console.log("========> error: ", error)
+  }
+}
+
 // log item to preview HTML code
 // const HTML = await page.evaluate(element => element.outerHTML, btnMoreWrapper);
 // console.log('========= HTML:', HTML);
@@ -179,13 +197,27 @@ async function syncPostFacebook({ page, pageUrl, browser, waitFor, userId, userP
     chromePath: 'C://Program Files/Google/Chrome/Application/chrome.exe',
     url: 'https://www.facebook.com/'
   });
-  await syncPostFacebook({
+  // await syncPostFacebook({
+  //   page, 
+  //   browser, 
+  //   waitFor,
+  //   userId: "100093602717813", 
+  //   userPass: "xldnKeq6116n60", 
+  //   user2fa: "SWY5D37MR6Z4V3U3GMVUGQXSTJGV5WUW", 
+  //   pageUrl: "https://www.facebook.com/nhungcaunoibathu"
+  // })
+  await commentPostFacebook({
     page, 
     browser, 
     waitFor,
     userId: "100093602717813", 
     userPass: "xldnKeq6116n60", 
     user2fa: "SWY5D37MR6Z4V3U3GMVUGQXSTJGV5WUW", 
-    pageUrl: "https://www.facebook.com/nhungcaunoibathu"
+    dataReplyPosts: [
+      {
+        url: "https://www.facebook.com/nhungcaunoibathu/posts/pfbid023jn7eF2PeRGgEgxn1jymMK4h7mUCN5aG91bXsxQPWDgRz2V6hwGuVFmZrEYQ5zBHl",
+        comment: "Vì bạn xứng đáng :D"
+      }
+    ]
   })
 })();
