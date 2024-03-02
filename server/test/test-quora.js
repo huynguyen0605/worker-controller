@@ -54,7 +54,7 @@ async function syncQuoraQuestion({ page, waitFor }) {
       await page.evaluate(() => {
         window.scrollBy(0, window.innerHeight);
       });
-      waitFor(scrollInterval);
+      await waitFor(scrollInterval);
       currentTime = Date.now();
     }
   }
