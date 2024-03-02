@@ -22,7 +22,7 @@ async function updateClients() {
 }
 
 // Schedule the update to run every 10 minutes
-cron.schedule('*/1 * * * *', () => {
+cron.schedule('*/2 * * * *', () => {
   console.log('Running client update job...');
   updateClients();
 });
@@ -69,9 +69,11 @@ const clients = (app) => {
   app.get('/api/ping-client', async (req, res) => {
     try {
       const { name } = req.query;
+      console.log('huynvq::====>ping client', name);
       const client = await Client.findOne({ name });
       if (client) {
-        await Client.updateOne({ name }, { $set: { updatedAt: new Date() } });
+        console.log(`============>/api/ping-client client found ${name}`);
+        await Client.updateOne({ name }, { $set: { available: false, updatedAt: new Date() } });
       } else {
         console.log(`============>/api/ping-client client not found ${name}`);
         res.status(500).json({ error: `Không tìm thấy client ${name}` });

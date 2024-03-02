@@ -1,5 +1,14 @@
 const Quora = require('./model');
 const Job = require('../jobs/model');
+const puppeteerReply = require('./templates/reply');
+const { NodeHtmlMarkdown } = require('node-html-markdown');
+const RoundRobin = require('../../mechanism/roundrobin');
+const upvote = require('./templates/upvote');
+const nhm = new NodeHtmlMarkdown(
+  /* options (optional) */ {},
+  /* customTransformers (optional) */ undefined,
+  /* customCodeBlockTranslators (optional) */ undefined,
+);
 
 const quoras = (app) => {
   app.get('/api/quoras', async (req, res) => {
@@ -62,23 +71,50 @@ const quoras = (app) => {
       const { content } = req.body;
       const quora = await Quora.findById(id);
 
-      const {
-        keyword,
-        title,
-        url,
-        status,
-        number_of_upvote,
-        number_of_comment,
-        client_id,
-        client_name,
-      } = quora;
+      const { keyword, title, url, status, number_of_upvote, number_of_comment } = quora;
+
+      const roundRobin = new RoundRobin();
+      const client = await roundRobin.getNextClient('quora-executor');
+      console.log('huynvq::=====>client', client);
+      const { _id: client_id, name: client_name } = client;
+      //nếu ko truyền client thì tìm 1 client tên là quora, trạng thái đang active để lưu
+      console.log('huynvq::======>client_id', client_id, client_name);
+
+      const contentMd = nhm.translate(content);
+      await Job.create({
+        name: `${url}`,
+        status: 'iddle',
+        code: puppeteerReply(url, contentMd),
+        client_id: client_id,
+        client_name: client_name,
+      });
+
+      await Quora.findByIdAndUpdate(id, { reply: content });
+
+      res.status(200).json(true);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.post('/api/quoras-upvote/:id', async (req, res) => {
+    try {
+      const { id } = req.params;
+      const quora = await Quora.findById(id);
+      const { answer_url } = quora;
+
+      const roundRobin = new RoundRobin();
+      const client = await roundRobin.getNextClient('quora-executor');
+      const { _id: client_id, name: client_name } = client;
+
+      //nếu ko truyền client thì tìm 1 client tên là quora, trạng thái đang active để lưu
 
       await Job.create({
         name: `${url}`,
         status: 'iddle',
-        code: `console.log('hello world') ${content}`,
-        client_id,
-        client_name,
+        code: upvote(answer_url),
+        client_id: client_id,
+        client_name: client_name,
       });
 
       await Quora.findByIdAndUpdate(id, { reply: content });

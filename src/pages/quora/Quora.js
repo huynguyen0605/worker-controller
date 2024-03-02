@@ -4,6 +4,38 @@ import PageLayout from '../../layout/PageLayout';
 import { doGet, doPost, doDelete } from '../../service'; // Adjust the path based on your project structure
 import TextEditor from '../../components/TextEditor';
 
+const ReplyFormComponent = ({ record, callback }) => {
+  const [form] = Form.useForm();
+
+  const handleReply = async (quoraId, replyContent) => {
+    try {
+      await doPost(`/quoras-reply/${quoraId}`, { content: replyContent });
+      message.success('Reply thành công');
+      await callback();
+    } catch (error) {
+      message.error('Reply lỗi ' + error.message);
+    }
+  };
+
+  const onFinish = (values) => {
+    handleReply(record._id, values.content);
+    form.resetFields(); // Reset the form fields after submission if needed
+  };
+
+  return (
+    <Form form={form} onFinish={onFinish}>
+      <Form.Item name="content">
+        <TextEditor placeholder="Nhập phản hồi" />
+      </Form.Item>
+      <Form.Item>
+        <Button type="primary" htmlType="submit">
+          Phản hồi
+        </Button>
+      </Form.Item>
+    </Form>
+  );
+};
+
 const Quora = () => {
   const [quoras, setQuoras] = useState([]);
 
@@ -15,17 +47,6 @@ const Quora = () => {
   useEffect(() => {
     getQuoras();
   }, []);
-
-  const [form] = Form.useForm();
-  const handleReply = async (quoraId, replyContent) => {
-    try {
-      await doPost(`/quoras-reply/${quoraId}`, { content: replyContent });
-      message.success('Reply thành công');
-      await getQuoras();
-    } catch (error) {
-      message.error('Reply lỗi ' + error.message);
-    }
-  };
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [formAdd] = Form.useForm();
@@ -115,22 +136,15 @@ const Quora = () => {
               width: 600,
               render: (value, record) => {
                 return record?.reply ? (
-                  <div>{record?.reply}</div>
+                  <Space direction="vertical">
+                    <Space direction="horizontal">
+                      <a href={record?.answer_url}>Link câu trả lời</a>
+                    </Space>
+                    <div>{record?.reply}</div>
+                    <div>{record?.answer_url}</div>
+                  </Space>
                 ) : (
-                  <Form form={form} onFinish={(values) => handleReply(record._id, values.content)}>
-                    <Form.Item name="content">
-                      <TextEditor placeholder="Nhập phản hồi" />
-                      {/* <Input.TextArea
-                        placeholder="Nhập phản hồi"
-                        autoSize={{ minRows: 3, maxRows: 20 }}
-                      /> */}
-                    </Form.Item>
-                    <Form.Item>
-                      <Button type="primary" htmlType="submit">
-                        Phản hồi
-                      </Button>
-                    </Form.Item>
-                  </Form>
+                  <ReplyFormComponent record={record} callback={getQuoras} />
                 );
               },
             },
@@ -140,6 +154,15 @@ const Quora = () => {
               width: 100,
               render: (value, record) => (
                 <Space>
+                  <Button
+                    type="primary"
+                    onClick={async () => {
+                      await doPost(`/quoras-upvote/${record._id}`);
+                      await getQuoras();
+                    }}
+                  >
+                    Upvote
+                  </Button>
                   <Button
                     type="ghost"
                     danger

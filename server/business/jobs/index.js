@@ -21,6 +21,17 @@ const jobs = (app) => {
     }
   });
 
+  app.get('/api/job-by-client', async (req, res) => {
+    try {
+      const { clientName } = req.query;
+      const job = await Job.findOne({ client_name: clientName, status: 'iddle' });
+      await Job.findByIdAndUpdate(job._id, { status: 'processing' });
+      return job;
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
   // Get Job by ID
   app.get('/api/jobs/:id', async (req, res) => {
     const { id } = req.params;

@@ -19,7 +19,7 @@ const Jobs = () => {
   }, []);
 
   return (
-    <PageLayout title="Job List">
+    <PageLayout title="Danh sách Job">
       <>
         <Table
           bordered
@@ -38,6 +38,11 @@ const Jobs = () => {
               title: 'Status',
               dataIndex: 'status',
               key: 'status',
+            },
+            {
+              title: 'Client',
+              dataIndex: 'client_name',
+              key: 'client_name',
             },
             {
               title: 'Thao tác',
