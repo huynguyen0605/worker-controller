@@ -1,5 +1,5 @@
 async function init({ chromePath, url }) {
-  const puppeteer = await import("puppeteer");
+  const puppeteer = await import('puppeteer');
   const waitFor = async (time) => {
     return new Promise((resolve) => {
       setTimeout(() => {
@@ -10,7 +10,7 @@ async function init({ chromePath, url }) {
   const browser = await puppeteer.launch({
     executablePath: chromePath,
     headless: false,
-    args: ["--incognito"],
+    args: ['--incognito'],
   });
   const pages = await browser.pages();
   const page = pages[0];
@@ -36,7 +36,7 @@ async function loginFacebook({ page, browser, waitFor, userId, userPass, user2fa
   await page.click(fbButtonLogin);
   await waitFor(2000);
   const authPage = await browser.newPage();
-  await authPage.goto("https://2fa.live");
+  await authPage.goto('https://2fa.live');
   const authTokenSelector = 'textarea[id="listToken"]';
   await authPage.waitForSelector(authTokenSelector, { timeout: 10000 });
   await authPage.focus(authTokenSelector);
@@ -46,11 +46,8 @@ async function loginFacebook({ page, browser, waitFor, userId, userPass, user2fa
   await authPage.click(authButtonSubmit);
   await waitFor(1000);
   const authResultSelector = 'textarea[id="output"]';
-  const outputValue = await authPage.$eval(
-    authResultSelector,
-    (textarea) => textarea.value
-  );
-  const code = outputValue.split("|")[1];
+  const outputValue = await authPage.$eval(authResultSelector, (textarea) => textarea.value);
+  const code = outputValue.split('|')[1];
   await authPage.close();
   await waitFor(3000);
   const fbCodeSelector = 'input[type="text"][id="approvals_code"]';
@@ -63,13 +60,12 @@ async function loginFacebook({ page, browser, waitFor, userId, userPass, user2fa
   await waitFor(3000);
   await page.click(fbCodeSubmitSelector);
   const url = await page.url();
-  if(url.includes("checkpoint/disabled")) {
+  if (url.includes('checkpoint/disabled')) {
     // handle when acc facebook to be checkpoint/disabled
-    throw new Error("not pass login")
+    throw new Error('not pass login');
   } else {
-    console.log("pass login")
-
-  }  
+    console.log('pass login');
+  }
   try {
     await page.waitForSelector(fbCodeSubmitSelector, { timeout: 5000 });
     await waitFor(2000);
@@ -81,7 +77,7 @@ async function loginFacebook({ page, browser, waitFor, userId, userPass, user2fa
     await waitFor(2000);
     await page.click(fbCodeSubmitSelector);
   } catch (error) {
-    console.log("no checkpoint button");
+    console.log('no checkpoint button');
   }
 }
 
@@ -113,76 +109,80 @@ async function syncPostFacebook({ page, pageUrl, browser, waitFor, userId, userP
         currentTime = Date.now();
       }
     };
-    const postLinks = []
-    while(true) {
+    const postLinks = [];
+    while (true) {
       await waitPageLoading();
-      const selectedLinks = await page.$$eval('a[href*="' + pageUrl + '/posts"]', elements => {
-        return elements.map(element => element.href);
+      const selectedLinks = await page.$$eval('a[href*="' + pageUrl + '/posts"]', (elements) => {
+        return elements.map((element) => element.href);
       });
-      if(selectedLinks) {
-        selectedLinks.forEach(link => {
-          const newLink = link.replace(/\?.*$/, "");
-          if(!postLinks.includes(newLink)) {
+      if (selectedLinks) {
+        selectedLinks.forEach((link) => {
+          const newLink = link.replace(/\?.*$/, '');
+          if (!postLinks.includes(newLink)) {
             postLinks.push(newLink);
           }
-        })
+        });
       }
-      if(postLinks.length >= limitPost) break;
+      if (postLinks.length >= limitPost) break;
     }
     const posts = [];
-    for(const [indexLink, postLink] of postLinks.entries()) {
+    for (const [indexLink, postLink] of postLinks.entries()) {
       await page.goto(postLink);
       await waitFor(2000);
-      const postWrapperSelector = 'body > div > div > div:nth-child(1) > div > div:nth-child(4) > div > div > div:nth-child(1) > div:nth-child(1) > div > div > div > div > div > div > div > div > div > div > div > div > div > div';
+      const postWrapperSelector =
+        'body > div > div > div:nth-child(1) > div > div:nth-child(4) > div > div > div:nth-child(1) > div:nth-child(1) > div > div > div > div > div > div > div > div > div > div > div > div > div > div';
       const postWrappers = await page.$$(postWrapperSelector);
-      if(postWrappers) {
+      if (postWrappers) {
         for (const [index, postWrapper] of postWrappers.entries()) {
-          const isTrueElement = await page.evaluate(el => {
+          const isTrueElement = await page.evaluate((el) => {
             return el.getAttribute('class') === null && el.childElementCount > 0;
           }, postWrapper);
-          if(isTrueElement) {
-            const childElementSelector = postWrapperSelector + ':nth-child(' + (index + 1) + ') > div > div > div:nth-child(3)';
+          if (isTrueElement) {
+            const childElementSelector =
+              postWrapperSelector +
+              ':nth-child(' +
+              (index + 1) +
+              ') > div > div > div:nth-child(3)';
             const childElement = await page.$(childElementSelector);
-            const HTML = await page.evaluate(element => element.outerHTML, childElement);
+            const HTML = await page.evaluate((element) => element.outerHTML, childElement);
             const data = {
               url: postLink,
-              content: HTML
-            }
-            posts.push(data)
-            // const filePath = "post-" + indexLink + ".txt";
-            // fs.writeFile(filePath, postLink + " ============ " + HTML, (err) => {
-            //   if (err) {
-            //     console.error('Error writing to file:', err);
-            //     return;
-            //   }
-            //   console.log('Data has been written to', filePath);
-            // });
+              content: HTML,
+            };
+            posts.push(data);
           }
         }
       }
     }
     console.log(posts);
-    // handle lưu ở đây
   } catch (error) {
-    console.log("========> error: ", error)
+    console.log('========> error: ', error);
   }
 }
 
-async function commentPostFacebook({ page, dataReplyPosts, browser, waitFor, userId, userPass, user2fa }) {
+async function commentPostFacebook({
+  page,
+  dataReplyPosts,
+  browser,
+  waitFor,
+  userId,
+  userPass,
+  user2fa,
+}) {
   try {
     await loginFacebook({ page, browser, waitFor, userId, userPass, user2fa });
     await waitFor(5000);
-    for(const [index, dataReplyPost] of dataReplyPosts.entries()) {
+    for (const [index, dataReplyPost] of dataReplyPosts.entries()) {
       await page.goto(dataReplyPost.url);
       await waitFor(2000);
-      const inputCommentSelector = 'div[aria-label="Write a comment…"]'
+      const inputCommentSelector = 'div[aria-label="Write a comment…"]';
       const inputComment = await page.$(inputCommentSelector);
       await inputComment.type(dataReplyPost.comment);
       const submitBtn = await page.$('#focused-state-composer-submit');
       await submitBtn.click();
     }
   } catch (error) {
-    console.log("========> error: ", error)
+    console.log('========> error: ', error);
   }
 }
 
@@ -195,29 +195,30 @@ async function commentPostFacebook({ page, dataReplyPosts, browser, waitFor, use
 (async () => {
   const { browser, page, waitFor } = await init({
     chromePath: 'C://Program Files/Google/Chrome/Application/chrome.exe',
-    url: 'https://www.facebook.com/'
+    url: 'https://www.facebook.com/',
   });
   // await syncPostFacebook({
-  //   page, 
-  //   browser, 
+  //   page,
+  //   browser,
   //   waitFor,
-  //   userId: "100093602717813", 
-  //   userPass: "xldnKeq6116n60", 
-  //   user2fa: "SWY5D37MR6Z4V3U3GMVUGQXSTJGV5WUW", 
+  //   userId: "100093602717813",
+  //   userPass: "xldnKeq6116n60",
+  //   user2fa: "SWY5D37MR6Z4V3U3GMVUGQXSTJGV5WUW",
   //   pageUrl: "https://www.facebook.com/nhungcaunoibathu"
   // })
   await commentPostFacebook({
-    page, 
-    browser, 
+    page,
+    browser,
     waitFor,
-    userId: "100093602717813", 
-    userPass: "xldnKeq6116n60", 
-    user2fa: "SWY5D37MR6Z4V3U3GMVUGQXSTJGV5WUW", 
+    userId: '100093602717813',
+    userPass: 'xldnKeq6116n60',
+    user2fa: 'SWY5D37MR6Z4V3U3GMVUGQXSTJGV5WUW',
     dataReplyPosts: [
       {
-        url: "https://www.facebook.com/nhungcaunoibathu/posts/pfbid023jn7eF2PeRGgEgxn1jymMK4h7mUCN5aG91bXsxQPWDgRz2V6hwGuVFmZrEYQ5zBHl",
-        comment: "Vì bạn xứng đáng :D"
-      }
-    ]
-  })
+        url:
+          'https://www.facebook.com/nhungcaunoibathu/posts/pfbid023jn7eF2PeRGgEgxn1jymMK4h7mUCN5aG91bXsxQPWDgRz2V6hwGuVFmZrEYQ5zBHl',
+        comment: 'Vì bạn xứng đáng :D',
+      },
+    ],
+  });
 })();
