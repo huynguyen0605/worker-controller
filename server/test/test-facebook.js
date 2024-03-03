@@ -85,8 +85,6 @@ async function loginFacebook({ page, browser, waitFor, userId, userPass, user2fa
   }
 }
 
-const fs = require('fs');
-
 async function syncPostFacebook({ page, pageUrl, browser, waitFor, userId, userPass, user2fa }) {
   const limitPost = 50;
   try {
@@ -149,14 +147,88 @@ async function syncPostFacebook({ page, pageUrl, browser, waitFor, userId, userP
               content: HTML
             }
             posts.push(data)
-            // const filePath = "post-" + indexLink + ".txt";
-            // fs.writeFile(filePath, postLink + " ============ " + HTML, (err) => {
-            //   if (err) {
-            //     console.error('Error writing to file:', err);
-            //     return;
-            //   }
-            //   console.log('Data has been written to', filePath);
-            // });
+          }
+        }
+      }
+    }
+    console.log(posts);
+    // handle lưu ở đây
+  } catch (error) {
+    console.log("========> error: ", error)
+  }
+}
+
+async function scratchDataGroupFacebook({ page, groupUrl, browser, waitFor, userId, userPass, user2fa }) {
+  const limitPost = 5;
+  try {
+    await loginFacebook({ page, browser, waitFor, userId, userPass, user2fa });
+    await waitFor(5000);
+    await page.goto(groupUrl);
+    await waitFor(1000);
+    const elementEN = await page.$('div[role="button"][aria-label="Join group"]');
+    const elementVN = await page.$('div[role="button"][aria-label="Tham gia nhóm"]');
+    if(elementEN || elementVN) {
+      if(elementEN) await elementEN.click();
+      if(elementVN) await elementVN.click();
+      await waitFor(1000);
+      await page.reload();
+    }
+    const waitPageLoading = async () => {
+      let scrolledHeight = 0;
+      const scrollDuration = 10 * 1000;
+      const scrollInterval = 1000;
+      const startTime = Date.now();
+      let currentTime = startTime;
+      while (currentTime - startTime < scrollDuration) {
+        await page.evaluate(() => {
+          window.scrollBy(0, window.innerHeight);
+        });
+        await waitFor(scrollInterval);
+        const newScrolledHeight = await page.evaluate(() => document.body.scrollHeight);
+        if (newScrolledHeight === scrolledHeight) {
+          break;
+        }
+        scrolledHeight = newScrolledHeight;
+        currentTime = Date.now();
+      }
+    };
+    const groupLink = (await page.url()).replace(/\?.*$/, "");
+    const postLinks = [];
+    while(true) {
+      await waitPageLoading();
+      const selectedLinks = await page.$$eval('a[href*="' + groupLink + 'posts"]', elements => {
+        return elements.map(element => element.href);
+      });
+      if(selectedLinks) {
+        selectedLinks.forEach(link => {
+          const newLink = link.replace(/\?.*$/, "");
+          if(!postLinks.includes(newLink)) {
+            postLinks.push(newLink);
+          }
+        })
+      }
+      if(postLinks.length >= limitPost) break;
+    }
+    const posts = [];
+    for(const [indexLink, postLink] of postLinks.entries()) {
+      await page.goto(postLink);
+      await waitFor(2000);
+      const postWrapperSelector = "body > div > div > div:nth-child(1) > div > div:nth-child(4) > div > div > div > div:nth-child(1) > div > div:nth-child(3) > div > div > div:nth-child(4) > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div";
+      const postWrappers = await page.$$(postWrapperSelector);
+      if(postWrappers) {
+        for (const [index, postWrapper] of postWrappers.entries()) {
+          const isTrueElement = await page.evaluate(el => {
+            return el.getAttribute('class') === null && el.childElementCount > 0;
+          }, postWrapper);
+          if(isTrueElement) {
+            const childElementSelector = postWrapperSelector + ':nth-child(' + (index + 1) + ') > div > div > div:nth-child(3)';
+            const childElement = await page.$(childElementSelector);
+            const HTML = await page.evaluate(element => element.outerHTML, childElement); 
+            const data = {
+              url: postLink,
+              content: HTML
+            }
+            posts.push(data)
           }
         }
       }
@@ -175,7 +247,7 @@ async function commentPostFacebook({ page, dataReplyPosts, browser, waitFor, use
     for(const [index, dataReplyPost] of dataReplyPosts.entries()) {
       await page.goto(dataReplyPost.url);
       await waitFor(2000);
-      const inputCommentSelector = 'div[aria-label="Write a comment…"]'
+      const inputCommentSelector = 'div[contenteditable="true"][spellcheck="true"]'
       const inputComment = await page.$(inputCommentSelector);
       await inputComment.type(dataReplyPost.comment);
       const submitBtn = await page.$('#focused-state-composer-submit');
@@ -190,32 +262,43 @@ async function commentPostFacebook({ page, dataReplyPosts, browser, waitFor, use
 // const HTML = await page.evaluate(element => element.outerHTML, btnMoreWrapper);
 // console.log('========= HTML:', HTML);
 
-// 100093513507075|HulQ1xFu4s8RVd|YSVLMJKYOYJBF53MUK2C5ILRKVEZW3YK|carterpeters5x8@hotmail.com|zioOyuj7vtz - checkpoint
-// 100093602717813|xldnKeq6116n60|SWY5D37MR6Z4V3U3GMVUGQXSTJGV5WUW|julian0etberry@hotmail.com|RMc74b6Dx - ok
+// 100094027966193|RTvSEOqt7NuLrp|LACQOLLZTEYO4576X4VHV7C4NO74DIYO|dylanmiortega@hotmail.com|h2vIt67zhv
 (async () => {
   const { browser, page, waitFor } = await init({
     chromePath: 'C://Program Files/Google/Chrome/Application/chrome.exe',
     url: 'https://www.facebook.com/'
   });
+  // ==============================================
   // await syncPostFacebook({
   //   page, 
   //   browser, 
   //   waitFor,
-  //   userId: "100093602717813", 
-  //   userPass: "xldnKeq6116n60", 
-  //   user2fa: "SWY5D37MR6Z4V3U3GMVUGQXSTJGV5WUW", 
+  //   userId: "100094027966193", 
+  //   userPass: "RTvSEOqt7NuLrp", 
+  //   user2fa: "LACQOLLZTEYO4576X4VHV7C4NO74DIYO", 
   //   pageUrl: "https://www.facebook.com/nhungcaunoibathu"
   // })
+  // ==============================================
+  // await scratchDataGroupFacebook({
+  //   page, 
+  //   browser, 
+  //   waitFor,
+  //   userId: "100094027966193", 
+  //   userPass: "RTvSEOqt7NuLrp", 
+  //   user2fa: "LACQOLLZTEYO4576X4VHV7C4NO74DIYO",
+  //   groupUrl: "https://www.facebook.com/groups/1359432470795770/"
+  // })
+  // ==============================================
   await commentPostFacebook({
     page, 
     browser, 
     waitFor,
-    userId: "100093602717813", 
-    userPass: "xldnKeq6116n60", 
-    user2fa: "SWY5D37MR6Z4V3U3GMVUGQXSTJGV5WUW", 
+    userId: "100094027966193", 
+    userPass: "RTvSEOqt7NuLrp", 
+    user2fa: "LACQOLLZTEYO4576X4VHV7C4NO74DIYO",
     dataReplyPosts: [
       {
-        url: "https://www.facebook.com/nhungcaunoibathu/posts/pfbid023jn7eF2PeRGgEgxn1jymMK4h7mUCN5aG91bXsxQPWDgRz2V6hwGuVFmZrEYQ5zBHl",
+        url: "https://www.facebook.com/groups/1359432470795770/posts/25014009574911394/",
         comment: "Vì bạn xứng đáng :D"
       }
     ]
