@@ -83,6 +83,12 @@ export default class MainLayout extends React.Component {
                 <span className="menu-item-link">Quora</span>
               </Link>
             </Menu.Item>
+            <Menu.Item key="Facebook">
+              <Link to="/facebook">
+                <WechatOutlined />
+                <span className="menu-item-link">Facebook</span>
+              </Link>
+            </Menu.Item>
             <Menu.Item key="6">
               <Link to="/account">
                 <AccountBookOutlined />

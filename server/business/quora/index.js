@@ -1,9 +1,9 @@
 const Quora = require('./model');
 const Job = require('../jobs/model');
-const puppeteerReply = require('./templates/reply');
+const puppeteerReply = require('../facebook/templates/reply');
 const { NodeHtmlMarkdown } = require('node-html-markdown');
 const RoundRobin = require('../../mechanism/roundrobin');
-const upvote = require('./templates/upvote');
+const upvote = require('../facebook/templates/upvote');
 const nhm = new NodeHtmlMarkdown(
   /* options (optional) */ {},
   /* customTransformers (optional) */ undefined,

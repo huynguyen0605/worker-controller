@@ -7,9 +7,9 @@ import TextEditor from '../../components/TextEditor';
 const ReplyFormComponent = ({ record, callback }) => {
   const [form] = Form.useForm();
 
-  const handleReply = async (quoraId, replyContent) => {
+  const handleReply = async (facebookId, replyContent) => {
     try {
-      await doPost(`/quoras-reply/${quoraId}`, { content: replyContent });
+      await doPost(`/facebooks-reply/${facebookId}`, { content: replyContent });
       message.success('Reply thành công');
       await callback();
     } catch (error) {
@@ -36,16 +36,16 @@ const ReplyFormComponent = ({ record, callback }) => {
   );
 };
 
-const Quora = () => {
-  const [quoras, setQuoras] = useState([]);
+const Facebook = () => {
+  const [facebooks, setFacebooks] = useState([]);
 
-  async function getQuoras() {
-    const response = await doGet('/quoras', { page: 1, pageSize: 1000 }); // Adjust the API endpoint and parameters as needed
-    setQuoras(response.data);
+  async function getFacebooks() {
+    const response = await doGet('/facebooks', { page: 1, pageSize: 1000 }); // Adjust the API endpoint and parameters as needed
+    setFacebooks(response.data);
   }
 
   useEffect(() => {
-    getQuoras();
+    getFacebooks();
   }, []);
 
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -57,8 +57,8 @@ const Quora = () => {
   const handleOk = async () => {
     try {
       const values = await formAdd.validateFields();
-      await doPost('/quoras', values);
-      await getQuoras();
+      await doPost('/facebooks', values);
+      await getFacebooks();
       formAdd.resetFields();
       setIsModalVisible(false);
     } catch (error) {
@@ -71,11 +71,11 @@ const Quora = () => {
   };
 
   return (
-    <PageLayout title="Quora List">
+    <PageLayout title="Facebook List">
       <>
         <Space direction="vertical" style={{ marginBottom: 16 }}>
           <Button type="primary" onClick={showModal}>
-            Add Quora
+            Add Facebook
           </Button>
         </Space>
         <Table
@@ -136,7 +136,7 @@ const Quora = () => {
                     <div>{record?.answer_url}</div>
                   </Space>
                 ) : (
-                  <ReplyFormComponent record={record} callback={getQuoras} />
+                  <ReplyFormComponent record={record} callback={getFacebooks} />
                 );
               },
             },
@@ -149,8 +149,8 @@ const Quora = () => {
                   <Button
                     type="primary"
                     onClick={async () => {
-                      await doPost(`/quoras-upvote/${record._id}`);
-                      await getQuoras();
+                      await doPost(`/facebooks-upvote/${record._id}`);
+                      await getFacebooks();
                     }}
                   >
                     Upvote
@@ -159,8 +159,8 @@ const Quora = () => {
                     type="ghost"
                     danger
                     onClick={async () => {
-                      await doDelete(`/quoras/${record._id}`);
-                      await getQuoras();
+                      await doDelete(`/facebooks/${record._id}`);
+                      await getFacebooks();
                     }}
                   >
                     Xóa
@@ -169,10 +169,15 @@ const Quora = () => {
               ),
             },
           ]}
-          dataSource={quoras}
+          dataSource={facebooks}
           rowKey="_id"
         />
-        <Modal title="Add Quora" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+        <Modal
+          title="Add Facebook"
+          visible={isModalVisible}
+          onOk={handleOk}
+          onCancel={handleCancel}
+        >
           <Form form={formAdd}>
             <Form.Item
               label="Từ khóa"
@@ -228,4 +233,4 @@ const Quora = () => {
   );
 };
 
-export default Quora;
+export default Facebook;
