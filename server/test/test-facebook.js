@@ -82,7 +82,7 @@ async function loginFacebook({ page, browser, waitFor, userId, userPass, user2fa
 }
 
 async function syncPostFacebook({ page, pageUrl, browser, waitFor, userId, userPass, user2fa }) {
-  const limitPost = 50;
+  const limitPost = 5;
   try {
     await loginFacebook({ page, browser, waitFor, userId, userPass, user2fa });
     await waitFor(5000);
@@ -214,7 +214,14 @@ async function scratchDataGroupFacebook({ page, groupUrl, browser, waitFor, user
     for(const [indexLink, postLink] of postLinks.entries()) {
       await page.goto(postLink);
       await waitFor(2000);
-      const postWrapperSelector = "body > div > div > div:nth-child(1) > div > div:nth-child(4) > div > div > div > div:nth-child(1) > div > div:nth-child(3) > div > div > div:nth-child(4) > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div";
+      let postWrapperSelector;
+      const regex = /groups\/(\d+)\/?/;
+      const match = postLink.match(regex);
+      if (match) {
+        postWrapperSelector = "body > div > div > div:nth-child(1) > div > div:nth-child(4) > div > div > div > div:nth-child(1) > div > div:nth-child(3) > div > div > div:nth-child(4) > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div"
+      } else {
+        postWrapperSelector = "body > div > div > div:nth-child(1) > div > div:nth-child(4) > div > div > div > div:nth-child(1) > div > div:nth-child(3) > div > div > div:nth-child(4) > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div";
+      }
       const postWrappers = await page.$$(postWrapperSelector);
       if(postWrappers) {
         for (const [index, postWrapper] of postWrappers.entries()) {
@@ -225,11 +232,13 @@ async function scratchDataGroupFacebook({ page, groupUrl, browser, waitFor, user
             const childElementSelector = postWrapperSelector + ':nth-child(' + (index + 1) + ') > div > div > div:nth-child(3)';
             const childElement = await page.$(childElementSelector);
             const HTML = await page.evaluate(element => element.outerHTML, childElement); 
-            const data = {
-              url: postLink,
-              content: HTML
+            if(HTML) {
+              const data = {
+                url: postLink,
+                content: HTML
+              }
+              posts.push(data)
             }
-            posts.push(data)
           }
         }
       }
@@ -287,28 +296,30 @@ async function commentPostFacebook({
   //   pageUrl: "https://www.facebook.com/nhungcaunoibathu"
   // })
   // ==============================================
-  // await scratchDataGroupFacebook({
-  //   page, 
-  //   browser, 
-  //   waitFor,
-  //   userId: "100094027966193", 
-  //   userPass: "RTvSEOqt7NuLrp", 
-  //   user2fa: "LACQOLLZTEYO4576X4VHV7C4NO74DIYO",
-  //   groupUrl: "https://www.facebook.com/groups/1359432470795770/"
-  // })
-  // ==============================================
-  await commentPostFacebook({
-    page,
-    browser,
+  await scratchDataGroupFacebook({
+    page, 
+    browser, 
     waitFor,
     userId: "100094027966193", 
     userPass: "RTvSEOqt7NuLrp", 
     user2fa: "LACQOLLZTEYO4576X4VHV7C4NO74DIYO",
-    dataReplyPosts: [
-      {
-        url: "https://www.facebook.com/groups/1359432470795770/posts/25014009574911394/",
-        comment: "Vì bạn xứng đáng :D"
-      }
-    ]
+    // groupUrl: "https://www.facebook.com/groups/1359432470795770/"
+    // groupUrl: "https://www.facebook.com/groups/nghiencon.gr/"
+    groupUrl: "https://www.facebook.com/groups/mebimsuachiasemeonuoicon/"
   })
+  // ==============================================
+  // await commentPostFacebook({
+  //   page,
+  //   browser,
+  //   waitFor,
+  //   userId: "100094027966193", 
+  //   userPass: "RTvSEOqt7NuLrp", 
+  //   user2fa: "LACQOLLZTEYO4576X4VHV7C4NO74DIYO",
+  //   dataReplyPosts: [
+  //     {
+  //       url: "https://www.facebook.com/groups/1359432470795770/posts/25014009574911394/",
+  //       comment: "Vì bạn xứng đáng :D"
+  //     }
+  //   ]
+  // })
 })();
