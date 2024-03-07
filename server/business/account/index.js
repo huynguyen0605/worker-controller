@@ -17,7 +17,7 @@ const accounts = (app) => {
       const client = await Client.findOne({ name: clientName });
       const accounts = await Account.find({
         client_assigned_to: client._id,
-      });
+      }).populate('links');
       res.json(accounts);
     } catch (error) {
       res.status(500).json({ error: error.message });

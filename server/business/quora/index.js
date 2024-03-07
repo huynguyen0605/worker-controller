@@ -79,23 +79,15 @@ const quoras = (app) => {
 
       const { keyword, title, url, status, number_of_upvote, number_of_comment } = quora;
 
-      const roundRobin = new RoundRobin();
-      const client = await roundRobin.getNextClient('quora-executor');
-      console.log('huynvq::=====>client', client);
-      const { _id: client_id, name: client_name } = client;
-      //nếu ko truyền client thì tìm 1 client tên là quora, trạng thái đang active để lưu
-      console.log('huynvq::======>client_id', client_id, client_name);
-
       const contentMd = nhm.translate(content);
       await Job.create({
         name: `${url}`,
         status: 'iddle',
         code: puppeteerReply(url, contentMd),
-        client_id: client_id,
-        client_name: client_name,
+        domain: 'quora',
       });
 
-      await Quora.findByIdAndUpdate(id, { reply: content });
+      await Quora.findByIdAndUpdate(id, { reply: content, status: 'replied' });
 
       res.status(200).json(true);
     } catch (error) {

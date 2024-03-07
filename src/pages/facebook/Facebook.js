@@ -3,6 +3,7 @@ import { Table, Form, Input, Space, Button, message, Modal, Tag } from 'antd';
 import PageLayout from '../../layout/PageLayout';
 import { doGet, doPost, doDelete } from '../../service'; // Adjust the path based on your project structure
 import TextEditor from '../../components/TextEditor';
+import './styles.css';
 
 const ReplyFormComponent = ({ record, callback }) => {
   const [form] = Form.useForm();
@@ -73,12 +74,9 @@ const Facebook = () => {
   return (
     <PageLayout title="Facebook List">
       <>
-        <Space direction="vertical" style={{ marginBottom: 16 }}>
-          <Button type="primary" onClick={showModal}>
-            Add Facebook
-          </Button>
-        </Space>
         <Table
+          bordered
+          pagination={{ pageSize: 100 }}
           columns={[
             {
               title: 'Từ khóa',
@@ -86,22 +84,49 @@ const Facebook = () => {
               width: 100,
               key: 'keyword',
             },
+            // {
+            //   title: 'Số lượng comment',
+            //   dataIndex: 'number_of_comment',
+            //   width: 100,
+            //   key: 'number_of_comment',
+            // },
             {
-              title: 'Số lượng comment',
-              dataIndex: 'number_of_comment',
+              title: 'Tag',
               width: 100,
-              key: 'number_of_comment',
+              key: 'tag',
+              render: (value, record, index) => {
+                return record?.tags.map((tag) => (
+                  <Tag style={{ background: tag?.color ? tag?.color : 'black', color: 'white' }}>
+                    {tag?.name}
+                  </Tag>
+                ));
+              },
             },
             {
               title: 'Nội dung câu hỏi',
-              dataIndex: 'title',
               key: 'title',
+              render: (value, record, index) => {
+                return (
+                  <div
+                    className="show-fb-content"
+                    dangerouslySetInnerHTML={{
+                      __html: record?.title,
+                    }}
+                  />
+                );
+              },
             },
             {
               title: 'Link',
-              dataIndex: 'url',
-              width: 100,
+              width: 90,
               key: 'url',
+              render: (value, record, index) => {
+                return (
+                  <a href={record?.url} target="_blank">
+                    Link
+                  </a>
+                );
+              },
             },
             {
               title: 'Trạng thái',
@@ -146,15 +171,6 @@ const Facebook = () => {
               width: 100,
               render: (value, record) => (
                 <Space>
-                  <Button
-                    type="primary"
-                    onClick={async () => {
-                      await doPost(`/facebooks-upvote/${record._id}`);
-                      await getFacebooks();
-                    }}
-                  >
-                    Upvote
-                  </Button>
                   <Button
                     type="ghost"
                     danger

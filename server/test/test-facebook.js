@@ -145,9 +145,9 @@ async function syncPostFacebook({ page, pageUrl, browser, waitFor, userId, userP
             const HTML = await page.evaluate((element) => element.outerHTML, childElement);
             const data = {
               url: postLink,
-              content: HTML
-            }
-            posts.push(data)
+              content: HTML,
+            };
+            posts.push(data);
           }
         }
       }
@@ -155,11 +155,19 @@ async function syncPostFacebook({ page, pageUrl, browser, waitFor, userId, userP
     console.log(posts);
     // handle lưu ở đây
   } catch (error) {
-    console.log("========> error: ", error)
+    console.log('========> error: ', error);
   }
 }
 
-async function scratchDataGroupFacebook({ page, groupUrl, browser, waitFor, userId, userPass, user2fa }) {
+async function scratchDataGroupFacebook({
+  page,
+  groupUrl,
+  browser,
+  waitFor,
+  userId,
+  userPass,
+  user2fa,
+}) {
   const limitPost = 5;
   try {
     await loginFacebook({ page, browser, waitFor, userId, userPass, user2fa });
@@ -168,9 +176,9 @@ async function scratchDataGroupFacebook({ page, groupUrl, browser, waitFor, user
     await waitFor(1000);
     const elementEN = await page.$('div[role="button"][aria-label="Join group"]');
     const elementVN = await page.$('div[role="button"][aria-label="Tham gia nhóm"]');
-    if(elementEN || elementVN) {
-      if(elementEN) await elementEN.click();
-      if(elementVN) await elementVN.click();
+    if (elementEN || elementVN) {
+      if (elementEN) await elementEN.click();
+      if (elementVN) await elementVN.click();
       await waitFor(1000);
       await page.reload();
     }
@@ -193,51 +201,57 @@ async function scratchDataGroupFacebook({ page, groupUrl, browser, waitFor, user
         currentTime = Date.now();
       }
     };
-    const groupLink = (await page.url()).replace(/\?.*$/, "");
+    const groupLink = (await page.url()).replace(/\?.*$/, '');
     const postLinks = [];
-    while(true) {
+    while (true) {
       await waitPageLoading();
-      const selectedLinks = await page.$$eval('a[href*="' + groupLink + 'posts"]', elements => {
-        return elements.map(element => element.href);
+      const selectedLinks = await page.$$eval('a[href*="' + groupLink + 'posts"]', (elements) => {
+        return elements.map((element) => element.href);
       });
-      if(selectedLinks) {
-        selectedLinks.forEach(link => {
-          const newLink = link.replace(/\?.*$/, "");
-          if(!postLinks.includes(newLink)) {
+      if (selectedLinks) {
+        selectedLinks.forEach((link) => {
+          const newLink = link.replace(/\?.*$/, '');
+          if (!postLinks.includes(newLink)) {
             postLinks.push(newLink);
           }
-        })
+        });
       }
-      if(postLinks.length >= limitPost) break;
+      if (postLinks.length >= limitPost) break;
     }
     const posts = [];
-    for(const [indexLink, postLink] of postLinks.entries()) {
+    for (const [indexLink, postLink] of postLinks.entries()) {
       await page.goto(postLink);
       await waitFor(2000);
       let postWrapperSelector;
       const regex = /groups\/(\d+)\/?/;
       const match = postLink.match(regex);
       if (match) {
-        postWrapperSelector = "body > div > div > div:nth-child(1) > div > div:nth-child(4) > div > div > div > div:nth-child(1) > div > div:nth-child(3) > div > div > div:nth-child(4) > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div"
+        postWrapperSelector =
+          'body > div > div > div:nth-child(1) > div > div:nth-child(4) > div > div > div > div:nth-child(1) > div > div:nth-child(3) > div > div > div:nth-child(4) > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div';
       } else {
-        postWrapperSelector = "body > div > div > div:nth-child(1) > div > div:nth-child(4) > div > div > div > div:nth-child(1) > div > div:nth-child(3) > div > div > div:nth-child(4) > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div";
+        postWrapperSelector =
+          'body > div > div > div:nth-child(1) > div > div:nth-child(4) > div > div > div > div:nth-child(1) > div > div:nth-child(3) > div > div > div:nth-child(4) > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div > div';
       }
       const postWrappers = await page.$$(postWrapperSelector);
-      if(postWrappers) {
+      if (postWrappers) {
         for (const [index, postWrapper] of postWrappers.entries()) {
-          const isTrueElement = await page.evaluate(el => {
+          const isTrueElement = await page.evaluate((el) => {
             return el.getAttribute('class') === null && el.childElementCount > 0;
           }, postWrapper);
-          if(isTrueElement) {
-            const childElementSelector = postWrapperSelector + ':nth-child(' + (index + 1) + ') > div > div > div:nth-child(3)';
+          if (isTrueElement) {
+            const childElementSelector =
+              postWrapperSelector +
+              ':nth-child(' +
+              (index + 1) +
+              ') > div > div > div:nth-child(3)';
             const childElement = await page.$(childElementSelector);
-            const HTML = await page.evaluate(element => element.outerHTML, childElement); 
-            if(HTML) {
+            const HTML = await page.evaluate((element) => element.outerHTML, childElement);
+            if (HTML) {
               const data = {
                 url: postLink,
-                content: HTML
-              }
-              posts.push(data)
+                content: HTML,
+              };
+              posts.push(data);
             }
           }
         }
@@ -251,7 +265,8 @@ async function scratchDataGroupFacebook({ page, groupUrl, browser, waitFor, user
 
 async function commentPostFacebook({
   page,
-  dataReplyPosts,
+  url,
+  answer,
   browser,
   waitFor,
   userId,
@@ -261,15 +276,13 @@ async function commentPostFacebook({
   try {
     await loginFacebook({ page, browser, waitFor, userId, userPass, user2fa });
     await waitFor(5000);
-    for (const [index, dataReplyPost] of dataReplyPosts.entries()) {
-      await page.goto(dataReplyPost.url);
-      await waitFor(2000);
-      const inputCommentSelector = 'div[contenteditable="true"][spellcheck="true"]'
-      const inputComment = await page.$(inputCommentSelector);
-      await inputComment.type(dataReplyPost.comment);
-      const submitBtn = await page.$('#focused-state-composer-submit');
-      await submitBtn.click();
-    }
+    await page.goto(url);
+    await waitFor(2000);
+    const inputCommentSelector = 'div[contenteditable="true"][spellcheck="true"]';
+    const inputComment = await page.$(inputCommentSelector);
+    await inputComment.type(answer);
+    const submitBtn = await page.$('#focused-state-composer-submit');
+    await submitBtn.click();
   } catch (error) {
     console.log('========> error: ', error);
   }
@@ -290,30 +303,30 @@ async function commentPostFacebook({
   //   page,
   //   browser,
   //   waitFor,
-  //   userId: "100094027966193", 
-  //   userPass: "RTvSEOqt7NuLrp", 
-  //   user2fa: "LACQOLLZTEYO4576X4VHV7C4NO74DIYO", 
+  //   userId: "100094027966193",
+  //   userPass: "RTvSEOqt7NuLrp",
+  //   user2fa: "LACQOLLZTEYO4576X4VHV7C4NO74DIYO",
   //   pageUrl: "https://www.facebook.com/nhungcaunoibathu"
   // })
   // ==============================================
   await scratchDataGroupFacebook({
-    page, 
-    browser, 
+    page,
+    browser,
     waitFor,
-    userId: "100094027966193", 
-    userPass: "RTvSEOqt7NuLrp", 
-    user2fa: "LACQOLLZTEYO4576X4VHV7C4NO74DIYO",
+    userId: '100094027966193',
+    userPass: 'RTvSEOqt7NuLrp',
+    user2fa: 'LACQOLLZTEYO4576X4VHV7C4NO74DIYO',
     // groupUrl: "https://www.facebook.com/groups/1359432470795770/"
     // groupUrl: "https://www.facebook.com/groups/nghiencon.gr/"
-    groupUrl: "https://www.facebook.com/groups/mebimsuachiasemeonuoicon/"
-  })
+    groupUrl: 'https://www.facebook.com/groups/mebimsuachiasemeonuoicon/',
+  });
   // ==============================================
   // await commentPostFacebook({
   //   page,
   //   browser,
   //   waitFor,
-  //   userId: "100094027966193", 
-  //   userPass: "RTvSEOqt7NuLrp", 
+  //   userId: "100094027966193",
+  //   userPass: "RTvSEOqt7NuLrp",
   //   user2fa: "LACQOLLZTEYO4576X4VHV7C4NO74DIYO",
   //   dataReplyPosts: [
   //     {

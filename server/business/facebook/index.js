@@ -19,6 +19,7 @@ const facebooks = (app) => {
       const sort = sortBy ? { [sortBy]: 1 } : {};
 
       const facebooks = await Facebook.find(filter)
+        .populate('tags')
         .sort(sort)
         .skip((page - 1) * pageSize)
         .limit(parseInt(pageSize));
@@ -77,53 +78,18 @@ const facebooks = (app) => {
       const { content } = req.body;
       const facebook = await Facebook.findById(id);
 
-      const { keyword, title, url, status, number_of_upvote, number_of_comment } = facebook;
-
-      const roundRobin = new RoundRobin();
-      const client = await roundRobin.getNextClient('facebook-executor');
-      console.log('huynvq::=====>client', client);
-      const { _id: client_id, name: client_name } = client;
-      //nếu ko truyền client thì tìm 1 client tên là facebook, trạng thái đang active để lưu
-      console.log('huynvq::======>client_id', client_id, client_name);
-
+      const { keyword, title, url, status, number_of_upvote, number_of_comment, tags } = facebook;
       const contentMd = nhm.translate(content);
+
       await Job.create({
         name: `${url}`,
         status: 'iddle',
         code: puppeteerReply(url, contentMd),
-        client_id: client_id,
-        client_name: client_name,
+        domain: 'facebook',
+        tags: tags,
       });
 
-      await Facebook.findByIdAndUpdate(id, { reply: content });
-
-      res.status(200).json(true);
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
-  });
-
-  app.post('/api/facebooks-upvote/:id', async (req, res) => {
-    try {
-      const { id } = req.params;
-      const facebook = await Facebook.findById(id);
-      const { answer_url } = facebook;
-
-      const roundRobin = new RoundRobin();
-      const client = await roundRobin.getNextClient('facebook-executor');
-      const { _id: client_id, name: client_name } = client;
-
-      //nếu ko truyền client thì tìm 1 client tên là facebook, trạng thái đang active để lưu
-
-      await Job.create({
-        name: `${url}`,
-        status: 'iddle',
-        code: upvote(answer_url),
-        client_id: client_id,
-        client_name: client_name,
-      });
-
-      await Facebook.findByIdAndUpdate(id, { reply: content });
+      await Facebook.findByIdAndUpdate(id, { reply: content, status: 'replied' });
 
       res.status(200).json(true);
     } catch (error) {

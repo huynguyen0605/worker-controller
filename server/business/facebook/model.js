@@ -7,7 +7,7 @@ const mongoose = require('mongoose');
  */
 
 /**
- * type: post/reply
+ * type: post/comment/group-post/group-comment
  */
 const FacebookSchema = new mongoose.Schema(
   {
@@ -15,6 +15,12 @@ const FacebookSchema = new mongoose.Schema(
     title: { type: String },
     url: { type: String },
     type: { type: String },
+    tags: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'tags',
+      },
+    ],
     status: { type: String },
     reply: { type: String },
     number_of_upvote: { type: String },

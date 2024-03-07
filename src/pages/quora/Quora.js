@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Form, Input, Space, Button, message, Modal, Tag } from 'antd';
+import { Table, Form, Input, Space, Button, message, Modal, Tag, Tooltip } from 'antd';
 import PageLayout from '../../layout/PageLayout';
 import { doGet, doPost, doDelete } from '../../service'; // Adjust the path based on your project structure
 import TextEditor from '../../components/TextEditor';
@@ -129,11 +129,16 @@ const Quora = () => {
               render: (value, record) => {
                 return record?.reply ? (
                   <Space direction="vertical">
-                    <Space direction="horizontal">
+                    {/* <Space direction="horizontal">
                       <a href={record?.answer_url}>Link câu trả lời</a>
-                    </Space>
-                    <div>{record?.reply}</div>
-                    <div>{record?.answer_url}</div>
+                    </Space> */}
+                    <Tooltip title={record?.reply}>
+                      <span>
+                        {record?.reply.length > 100
+                          ? `${record?.reply.substring(0, 100)}...`
+                          : record?.reply}
+                      </span>
+                    </Tooltip>
                   </Space>
                 ) : (
                   <ReplyFormComponent record={record} callback={getQuoras} />
