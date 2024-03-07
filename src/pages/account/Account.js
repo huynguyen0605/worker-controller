@@ -124,7 +124,7 @@ const Accounts = () => {
                     style={{ width: 200 }}
                     placeholder="Chọn tag"
                     onChange={async (value) => {
-                      await doPut(`/accounts/${record._id}`, { ...record, tag: value });
+                      await doPut(`/accounts/${record._id}`, { ...record, tags: value });
                       await getAccounts();
                       message.success('Cập nhật tiến trình thành công');
                     }}
@@ -178,7 +178,7 @@ const Accounts = () => {
                     placeholder="Chọn links"
                     onChange={async (value) => {
                       // Assuming the endpoint to update links is '/updateLinks/:id'
-                      await doPut(`/updateLinks/${record._id}`, { links: value });
+                      await doPut(`/accounts/${record._id}`, { links: value });
                       await getAccounts();
                       message.success('Cập nhật links thành công');
                     }}
