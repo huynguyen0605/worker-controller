@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 
 const app = express();
 const port = 3000;
@@ -10,6 +11,7 @@ const mongoose = require('mongoose');
   await mongoose.connect('mongodb://127.0.0.1:27017/worker-management');
 })();
 // Middleware to parse JSON requests
+app.use(cors());
 app.use(bodyParser.json({ limit: '100mb' }));
 
 // Middleware to handle CORS (Cross-Origin Resource Sharing) - Adjust as needed for your environment

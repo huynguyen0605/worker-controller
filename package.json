@@ -85,6 +85,7 @@
     "axios": "^1.6.2",
     "beautify-json": "^1.0.1",
     "cheerio": "^1.0.0-rc.12",
+    "cors": "^2.8.5",
     "mongodb": "^6.3.0",
     "mongoose": "^8.1.2",
     "node-cron": "^3.0.3",
