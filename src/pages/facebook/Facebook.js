@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Form, Input, Space, Button, message, Modal, Tag } from 'antd';
 import PageLayout from '../../layout/PageLayout';
-import { doGet, doPost, doDelete } from '../../service'; // Adjust the path based on your project structure
+import { doGet, doPost, doDelete, doPut } from '../../service'; // Adjust the path based on your project structure
 import TextEditor from '../../components/TextEditor';
 import './styles.css';
 
@@ -76,7 +76,7 @@ const Facebook = () => {
       <>
         <Table
           bordered
-          pagination={{ pageSize: 100 }}
+          pagination={{ pageSize: 50 }}
           columns={[
             {
               title: 'Từ khóa',
@@ -171,6 +171,15 @@ const Facebook = () => {
               width: 100,
               render: (value, record) => (
                 <Space>
+                  <Button
+                    type="primary"
+                    onClick={async () => {
+                      await doPut(`/facebooks/${record._id}`, { visible: false });
+                      await getFacebooks();
+                    }}
+                  >
+                    Ẩn
+                  </Button>
                   <Button
                     type="ghost"
                     danger

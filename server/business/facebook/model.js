@@ -25,6 +25,7 @@ const FacebookSchema = new mongoose.Schema(
     reply: { type: String },
     number_of_upvote: { type: String },
     number_of_comment: { type: String },
+    visible: { type: Boolean, default: true },
   },
   {
     timestamps: true,
