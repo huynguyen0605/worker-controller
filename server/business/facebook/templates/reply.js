@@ -15,6 +15,7 @@ const reply = (questionUrl, answer) => {
       await inputComment.type(\`${answer}\`);
       const submitBtn = await page.$('#focused-state-composer-submit');
       await submitBtn.click();
+      await waitFor(10000);
     } catch (error) {
       console.log('========> error: ', error);
     }
