@@ -83,8 +83,7 @@ const facebooks = (app) => {
       const facebook = await Facebook.findById(id);
 
       const { keyword, title, url, status, number_of_upvote, number_of_comment, tags } = facebook;
-      const contentMd = nhm.translate(content);
-
+      const contentMd = content.replace(/<[^>]*>/g, '');
       await Job.create({
         name: `${url}`,
         status: 'iddle',
