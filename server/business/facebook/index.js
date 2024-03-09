@@ -16,7 +16,7 @@ const facebooks = (app) => {
       const { page = 1, pageSize = 10, status, sortBy } = req.query;
 
       let filter = status ? { status } : {};
-      const sort = sortBy ? { [sortBy]: 1 } : { createdAt: 1 };
+      const sort = sortBy ? { [sortBy]: 1 } : { createdAt: -1 };
       filter = {
         ...filter,
         visible: true,
