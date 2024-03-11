@@ -13,9 +13,10 @@ const reply = (questionUrl, answer) => {
       const inputCommentSelector = 'div[contenteditable="true"][spellcheck="true"]';
       const inputComment = await page.$(inputCommentSelector);
       await inputComment.type(\`${answer}\`);
+      await waitFor(2000);
       const submitBtn = await page.$('#focused-state-composer-submit');
       await submitBtn.click();
-      await waitFor(10000);
+      await waitFor(20000);
     } catch (error) {
       console.log('========> error: ', error);
     }
