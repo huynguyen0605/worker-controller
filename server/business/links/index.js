@@ -26,6 +26,7 @@ const links = (app) => {
   // Create a new link
   app.post('/api/links', async (req, res) => {
     try {
+      console.log('req.body', req.body);
       const newLink = await Link.create(req.body);
       res.status(201).json(newLink);
     } catch (error) {

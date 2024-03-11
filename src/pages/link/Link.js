@@ -22,8 +22,8 @@ const LinkTable = () => {
     }
   };
 
-  const handleEdit = (link) => {
-    form.setFieldsValue(link);
+  const handleEdit = (record) => {
+    form.setFieldsValue({ ...record });
     setModalVisible(true);
   };
 
@@ -104,11 +104,17 @@ const LinkTable = () => {
           onCancel={handleModalCancel}
         >
           <Form form={form} layout="vertical" name="linkForm">
+            <Form.Item name="_id" hidden>
+              <Input hidden />
+            </Form.Item>
             <Form.Item name="title" label="Title" rules={[{ required: true }]}>
               <Input />
             </Form.Item>
             <Form.Item name="url" label="URL" rules={[{ required: true }]}>
               <Input />
+            </Form.Item>
+            <Form.Item name="type" label="Type" rules={[{ required: true }]}>
+              <Input placeholder="group/feed" />
             </Form.Item>
           </Form>
         </Modal>

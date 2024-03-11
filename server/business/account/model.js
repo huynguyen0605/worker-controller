@@ -5,7 +5,12 @@ const AccountSchema = new mongoose.Schema(
     name: { type: String },
     info: { type: String },
     client_assigned_to: { type: String },
-    tag: { type: [String], default: [] }, // danh sách chủ đề gắn với tài khoản
+    tags: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'tags',
+      },
+    ],
     links: [
       {
         type: mongoose.Schema.Types.ObjectId,

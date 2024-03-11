@@ -1,0 +1,15 @@
+.show-fb-content {
+  height: 100px;
+  width: 600px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.show-fb-content * {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+.show-fb-content div > img {
+  width: 50px !important;
+  height: 50px !important;
+  object-fit: contain;
+}

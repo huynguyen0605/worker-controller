@@ -89,11 +89,25 @@ const Client = () => {
               title: 'Trạng thái',
               align: 'left',
               render: (value, record, index) => {
-                if (record.available) {
-                  return <Tag style={{ background: 'green', color: 'white' }}>Khả dụng</Tag>;
-                } else {
-                  return <Tag>Không khả dụng</Tag>;
-                }
+                return (
+                  <Select
+                    defaultValue={record?.available}
+                    style={{ width: 200 }}
+                    placeholder="Chọn tiến trình"
+                    onChange={async (value) => {
+                      await doPut(`/clients/${record._id}`, { ...record, available: value });
+                      await getData();
+                      message.success('Cập nhật tiến trình thành công');
+                    }}
+                  >
+                    <Select.Option key={'a'} value={true}>
+                      Khả dụng
+                    </Select.Option>
+                    <Select.Option key={'b'} value={false}>
+                      Không khả dụng
+                    </Select.Option>
+                  </Select>
+                );
               },
             },
             {

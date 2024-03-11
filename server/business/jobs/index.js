@@ -2,14 +2,18 @@ const Job = require('./model');
 const jobs = (app) => {
   app.get('/api/jobs', async (req, res) => {
     try {
-      const { page = 1, pageSize = 10, status, sortBy } = req.query;
+      const { page = 1, pageSize = 10, status, sortBy, domain } = req.query;
 
       let query = {};
       if (status) {
         query.status = status;
       }
+      if (domain) {
+        query.domain = domain;
+      }
 
       const jobs = await Job.find(query)
+        .populate('tags')
         .sort(sortBy ? { [sortBy]: 1 } : {})
         .skip((page - 1) * pageSize)
         .limit(parseInt(pageSize))

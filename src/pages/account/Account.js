@@ -46,6 +46,7 @@ const Accounts = () => {
   async function getLinks() {
     try {
       const response = await doGet('/links');
+      console.log(response.data);
       setLinks(response.data);
     } catch (error) {
       console.error('Error fetching links:', error.message);
@@ -114,16 +115,16 @@ const Accounts = () => {
             },
             {
               title: 'Chủ đề',
-              key: 'tag',
+              key: 'tags',
               render: (value, record, index) => {
                 return (
                   <Select
                     mode="multiple"
-                    value={record?.tag || []}
+                    value={record?.tags || []}
                     style={{ width: 200 }}
                     placeholder="Chọn tag"
                     onChange={async (value) => {
-                      await doPut(`/accounts/${record._id}`, { ...record, tag: value });
+                      await doPut(`/accounts/${record._id}`, { ...record, tags: value });
                       await getAccounts();
                       message.success('Cập nhật tiến trình thành công');
                     }}
@@ -167,27 +168,30 @@ const Accounts = () => {
             {
               title: 'Links', // New column for links
               key: 'links',
-              render: (value, record, index) => (
-                <Select
-                  mode="multiple"
-                  value={record?.links || []}
-                  style={{ width: 200 }}
-                  placeholder="Chọn links"
-                  onChange={async (value) => {
-                    // Assuming the endpoint to update links is '/updateLinks/:id'
-                    await doPut(`/updateLinks/${record._id}`, { links: value });
-                    await getAccounts();
-                    message.success('Cập nhật links thành công');
-                  }}
-                >
-                  {/* Assuming links is an array fetched from somewhere */}
-                  {links.map((link) => (
-                    <Select.Option key={link._id} value={link._id}>
-                      {link.name}
-                    </Select.Option>
-                  ))}
-                </Select>
-              ),
+              render: (value, record, index) => {
+                console.log('links', record?.links, Array.isArray(record.links));
+                return (
+                  <Select
+                    mode="multiple"
+                    value={record?.links || []}
+                    style={{ width: 200 }}
+                    placeholder="Chọn links"
+                    onChange={async (value) => {
+                      // Assuming the endpoint to update links is '/updateLinks/:id'
+                      await doPut(`/accounts/${record._id}`, { links: value });
+                      await getAccounts();
+                      message.success('Cập nhật links thành công');
+                    }}
+                  >
+                    {/* Assuming links is an array fetched from somewhere */}
+                    {links.map((link) => (
+                      <Select.Option key={link._id} value={link._id}>
+                        {link.title}
+                      </Select.Option>
+                    ))}
+                  </Select>
+                );
+              },
             },
             {
               title: 'Hành động',

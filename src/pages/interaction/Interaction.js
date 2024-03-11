@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import PageLayout from '../../layout/PageLayout';
 import { doGet, doPost, doPut, doDelete } from '../../service';
-import { Table, Form, Input, Space, Button, Modal } from 'antd';
+import { Table, Form, Input, Space, Button, Modal, Tooltip } from 'antd';
 
 const Interaction = () => {
   const [interactions, setInteractions] = useState([]);
@@ -64,6 +64,7 @@ const Interaction = () => {
 
         <Table
           bordered
+          pagination={{ pageSize: 100 }}
           columns={[
             {
               title: 'STT',
@@ -79,7 +80,15 @@ const Interaction = () => {
             {
               title: 'Code thao tác',
               align: 'left',
-              render: (value, record, index) => record.content,
+              render: (value, record, index) => (
+                <Tooltip title={record.content}>
+                  <span>
+                    {record.content.length > 100
+                      ? `${record.content.substring(0, 100)}...`
+                      : record.content}
+                  </span>
+                </Tooltip>
+              ),
             },
             {
               title: 'Danh sách tham số bổ sung',
