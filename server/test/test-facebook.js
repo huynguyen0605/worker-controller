@@ -304,8 +304,8 @@ async function commentPostFacebook({
     userPass: "RTvSEOqt7NuLrp", 
     user2fa: "LACQOLLZTEYO4576X4VHV7C4NO74DIYO",
     // groupUrl: "https://www.facebook.com/groups/1359432470795770/"
-    // groupUrl: "https://www.facebook.com/groups/nghiencon.gr/"
-    groupUrl: "https://www.facebook.com/groups/mebimsuachiasemeonuoicon/"
+    groupUrl: "https://www.facebook.com/groups/nghiencon.gr/"
+    // groupUrl: "https://www.facebook.com/groups/mebimsuachiasemeonuoicon/"
   })
   // ==============================================
   // await commentPostFacebook({
