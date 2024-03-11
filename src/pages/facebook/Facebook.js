@@ -85,6 +85,7 @@ const Facebook = () => {
           pagination={{
             pageSize: 50,
             current: currentPage,
+            total: 5000,
             onChange: (page, pageSize) => {
               setCurrentPage(page);
             },
