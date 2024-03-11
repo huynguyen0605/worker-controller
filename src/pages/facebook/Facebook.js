@@ -39,15 +39,21 @@ const ReplyFormComponent = ({ record, callback }) => {
 
 const Facebook = () => {
   const [facebooks, setFacebooks] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
 
-  async function getFacebooks() {
-    const response = await doGet('/facebooks', { page: 1, pageSize: 1000 }); // Adjust the API endpoint and parameters as needed
-    setFacebooks(response.data);
+  async function getFacebooks(page = 1, pageSize = 50) {
+    try {
+      const response = await doGet('/facebooks', { page, pageSize });
+      setFacebooks(response.data);
+    } catch (error) {
+      // Handle error
+      console.error('Error fetching Facebooks:', error);
+    }
   }
 
   useEffect(() => {
-    getFacebooks();
-  }, []);
+    getFacebooks(currentPage);
+  }, [currentPage]);
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [formAdd] = Form.useForm();
@@ -59,7 +65,7 @@ const Facebook = () => {
     try {
       const values = await formAdd.validateFields();
       await doPost('/facebooks', values);
-      await getFacebooks();
+      await getFacebooks(currentPage);
       formAdd.resetFields();
       setIsModalVisible(false);
     } catch (error) {
@@ -76,7 +82,13 @@ const Facebook = () => {
       <>
         <Table
           bordered
-          pagination={{ pageSize: 50 }}
+          pagination={{
+            pageSize: 50,
+            current: currentPage,
+            onChange: (page, pageSize) => {
+              setCurrentPage(page);
+            },
+          }}
           columns={[
             {
               title: 'Từ khóa',
@@ -161,7 +173,7 @@ const Facebook = () => {
                     <div>{record?.answer_url}</div>
                   </Space>
                 ) : (
-                  <ReplyFormComponent record={record} callback={getFacebooks} />
+                  <ReplyFormComponent record={record} callback={() => getFacebooks(currentPage)} />
                 );
               },
             },
@@ -175,7 +187,7 @@ const Facebook = () => {
                     type="primary"
                     onClick={async () => {
                       await doPut(`/facebooks/${record._id}`, { visible: false });
-                      await getFacebooks();
+                      await getFacebooks(currentPage);
                     }}
                   >
                     Ẩn
@@ -185,7 +197,7 @@ const Facebook = () => {
                     danger
                     onClick={async () => {
                       await doDelete(`/facebooks/${record._id}`);
-                      await getFacebooks();
+                      await getFacebooks(currentPage);
                     }}
                   >
                     Xóa
