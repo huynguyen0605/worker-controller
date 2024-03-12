@@ -1,5 +1,5 @@
-const baseUrl = 'http://localhost:3000/api';
-// const baseUrl = 'http://103.179.189.15:680/api';
+// const baseUrl = 'http://localhost:3000/api';
+const baseUrl = 'http://103.179.189.15:680/api';
 import queryString from 'querystring';
 import axios from 'axios';
 
