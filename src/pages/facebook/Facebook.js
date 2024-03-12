@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Form, Input, Space, Button, message, Modal, Tag } from 'antd';
+import { Table, Form, Input, Space, Button, message, Modal, Tag, Select } from 'antd';
 import PageLayout from '../../layout/PageLayout';
 import { doGet, doPost, doDelete, doPut } from '../../service'; // Adjust the path based on your project structure
 import TextEditor from '../../components/TextEditor';
@@ -40,10 +40,11 @@ const ReplyFormComponent = ({ record, callback }) => {
 const Facebook = () => {
   const [facebooks, setFacebooks] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [status, setStatus] = useState('iddle');
 
-  async function getFacebooks(page = 1, pageSize = 50) {
+  async function getFacebooks(page = 1, status = 'iddle', pageSize = 50) {
     try {
-      const response = await doGet('/facebooks', { page, pageSize });
+      const response = await doGet('/facebooks', { status, page, pageSize });
       setFacebooks(response.data);
     } catch (error) {
       // Handle error
@@ -52,8 +53,8 @@ const Facebook = () => {
   }
 
   useEffect(() => {
-    getFacebooks(currentPage);
-  }, [currentPage]);
+    getFacebooks(currentPage, status);
+  }, [currentPage, status]);
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [formAdd] = Form.useForm();
@@ -65,12 +66,16 @@ const Facebook = () => {
     try {
       const values = await formAdd.validateFields();
       await doPost('/facebooks', values);
-      await getFacebooks(currentPage);
+      await getFacebooks(currentPage, status);
       formAdd.resetFields();
       setIsModalVisible(false);
     } catch (error) {
       message.error('Lưu lỗi ' + error.message);
     }
+  };
+
+  const handleStatusChange = (value) => {
+    setStatus(value);
   };
 
   const handleCancel = () => {
@@ -80,6 +85,15 @@ const Facebook = () => {
   return (
     <PageLayout title="Facebook List">
       <>
+        <Select
+          value={status}
+          placeholder="Lọc trạng thái"
+          style={{ width: 200 }}
+          onChange={handleStatusChange}
+        >
+          <Option value="iddle">Chưa xử lý</Option>
+          <Option value="replied">Đã phản hồi</Option>
+        </Select>
         <Table
           bordered
           pagination={{
@@ -174,7 +188,10 @@ const Facebook = () => {
                     <div>{record?.answer_url}</div>
                   </Space>
                 ) : (
-                  <ReplyFormComponent record={record} callback={() => getFacebooks(currentPage)} />
+                  <ReplyFormComponent
+                    record={record}
+                    callback={() => getFacebooks(currentPage, status)}
+                  />
                 );
               },
             },
@@ -188,7 +205,7 @@ const Facebook = () => {
                     type="primary"
                     onClick={async () => {
                       await doPut(`/facebooks/${record._id}`, { visible: false });
-                      await getFacebooks(currentPage);
+                      await getFacebooks(currentPage, status);
                     }}
                   >
                     Ẩn
@@ -198,7 +215,7 @@ const Facebook = () => {
                     danger
                     onClick={async () => {
                       await doDelete(`/facebooks/${record._id}`);
-                      await getFacebooks(currentPage);
+                      await getFacebooks(currentPage, status);
                     }}
                   >
                     Xóa
