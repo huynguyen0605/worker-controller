@@ -27,6 +27,7 @@ const analyzer = async (newFacebooks) => {
     }
     return result;
   });
+  conssole.log('analyzedFacebooks', analyzedFacebooks.length);
   await Facebook.insertMany(analyzedFacebooks);
   const namesToCheck = analyzedJobs.map((job) => job.name);
   const existingJobs = await Job.find({ name: { $in: namesToCheck } });
