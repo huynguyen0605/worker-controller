@@ -48,11 +48,11 @@ const buildActions = (mappings) => {
     contentAction += action;
     if (allActions.length == 1) {
     } else if (i == 0) {
-      contentAction += getRandomElementFromArray(actionConnector);
+      contentAction += '' + getRandomElementFromArray(actionConnector) + ' ';
     } else if (i == allActions.length - 1) {
       contentAction += '.';
     } else {
-      contentAction += getRandomElementFromArray(actionConnector2);
+      contentAction += ' ' + getRandomElementFromArray(actionConnector2) + ' ';
     }
   }
   return contentAction;
