@@ -12,6 +12,7 @@ const analyzer = async (newFacebooks) => {
   let analyzedFacebooks = newFacebooks.map((facebook) => {
     let result = { ...facebook };
     let answer = fbAnalyzer(facebook.title);
+    console.log('answer', answer);
     if (answer) {
       result = {
         ...facebook,
