@@ -17,7 +17,7 @@ const analyzer = async (newFacebooks) => {
       result = {
         ...facebook,
         reply: `<p>${answer}</p>`,
-        status: replied,
+        status: 'replied',
       };
       analyzedJobs.push({
         name: facebook.url,
