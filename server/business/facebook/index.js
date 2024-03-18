@@ -4,12 +4,37 @@ const puppeteerReply = require('./templates/reply');
 const { NodeHtmlMarkdown } = require('node-html-markdown');
 const RoundRobin = require('../../mechanism/roundrobin');
 const upvote = require('./templates/upvote');
-const nhm = new NodeHtmlMarkdown(
-  /* options (optional) */ {},
-  /* customTransformers (optional) */ undefined,
-  /* customCodeBlockTranslators (optional) */ undefined,
-);
+const fbAnalyzer = require('./facebook-analyzer');
 
+const analyzer = async (newFacebooks) => {
+  let analyzedJobs = [];
+  let analyzedFacebooks = newFacebooks.map((facebook) => {
+    let result = { ...facebook };
+    let answer = fbAnalyzer(facebook.title);
+    if (answer) {
+      result = {
+        ...facebook,
+        reply: `<p>${answer}</p>`,
+        status: replied,
+      };
+      analyzedJobs.push({
+        name: facebook.url,
+        code: puppeteerReply(url, answer),
+        domain: 'facebook',
+        tags: facebook.tags,
+        status: 'iddle',
+      });
+    }
+    return result;
+  });
+  await Facebook.insertMany(analyzedFacebooks);
+  const namesToCheck = analyzedJobs.map((job) => job.name);
+  const existingJobs = await Job.find({ name: { $in: namesToCheck } });
+  const newJobs = analyzedJobs.filter((job) => {
+    return !existingJobs.some((existingJob) => existingJob.name === job.name);
+  });
+  await Job.insertMany(newJobs);
+};
 const facebooks = (app) => {
   app.get('/api/facebooks', async (req, res) => {
     try {
@@ -69,8 +94,9 @@ const facebooks = (app) => {
       const newFacebooks = facebookData.filter((facebook) => {
         return !existingFacebooks.some((existingFacebook) => existingFacebook.url === facebook.url);
       });
-      const insertedFacebooks = await Facebook.insertMany(newFacebooks);
-      res.status(201).json(insertedFacebooks);
+
+      await analyzer(newFacebooks);
+      res.status(201).json(true);
     } catch (error) {
       res.status(400).json({ error: error.message });
     }
