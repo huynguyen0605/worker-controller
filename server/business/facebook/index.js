@@ -101,6 +101,7 @@ const facebooks = (app) => {
       await analyzer(newFacebooks);
       res.status(201).json(true);
     } catch (error) {
+      console.log('error bulk', error.message);
       res.status(400).json({ error: error.message });
     }
   });
