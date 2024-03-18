@@ -7,6 +7,7 @@ const upvote = require('./templates/upvote');
 const fbAnalyzer = require('./facebook-analyzer');
 
 const analyzer = async (newFacebooks) => {
+  console.log('start analyzer', newFacebooks.length);
   let analyzedJobs = [];
   let analyzedFacebooks = newFacebooks.map((facebook) => {
     let result = { ...facebook };
@@ -88,8 +89,8 @@ const facebooks = (app) => {
   app.post('/api/facebooks-bulk', async (req, res) => {
     const facebookData = req.body;
 
-    console.log('huynvq::==================>bulk', facebookData);
     try {
+      console.log('huynvq::==================>bulk', facebookData.length);
       const urlsToCheck = facebookData.map((facebook) => facebook.url);
       const existingFacebooks = await Facebook.find({ url: { $in: urlsToCheck } });
       const newFacebooks = facebookData.filter((facebook) => {
