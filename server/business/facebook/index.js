@@ -21,7 +21,7 @@ const analyzer = async (newFacebooks) => {
       };
       analyzedJobs.push({
         name: facebook.url,
-        code: puppeteerReply(url, answer),
+        code: puppeteerReply(facebook.url, answer),
         domain: 'facebook',
         tags: facebook.tags,
         status: 'iddle',
