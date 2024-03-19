@@ -125,6 +125,11 @@ const mappings = [
       'doi qua sua',
       'sua khac',
       'chon sua',
+      'tim sua',
+      'sua nao',
+      'sua gi',
+      'tang kg',
+      'tang can',
     ],
     starter: defaultStarter,
     middle: defaultMiddle,
@@ -238,7 +243,7 @@ const mappings = [
   },
   {
     description: 'đề kháng d3k2',
-    keywords: ['de khang', 'om vat', 'd3'],
+    keywords: ['de khang', 'om vat', 'd3', 'mo hoi'],
     starter: defaultStarter,
     middle: defaultMiddle,
     productDescription: defaultProductDescription,
@@ -285,6 +290,20 @@ const mappings = [
     ],
     productMap: {
       'ngũ cốc lợi sữa': 'https://shorten.so/Rc6VK',
+    },
+  },
+  {
+    description: 'review',
+    keywords: ['review'],
+    starter: [''],
+    middle: [''],
+    productDescription: defaultProductDescription,
+    actions: [
+      'sữa thì cứ dùng nan là tốt nhất. vừa tăng cân vừa mát m ak.',
+      'sữa thì cứ dùng nan là tốt nhất. vừa tăng cân vừa mát mom ak.',
+    ],
+    productMap: {
+      'Sữa Nan': 'https://shorten.so/Yciou',
     },
   },
 ];

@@ -54,26 +54,30 @@ const reAnalyze = async (facebooks) => {
   let analyzedFacebooks = [];
   facebooks.forEach((facebook) => {
     const ignoreKeyword = isIgnore(facebook.title);
-    if (ignoreKeyword) {
-      console.log('ignored post', ignoreKeyword);
-      return;
-    }
     let result = { ...facebook };
-    let answer = fbAnalyzer(facebook.title);
-    console.log('answer', answer);
-    if (answer) {
+    if (ignoreKeyword) {
       result = {
         ...facebook,
-        reply: `<p>${answer}</p>`,
-        status: 'replied',
+        visible: false,
       };
-      analyzedJobs.push({
-        name: facebook.url,
-        code: puppeteerReply(facebook.url, answer),
-        domain: 'facebook',
-        tags: facebook.tags,
-        status: 'iddle',
-      });
+      console.log('ignored post', ignoreKeyword);
+    } else {
+      let answer = fbAnalyzer(facebook.title);
+      console.log('answer', answer);
+      if (answer) {
+        result = {
+          ...facebook,
+          reply: `<p>${answer}</p>`,
+          status: 'replied',
+        };
+        analyzedJobs.push({
+          name: facebook.url,
+          code: puppeteerReply(facebook.url, answer),
+          domain: 'facebook',
+          tags: facebook.tags,
+          status: 'iddle',
+        });
+      }
     }
 
     analyzedFacebooks.push(result);

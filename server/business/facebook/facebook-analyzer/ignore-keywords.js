@@ -21,6 +21,8 @@ const ignoreKeywords = [
   'xa not',
   'xa hang',
   'nhan viec',
+  'pass',
+  'gia sua',
 ];
 
 const isIgnore = (htmlContent) => {
