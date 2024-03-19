@@ -10,6 +10,9 @@ const ignoreKeywords = [
   'lam them',
   'lm them',
   'zalo',
+  'ca sang',
+  'ca chieu',
+  'ca toi',
 ];
 
 function removeDiacritics(text) {
