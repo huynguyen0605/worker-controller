@@ -224,8 +224,8 @@ const mappings = [
     },
   },
   {
-    description: 'đề kháng',
-    keywords: ['de khang'],
+    description: 'đề kháng d3k2',
+    keywords: ['de khang', 'om vat'],
     starter: defaultStarter,
     middle: defaultMiddle,
     productDescription: defaultProductDescription,
@@ -239,6 +239,21 @@ const mappings = [
     ],
     productMap: {
       'ngũ cốc lợi sữa': 'https://shorten.so/Rc6VK',
+    },
+  },
+  {
+    description: 'đề kháng ildong',
+    keywords: ['de khang', 'om vat'],
+    starter: defaultStarter,
+    middle: defaultMiddle,
+    productDescription: defaultProductDescription,
+    actions: [
+      'sd sữa non ildong hỗ trợ tăng đk & pt',
+      'dùng sữa non ildong tăng đk & pt',
+      'sd ildong tăng đk & pt',
+    ],
+    productMap: {
+      'sữa non ildong': 'https://shorten.so/gNcK5',
     },
   },
   {
