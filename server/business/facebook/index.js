@@ -85,7 +85,8 @@ const reAnalyze = async (facebooks) => {
   await Promise.all(
     analyzedFacebooks.map(async (analyzedFacebook) => {
       // Exclude the '__v' field from being updated
-      const { __v, ...updatedData } = analyzedFacebook;
+      const { reply, status } = analyzedFacebook;
+      const updatedData = { reply, status };
       await Facebook.updateOne(
         { url: analyzedFacebook.url },
         { $set: updatedData },
