@@ -48,7 +48,7 @@ const mappings = [
     ],
     productDescription: defaultProductDescription,
     productMap: {
-      'Diêm mạch': 'https://shorten.ee/9STYj',
+      'Diêm mạch': 'https://ln.run/KfwEE',
     },
   },
   {
@@ -97,7 +97,7 @@ const mappings = [
     ],
     productDescription: defaultProductDescription,
     productMap: {
-      'Men biogaia': 'https://shorten.so/Yciou',
+      'Men biogaia': 'https://ln.run/xC9Zm',
     },
   },
   {
@@ -173,9 +173,9 @@ const mappings = [
       'vs mũi bằng nc muối. dùng dầu chàm bôi ngực, lòng bàn chân sau tắm. khò khè thì dùng fys vàng. ngạt mũi thì dùng fys xanh, bt thì dùng fys hồng là đc mom',
     ],
     productMap: {
-      'fys xanh': 'https://shorten.so/Vl6Bk',
-      'fys hồng': 'https://shorten.so/0tB9x',
-      'fys vàng': 'https://shorten.ee/K5Ddx',
+      'fys xanh': 'https://ln.run/zT6b7',
+      'fys hồng': 'https://ln.run/QOV-K',
+      'fys vàng': 'https://ln.run/8qKKP',
     },
   },
   {
@@ -191,7 +191,7 @@ const mappings = [
       'sd dha bổ sung nhé',
     ],
     productMap: {
-      dha: 'https://shorten.so/65zqI',
+      dha: 'https://ln.run/G636T',
     },
   },
   {
@@ -233,7 +233,7 @@ const mappings = [
       'kích sữa bằng máy hút vs sử dụng ngũ cốc là đc nhé',
     ],
     productMap: {
-      'ngũ cốc lợi sữa': 'https://shorten.so/Rc6VK',
+      'ngũ cốc lợi sữa': 'https://ln.run/Z71pL',
     },
   },
   {
@@ -251,7 +251,7 @@ const mappings = [
       'sd thêm d3k2 là tăng đề kháng',
     ],
     productMap: {
-      'ngũ cốc lợi sữa': 'https://shorten.so/Rc6VK',
+      d3k2: 'https://ln.run/o6hYd',
     },
   },
   {
@@ -266,7 +266,7 @@ const mappings = [
       'sd ildong tăng đk & pt',
     ],
     productMap: {
-      'sữa non ildong': 'https://shorten.so/gNcK5',
+      'sữa non ildong': 'https://ln.run/Ko1tI',
     },
   },
   {
