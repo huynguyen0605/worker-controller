@@ -84,9 +84,11 @@ const reAnalyze = async (facebooks) => {
   // Update documents in the Facebook collection based on URL
   await Promise.all(
     analyzedFacebooks.map(async (analyzedFacebook) => {
+      // Exclude the '__v' field from being updated
+      const { __v, ...updatedData } = analyzedFacebook;
       await Facebook.updateOne(
         { url: analyzedFacebook.url },
-        { $set: analyzedFacebook },
+        { $set: updatedData },
         { upsert: true },
       );
     }),
