@@ -17,6 +17,8 @@ const ignoreKeywords = [
   'chi tieu',
   'lh',
   'phu cap',
+  'xa not',
+  'xa hang',
 ];
 
 function removeDiacritics(text) {
