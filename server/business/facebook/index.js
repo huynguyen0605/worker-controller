@@ -96,6 +96,12 @@ const facebooks = (app) => {
     }
   });
 
+  app.get('/api/analyze-facebook', async (req, res) => {
+    const facebooks = await Facebook.find({ status: 'iddle', visible: true });
+    await analyzer(facebooks);
+    res.status(201).json(true);
+  });
+
   app.post('/api/facebooks-bulk', async (req, res) => {
     const facebookData = req.body;
 
