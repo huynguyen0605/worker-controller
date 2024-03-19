@@ -49,7 +49,7 @@ const analyzer = async (newFacebooks) => {
 };
 
 const reAnalyze = async (facebooks) => {
-  console.log('start reanalyze', newFacebooks.length);
+  console.log('start reanalyze', facebooks.length);
   let analyzedJobs = [];
   let analyzedFacebooks = [];
   facebooks.forEach((facebook) => {
