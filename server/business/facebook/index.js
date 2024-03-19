@@ -47,6 +47,58 @@ const analyzer = async (newFacebooks) => {
   });
   await Job.insertMany(newJobs);
 };
+
+const reAnalyze = async (facebooks) => {
+  console.log('start reanalyze', newFacebooks.length);
+  let analyzedJobs = [];
+  let analyzedFacebooks = [];
+  facebooks.forEach((facebook) => {
+    const ignoreKeyword = isIgnore(facebook.title);
+    if (ignoreKeyword) {
+      console.log('ignored post', ignoreKeyword);
+      return;
+    }
+    let result = { ...facebook };
+    let answer = fbAnalyzer(facebook.title);
+    console.log('answer', answer);
+    if (answer) {
+      result = {
+        ...facebook,
+        reply: `<p>${answer}</p>`,
+        status: 'replied',
+      };
+      analyzedJobs.push({
+        name: facebook.url,
+        code: puppeteerReply(facebook.url, answer),
+        domain: 'facebook',
+        tags: facebook.tags,
+        status: 'iddle',
+      });
+    }
+
+    analyzedFacebooks.push(result);
+  });
+  console.log('reAnalyzedFacebooks', analyzedFacebooks.length);
+  if (analyzedFacebooks.length == 0) return;
+
+  // Update documents in the Facebook collection based on URL
+  await Promise.all(
+    analyzedFacebooks.map(async (analyzedFacebook) => {
+      await Facebook.updateOne(
+        { url: analyzedFacebook.url },
+        { $set: analyzedFacebook },
+        { upsert: true },
+      );
+    }),
+  );
+
+  const namesToCheck = analyzedJobs.map((job) => job.name);
+  const existingJobs = await Job.find({ name: { $in: namesToCheck } });
+  const newJobs = analyzedJobs.filter((job) => {
+    return !existingJobs.some((existingJob) => existingJob.name === job.name);
+  });
+  await Job.insertMany(newJobs);
+};
 const facebooks = (app) => {
   app.get('/api/facebooks', async (req, res) => {
     try {
@@ -98,7 +150,7 @@ const facebooks = (app) => {
 
   app.get('/api/analyze-facebook', async (req, res) => {
     const facebooks = await Facebook.find({ status: 'iddle', visible: true });
-    await analyzer(facebooks);
+    await reAnalyze(facebooks);
     res.status(201).json(true);
   });
 
