@@ -5,11 +5,18 @@ const { NodeHtmlMarkdown } = require('node-html-markdown');
 const RoundRobin = require('../../mechanism/roundrobin');
 const upvote = require('./templates/upvote');
 const fbAnalyzer = require('./facebook-analyzer');
+const isIgnore = require('./facebook-analyzer/ignore-keywords');
 
 const analyzer = async (newFacebooks) => {
   console.log('start analyzer', newFacebooks.length);
   let analyzedJobs = [];
-  let analyzedFacebooks = newFacebooks.map((facebook) => {
+  let analyzedFacebooks = [];
+  newFacebooks.forEach((facebook) => {
+    const ignoreKeyword = isIgnore(facebook.title);
+    if (ignoreKeyword) {
+      console.log('ignored post', ignoreKeyword);
+      return;
+    }
     let result = { ...facebook };
     let answer = fbAnalyzer(facebook.title);
     console.log('answer', answer);
@@ -27,9 +34,11 @@ const analyzer = async (newFacebooks) => {
         status: 'iddle',
       });
     }
-    return result;
+
+    analyzedFacebooks.push(result);
   });
   console.log('analyzedFacebooks', analyzedFacebooks.length);
+  if (analyzedFacebooks.length == 0) return;
   await Facebook.insertMany(analyzedFacebooks);
   const namesToCheck = analyzedJobs.map((job) => job.name);
   const existingJobs = await Job.find({ name: { $in: namesToCheck } });
