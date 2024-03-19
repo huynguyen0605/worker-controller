@@ -149,7 +149,7 @@ const facebooks = (app) => {
   });
 
   app.get('/api/analyze-facebook', async (req, res) => {
-    const facebooks = await Facebook.find({ status: 'iddle', visible: true });
+    const facebooks = await Facebook.find({ status: null, visible: true });
     await reAnalyze(facebooks);
     res.status(201).json(true);
   });
