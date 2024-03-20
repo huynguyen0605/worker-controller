@@ -1,5 +1,3 @@
-// jobs.js
-
 import React, { useEffect, useState } from 'react';
 import { Table, Form, Input, Space, Button, message, Select, Tooltip } from 'antd';
 import PageLayout from '../../layout/PageLayout';
@@ -10,6 +8,7 @@ const Jobs = () => {
   const [form] = Form.useForm();
 
   const [selectedDomain, setSelectedDomain] = useState('facebook');
+  const [statusFilter, setStatusFilter] = useState('');
 
   const domainOptions = [
     { label: 'Facebook', value: 'facebook' },
@@ -17,20 +16,29 @@ const Jobs = () => {
   ];
 
   async function getJobs() {
-    const response = await doGet('/jobs', { page: 1, pageSize: 1000, selectedDomain });
+    const response = await doGet('/jobs', {
+      page: 1,
+      pageSize: 1000,
+      selectedDomain,
+      status: statusFilter,
+    });
     setJobs(response.data);
   }
 
   useEffect(() => {
     getJobs();
-  }, []);
+  }, [statusFilter, selectedDomain]); // Run effect whenever statusFilter changes
 
   const handleDomainChange = (value) => {
     setSelectedDomain(value);
   };
 
+  const handleStatusChange = (value) => {
+    setStatusFilter(value);
+  };
+
   const handleFilter = async () => {
-    await getJobs(selectedDomain);
+    await getJobs();
   };
 
   return (
@@ -42,6 +50,16 @@ const Jobs = () => {
             options={domainOptions}
             onChange={handleDomainChange}
             value={selectedDomain}
+          />
+          <Select
+            placeholder="Chọn trạng thái"
+            options={[
+              { label: 'Idle', value: 'iddle' },
+              { label: 'Failed', value: 'failed' },
+              { label: 'Done', value: 'done' },
+            ]}
+            onChange={handleStatusChange}
+            value={statusFilter}
           />
           <Button type="primary" onClick={handleFilter}>
             Lọc
