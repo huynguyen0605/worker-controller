@@ -11,7 +11,11 @@ const getMatchMapping = (content) => {
     }
   }
 
-  return matchedMappings;
+  if (matchedMappings.length <= 1) {
+    return matchedMappings;
+  } else {
+    return matchedMappings.slice(0, 2);
+  }
 };
 
 const getRandomElementFromArray = (array) => {
@@ -92,11 +96,11 @@ const analyzeContent = (htmlContent) => {
   return answer;
 };
 
-// (() => {
-//   const htmlContent =
-//     '<div><div class="" dir="auto"><div class="x1iorvi4 x1pi30zi x1swvt13 xjkvuk6" data-ad-comet-preview="message" data-ad-preview="message" id=":r1c:"><div class="x78zum5 xdt5ytf xz62fqu x16ldp7u"><div class="xu06os2 x1ok221b"><span class="x193iq5w xeuugli x13faqbe x1vvkbs x1xmvt09 x1lliihq x1s928wv xhkezso x1gmr53x x1cpjm7i x1fgarty x1943h6x xudqn12 x3x7a5m x6prxxf xvq8zen xo1l8bm xzsf02u x1yc453h" dir="auto"><div class="xdj266r x11i5rnm xat24cr x1mh8g0r x1vvkbs x126k92a"><div dir="auto" style="text-align: start;">Bé nhà mình 9th uống meji từ khi sinh đến giờ</div><div dir="auto" style="text-align: start;">Giờ mình muốn đổi sưac cho bé tại bé hơi còi(được có 7k8</div><div dir="auto" style="text-align: start;">Đổi sang loại nào thì đc các mom nhỉ</div></div></span></div></div></div></div></div>';
+(() => {
+  const htmlContent =
+    '<div><div class="" dir="auto"><div class="x1iorvi4 x1pi30zi x1swvt13 xjkvuk6" data-ad-comet-preview="message" data-ad-preview="message" id=":r2d:"><div class="x78zum5 xdt5ytf xz62fqu x16ldp7u"><div class="xu06os2 x1ok221b"><span class="x193iq5w xeuugli x13faqbe x1vvkbs x1xmvt09 x1lliihq x1s928wv xhkezso x1gmr53x x1cpjm7i x1fgarty x1943h6x xudqn12 x3x7a5m x6prxxf xvq8zen xo1l8bm xzsf02u x1yc453h" dir="auto"><div class="xdj266r x11i5rnm xat24cr x1mh8g0r x1vvkbs x126k92a"><div dir="auto" style="text-align: start;">Các mom cho e hỏi .  </div><div dir="auto" style="text-align: start;">Bé ti mẹ trực tiếp không vắt sữa nhưng mẹ ít sữa thì phải làm thế nào để sữa về ạ <span class="x3nfvp2 x1j61x8r x1fcty0u xdj266r xhhsvwb xat24cr xgzva0m xxymvpz xlup9mm x1kky2od"><img height="16" width="16" alt="😭" class="xz74otr" referrerpolicy="origin-when-cross-origin" src="https://static.xx.fbcdn.net/images/emoji.php/v9/t40/1/16/1f62d.png"></span><span class="x3nfvp2 x1j61x8r x1fcty0u xdj266r xhhsvwb xat24cr xgzva0m xxymvpz xlup9mm x1kky2od"><img height="16" width="16" alt="😭" class="xz74otr" referrerpolicy="origin-when-cross-origin" src="https://static.xx.fbcdn.net/images/emoji.php/v9/t40/1/16/1f62d.png"></span></div></div></span></div></div></div></div></div>';
 
-//   const content = removeDiacritics(htmlContent.replace(/<[^>]*>/g, ''));
-//   console.log('content', content);
-// })();
+  const kw = analyzeContent(htmlContent);
+  console.log('content', kw);
+})();
 module.exports = analyzeContent;
