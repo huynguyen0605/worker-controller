@@ -133,6 +133,7 @@ const mappings = [
       'tang kg',
       'tang can',
       'dung sua',
+      'dong nay',
     ],
     starter: defaultStarter,
     middle: defaultMiddle,
@@ -321,6 +322,18 @@ const mappings = [
   {
     description: 'khó ngủ',
     keywords: [],
+    starter: [''],
+    middle: [''],
+    productDescription: defaultProductDescription,
+    actions: [
+      'sữa thì cứ dùng nan là tốt nhất. vừa tăng cân vừa mát m ak.',
+      'sữa thì cứ dùng nan là tốt nhất. vừa tăng cân vừa mát mom ak.',
+    ],
+    productMap: {},
+  },
+  {
+    description: 'sắt',
+    keywords: ['sat'],
     starter: [''],
     middle: [''],
     productDescription: defaultProductDescription,

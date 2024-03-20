@@ -12,12 +12,16 @@ const analyzer = async (newFacebooks) => {
   let analyzedJobs = [];
   let analyzedFacebooks = [];
   newFacebooks.forEach((facebook) => {
+    let result = { ...facebook };
+    if (!facebook.title) {
+      console.log('ignored post empty title');
+      return;
+    }
     const ignoreKeyword = isIgnore(facebook.title);
     if (ignoreKeyword) {
       console.log('ignored post', ignoreKeyword);
       return;
     }
-    let result = { ...facebook };
     let answer = fbAnalyzer(facebook.title);
     console.log('answer', answer);
     if (answer) {
