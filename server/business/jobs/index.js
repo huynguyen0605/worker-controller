@@ -55,8 +55,8 @@ const jobs = (app) => {
   app.get('/api/iddle-job', async (req, res) => {
     try {
       const { id } = req.query;
-      console.log('iddle job', id);
-      await Job.findByIdAndUpdate(id, { status: 'iddle' });
+      console.log('failed job', id);
+      await Job.findByIdAndUpdate(id, { status: 'failed' });
       return true;
     } catch (error) {
       res.status(500).json({ error: error.message });
