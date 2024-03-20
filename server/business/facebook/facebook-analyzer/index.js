@@ -1,4 +1,4 @@
-const { mappings, actionConnector, actionConnector2 } = require('./word-definitions');
+const { mappings, actionConnector, actionConnector2, promotions } = require('./word-definitions');
 const removeDiacritics = require('./remove-diacritics');
 const getMatchMapping = (content) => {
   let matchedMappings = [];
@@ -90,7 +90,7 @@ const analyzeContent = (htmlContent) => {
   const content = removeDiacritics(htmlContent.replace(/<[^>]*>/g, ''));
   const mappings = getMatchMapping(content);
   if (mappings.length === 0) {
-    return null;
+    return getRandomElementFromArray(promotions);
   }
   const answer = buildContentAnswer(mappings);
   return answer;

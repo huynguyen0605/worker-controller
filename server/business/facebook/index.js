@@ -74,23 +74,18 @@ const reAnalyze = async (facebooks) => {
       // console.log('ignored post', ignoreKeyword);
     } else {
       let answer = fbAnalyzer(result.title);
-      // console.log('answer', answer);
-      if (answer) {
-        result = {
-          ...result,
-          reply: `<p>${answer}</p>`,
-          status: 'replied',
-        };
-        analyzedJobs.push({
-          name: result.url,
-          code: puppeteerReply(result.url, answer),
-          domain: 'facebook',
-          tags: result.tags,
-          status: 'iddle',
-        });
-      } else {
-        return;
-      }
+      result = {
+        ...result,
+        reply: `<p>${answer}</p>`,
+        status: 'replied',
+      };
+      analyzedJobs.push({
+        name: result.url,
+        code: puppeteerReply(result.url, answer),
+        domain: 'facebook',
+        tags: result.tags,
+        status: 'iddle',
+      });
     }
 
     analyzedFacebooks.push(result);

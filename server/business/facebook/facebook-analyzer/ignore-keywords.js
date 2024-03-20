@@ -39,6 +39,11 @@ const ignoreKeywords = [
   'kiem hang',
   'de lai',
   'tranh thai',
+  'k coc',
+  'ko coc',
+  'khong coc',
+  'cv',
+  'atm',
 ];
 
 const isIgnore = (htmlContent) => {
