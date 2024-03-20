@@ -130,6 +130,7 @@ const mappings = [
       'sua gi',
       'tang kg',
       'tang can',
+      'dung sua',
     ],
     starter: defaultStarter,
     middle: defaultMiddle,
@@ -163,6 +164,7 @@ const mappings = [
       'kho khe',
       'ho dom',
       'viem amidan',
+      'viem hong',
     ],
     starter: defaultStarter,
     middle: defaultMiddle,
@@ -243,7 +245,7 @@ const mappings = [
   },
   {
     description: 'đề kháng d3k2',
-    keywords: ['de khang', 'om vat', 'd3', 'mo hoi'],
+    keywords: ['de khang', 'om vat', 'd3', 'mo hoi', 'hay om'],
     starter: defaultStarter,
     middle: defaultMiddle,
     productDescription: defaultProductDescription,
@@ -261,7 +263,7 @@ const mappings = [
   },
   {
     description: 'đề kháng ildong',
-    keywords: ['de khang', 'om vat', 'd3'],
+    keywords: ['de khang', 'om vat', 'd3', 'hay om'],
     starter: defaultStarter,
     middle: defaultMiddle,
     productDescription: defaultProductDescription,
@@ -294,7 +296,7 @@ const mappings = [
   },
   {
     description: 'review',
-    keywords: ['review'],
+    keywords: ['review', 'optimum'],
     starter: [''],
     middle: [''],
     productDescription: defaultProductDescription,
@@ -305,6 +307,18 @@ const mappings = [
     productMap: {
       'Sữa Nan': 'https://shorten.so/Yciou',
     },
+  },
+  {
+    description: 'khó ngủ',
+    keywords: [],
+    starter: [''],
+    middle: [''],
+    productDescription: defaultProductDescription,
+    actions: [
+      'sữa thì cứ dùng nan là tốt nhất. vừa tăng cân vừa mát m ak.',
+      'sữa thì cứ dùng nan là tốt nhất. vừa tăng cân vừa mát mom ak.',
+    ],
+    productMap: {},
   },
 ];
 

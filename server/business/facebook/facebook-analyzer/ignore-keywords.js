@@ -23,6 +23,14 @@ const ignoreKeywords = [
   'nhan viec',
   'pass',
   'gia sua',
+  'phau thuat',
+  'ddvs',
+  'lien he',
+  'xa lo',
+  'kiem tien',
+  'sale',
+  'shop',
+  'ghep anh',
 ];
 
 const isIgnore = (htmlContent) => {
