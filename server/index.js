@@ -63,11 +63,15 @@ async function assignClientsToJobs() {
       available: false,
     });
 
-    console.log('assign job to client', clients, jobs);
+    console.log(
+      'assign job to client with total client: ',
+      clients.length,
+      ' with total job: ',
+      jobs.length,
+    );
 
     const bulkWriteOperations = jobs.map((job, index) => {
       const assignedClient = clients[index % clients.length];
-      console.log('assignedClient', assignedClient, index, clients);
       return {
         updateOne: {
           filter: { _id: job._id },

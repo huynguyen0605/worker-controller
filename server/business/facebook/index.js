@@ -57,56 +57,56 @@ const reAnalyze = async (facebooks) => {
   let analyzedJobs = [];
   let analyzedFacebooks = [];
   facebooks.forEach((facebook) => {
-    let result = { ...facebook };
-    if (!facebook.title) {
+    let result = JSON.parse(JSON.stringify(facebook));
+    if (!result.title) {
       result = {
-        ...facebook,
+        ...result,
         visible: false,
       };
       return;
     }
-    const ignoreKeyword = isIgnore(facebook.title);
+    const ignoreKeyword = isIgnore(result.title);
     if (ignoreKeyword) {
       result = {
-        ...facebook,
+        ...result,
         visible: false,
       };
-      console.log('ignored post', ignoreKeyword);
+      // console.log('ignored post', ignoreKeyword);
     } else {
-      let answer = fbAnalyzer(facebook.title);
-      console.log('answer', answer);
+      let answer = fbAnalyzer(result.title);
+      // console.log('answer', answer);
       if (answer) {
         result = {
-          ...facebook,
+          ...result,
           reply: `<p>${answer}</p>`,
           status: 'replied',
         };
         analyzedJobs.push({
-          name: facebook.url,
-          code: puppeteerReply(facebook.url, answer),
+          name: result.url,
+          code: puppeteerReply(result.url, answer),
           domain: 'facebook',
-          tags: facebook.tags,
+          tags: result.tags,
           status: 'iddle',
         });
+      } else {
+        return;
       }
     }
 
     analyzedFacebooks.push(result);
   });
-  console.log('reAnalyzedFacebooks', analyzedFacebooks.length);
-  if (analyzedFacebooks.length == 0) return;
+  if (analyzedFacebooks.length == 0) {
+    console.log('analyzed all, nothing to analyze');
+    return;
+  }
 
   // Update documents in the Facebook collection based on URL
   await Promise.all(
     analyzedFacebooks.map(async (analyzedFacebook) => {
       // Exclude the '__v' field from being updated
-      const { reply, status } = analyzedFacebook;
-      const updatedData = { reply, status };
-      await Facebook.updateOne(
-        { url: analyzedFacebook.url },
-        { $set: updatedData },
-        { upsert: true },
-      );
+      const { reply, status, visible } = analyzedFacebook;
+      const updatedData = { reply, status, visible };
+      await Facebook.updateOne({ url: analyzedFacebook.url }, { $set: updatedData });
     }),
   );
 
@@ -115,6 +115,7 @@ const reAnalyze = async (facebooks) => {
   const newJobs = analyzedJobs.filter((job) => {
     return !existingJobs.some((existingJob) => existingJob.name === job.name);
   });
+  console.log('analyzed newJobs', newJobs.length, analyzedFacebooks.length);
   await Job.insertMany(newJobs);
 };
 const facebooks = (app) => {
