@@ -12,9 +12,11 @@ const jobs = (app) => {
         query.domain = domain;
       }
 
+      const sort = sortBy ? { [sortBy]: 1 } : { createdAt: -1 };
+
       const jobs = await Job.find(query)
         .populate('tags')
-        .sort(sortBy ? { [sortBy]: 1 } : {})
+        .sort(sort)
         .skip((page - 1) * pageSize)
         .limit(parseInt(pageSize))
         .exec();
