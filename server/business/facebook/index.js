@@ -53,8 +53,15 @@ const reAnalyze = async (facebooks) => {
   let analyzedJobs = [];
   let analyzedFacebooks = [];
   facebooks.forEach((facebook) => {
-    const ignoreKeyword = isIgnore(facebook.title);
     let result = { ...facebook };
+    if (!facebook.title) {
+      result = {
+        ...facebook,
+        visible: false,
+      };
+      return;
+    }
+    const ignoreKeyword = isIgnore(facebook.title);
     if (ignoreKeyword) {
       result = {
         ...facebook,

@@ -80,6 +80,7 @@ const mappings = [
       'ken an',
       'da day',
       'trao nguoc',
+      'bu it',
     ],
     starter: defaultStarter,
     middle: defaultMiddle,
@@ -147,7 +148,6 @@ const mappings = [
       'dùng Nan tăng cân lại mát nữa m',
     ],
     productMap: {
-      // 'Sữa Nan': 'https://shorten.so/Yciou',
       'Sữa Nan': 'https://shope.ee/9UdoSopKVm',
     },
   },
