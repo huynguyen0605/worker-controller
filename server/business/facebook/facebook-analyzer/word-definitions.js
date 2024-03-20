@@ -48,7 +48,8 @@ const mappings = [
     ],
     productDescription: defaultProductDescription,
     productMap: {
-      'Diêm mạch': 'https://ln.run/KfwEE',
+      // 'Diêm mạch': 'https://ln.run/KfwEE',
+      'Diêm mạch': 'https://shope.ee/8pOHaZJy76',
     },
   },
   {
@@ -97,7 +98,7 @@ const mappings = [
     ],
     productDescription: defaultProductDescription,
     productMap: {
-      'Men biogaia': 'https://ln.run/xC9Zm',
+      'Men biogaia': 'https://shope.ee/AUWLgyxoot',
     },
   },
   {
@@ -146,7 +147,8 @@ const mappings = [
       'dùng Nan tăng cân lại mát nữa m',
     ],
     productMap: {
-      'Sữa Nan': 'https://shorten.so/Yciou',
+      // 'Sữa Nan': 'https://shorten.so/Yciou',
+      'Sữa Nan': 'https://shope.ee/9UdoSopKVm',
     },
   },
   {
@@ -180,9 +182,12 @@ const mappings = [
       'vs mũi bằng nc muối. dùng dầu chàm bôi ngực, lòng bàn chân sau tắm. khò khè thì dùng fys vàng. ngạt mũi thì dùng fys xanh, bt thì dùng fys hồng là đc mom',
     ],
     productMap: {
-      'fys xanh': 'https://ln.run/zT6b7',
-      'fys hồng': 'https://ln.run/QOV-K',
-      'fys vàng': 'https://ln.run/8qKKP',
+      // 'fys xanh': 'https://ln.run/zT6b7',
+      'fys xanh': 'https://shope.ee/AUWPEDboIS',
+      // 'fys hồng': 'https://ln.run/QOV-K',
+      'fys hồng': 'https://shope.ee/2fnXtgDnsI',
+      // 'fys vàng': 'https://ln.run/8qKKP',
+      'fys vàng': 'https://shope.ee/2q7AX0MQcr',
     },
   },
   {
@@ -198,7 +203,8 @@ const mappings = [
       'sd dha bổ sung nhé',
     ],
     productMap: {
-      dha: 'https://ln.run/G636T',
+      // dha: 'https://ln.run/G636T',
+      dha: 'https://shope.ee/7fCFIf334D',
     },
   },
   {
@@ -240,7 +246,8 @@ const mappings = [
       'kích sữa bằng máy hút vs sử dụng ngũ cốc là đc nhé',
     ],
     productMap: {
-      'ngũ cốc lợi sữa': 'https://ln.run/Z71pL',
+      // 'ngũ cốc lợi sữa': 'https://ln.run/Z71pL',
+      'ngũ cốc lợi sữa': 'https://shope.ee/7UsnfCS2vr',
     },
   },
   {
@@ -258,7 +265,8 @@ const mappings = [
       'sd thêm d3k2 là tăng đề kháng',
     ],
     productMap: {
-      d3k2: 'https://ln.run/o6hYd',
+      // d3k2: 'https://ln.run/o6hYd',
+      d3k2: 'https://shope.ee/B69OxZ3XZ',
     },
   },
   {
@@ -273,7 +281,8 @@ const mappings = [
       'sd ildong tăng đk & pt',
     ],
     productMap: {
-      'sữa non ildong': 'https://ln.run/Ko1tI',
+      // 'sữa non ildong': 'https://ln.run/Ko1tI',
+      'sữa non ildong': 'https://shope.ee/6pd6rqy4oS',
     },
   },
   {
@@ -283,15 +292,16 @@ const mappings = [
     middle: [''],
     productDescription: defaultProductDescription,
     actions: [
-      'đã gọi là cơ địa thì k dứt điểm hẳn đc. sd thêm',
-      'sử dụng d3k2 là tăng đề kháng',
-      'dùng thêm d3k2 là được',
-      'dùng thêm d3k2 là ổn',
-      'sd d3k2 là được nhé',
-      'sd thêm d3k2 là tăng đề kháng',
+      'đã gọi là cơ địa thì k dứt điểm hẳn đc. chỉ bôi vtm E cho đỡ đc thôi',
+      'đã gọi là cơ địa thì sao dứt điểm đc, m bôi vtm E cho con đỡ là đc',
+      'đã gọi là cơ địa thì sao dứt điểm đc, mom bôi vtm E cho con đỡ là đc',
+      'đã gọi là cơ địa thì sao dứt điểm đc, m bôi vtm E cho con đỡ là đc. dùng loại nắp xanh',
+      'đã gọi là cơ địa thì sao dứt điểm đc, mom bôi vtm E cho con đỡ là đc. dùng loại nắp xanh',
+      'đã gọi là cơ địa thì sao dứt điểm đc, mom bôi dưỡng ẩm vtm E cho con đỡ là đc. dùng loại nắp xanh',
+      'đã gọi là cơ địa thì sao dứt điểm đc, mom bôi dưỡng ẩm cho con đỡ là đc. dùng loại nắp xanh có vtm E',
     ],
     productMap: {
-      'ngũ cốc lợi sữa': 'https://shorten.so/Rc6VK',
+      'vtm E loại nắp xanh': 'https://shope.ee/9za8h0CfCq',
     },
   },
   {
@@ -305,7 +315,7 @@ const mappings = [
       'sữa thì cứ dùng nan là tốt nhất. vừa tăng cân vừa mát mom ak.',
     ],
     productMap: {
-      'Sữa Nan': 'https://shorten.so/Yciou',
+      'Sữa Nan': 'https://shope.ee/9UdoSopKVm',
     },
   },
   {
