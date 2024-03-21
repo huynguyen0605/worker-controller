@@ -97,7 +97,7 @@ const Facebook = () => {
           <Option value="replied">Đã phản hồi</Option>
         </Select>
         <Select
-          value={status}
+          value={type}
           placeholder="Lọc loại bài viết"
           style={{ width: 200 }}
           onChange={handleTypeChange}
