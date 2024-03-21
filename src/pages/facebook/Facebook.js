@@ -41,10 +41,11 @@ const Facebook = () => {
   const [facebooks, setFacebooks] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [status, setStatus] = useState('iddle');
+  const [type, setType] = useState('post');
 
-  async function getFacebooks(page = 1, status = 'iddle', pageSize = 50) {
+  async function getFacebooks(page = 1, status = 'iddle', type = 'post', pageSize = 50) {
     try {
-      const response = await doGet('/facebooks', { status, page, pageSize });
+      const response = await doGet('/facebooks', { status, page, type, pageSize });
       setFacebooks(response.data);
     } catch (error) {
       // Handle error
@@ -53,20 +54,17 @@ const Facebook = () => {
   }
 
   useEffect(() => {
-    getFacebooks(currentPage, status);
-  }, [currentPage, status]);
+    getFacebooks(currentPage, status, type);
+  }, [currentPage, status, type]);
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [formAdd] = Form.useForm();
-  const showModal = () => {
-    setIsModalVisible(true);
-  };
 
   const handleOk = async () => {
     try {
       const values = await formAdd.validateFields();
       await doPost('/facebooks', values);
-      await getFacebooks(currentPage, status);
+      await getFacebooks(currentPage, status, type);
       formAdd.resetFields();
       setIsModalVisible(false);
     } catch (error) {
@@ -76,6 +74,10 @@ const Facebook = () => {
 
   const handleStatusChange = (value) => {
     setStatus(value);
+  };
+
+  handleTypeChange = (value) => {
+    setType(value);
   };
 
   const handleCancel = () => {
@@ -93,6 +95,15 @@ const Facebook = () => {
         >
           <Option value="iddle">Chưa xử lý</Option>
           <Option value="replied">Đã phản hồi</Option>
+        </Select>
+        <Select
+          value={status}
+          placeholder="Lọc loại bài viết"
+          style={{ width: 200 }}
+          onChange={handleTypeChange}
+        >
+          <Option value="post">Bài viết trên page</Option>
+          <Option value="group-post">Bài viết trong nhóm</Option>
         </Select>
         <Table
           bordered
@@ -190,7 +201,7 @@ const Facebook = () => {
                 ) : (
                   <ReplyFormComponent
                     record={record}
-                    callback={() => getFacebooks(currentPage, status)}
+                    callback={() => getFacebooks(currentPage, status, type)}
                   />
                 );
               },
@@ -205,7 +216,7 @@ const Facebook = () => {
                     type="primary"
                     onClick={async () => {
                       await doPut(`/facebooks/${record._id}`, { visible: false });
-                      await getFacebooks(currentPage, status);
+                      await getFacebooks(currentPage, status, type);
                     }}
                   >
                     Ẩn
@@ -215,7 +226,7 @@ const Facebook = () => {
                     danger
                     onClick={async () => {
                       await doDelete(`/facebooks/${record._id}`);
-                      await getFacebooks(currentPage, status);
+                      await getFacebooks(currentPage, status, type);
                     }}
                   >
                     Xóa

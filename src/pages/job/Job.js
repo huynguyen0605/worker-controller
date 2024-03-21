@@ -46,12 +46,14 @@ const Jobs = () => {
       <>
         <Space direction="horizontal">
           <Select
+            style={{ width: 200 }}
             placeholder="Chọn nền tảng"
             options={domainOptions}
             onChange={handleDomainChange}
             value={selectedDomain}
           />
           <Select
+            style={{ width: 200 }}
             placeholder="Chọn trạng thái"
             options={[
               { label: 'Idle', value: 'iddle' },

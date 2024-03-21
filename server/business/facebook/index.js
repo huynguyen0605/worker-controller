@@ -116,12 +116,18 @@ const reAnalyze = async (facebooks) => {
 const facebooks = (app) => {
   app.get('/api/facebooks', async (req, res) => {
     try {
-      const { page = 1, pageSize = 10, status, sortBy } = req.query;
+      const { page = 1, pageSize = 10, status, type, sortBy } = req.query;
 
-      let filter = !status ? {} : status == 'iddle' ? { status: null } : { status: 'replied' };
+      let filterStatus = !status
+        ? {}
+        : status == 'iddle'
+        ? { status: null }
+        : { status: 'replied' };
+      let filterType = !type ? {} : { type };
       const sort = sortBy ? { [sortBy]: 1 } : { createdAt: -1 };
       filter = {
-        ...filter,
+        ...filterStatus,
+        ...filterType,
         visible: true,
       };
 
@@ -163,7 +169,7 @@ const facebooks = (app) => {
   });
 
   app.get('/api/analyze-facebook', async (req, res) => {
-    const facebooks = await Facebook.find({ status: null, visible: true });
+    const facebooks = await Facebook.find({ status: null, visible: true, type: 'group-post' });
     await reAnalyze(facebooks);
     res.status(201).json(true);
   });
@@ -179,7 +185,11 @@ const facebooks = (app) => {
         return !existingFacebooks.some((existingFacebook) => existingFacebook.url === facebook.url);
       });
 
-      await analyzer(newFacebooks);
+      const groupFbs = newFacebooks.filter((facebook) => facebook.type == 'group-post');
+      const feedFbs = newFacebooks.filter((facebook) => facebook.type == 'post');
+
+      await analyzer(groupFbs);
+      await Facebook.insertMany(feedFbs);
       res.status(201).json(true);
     } catch (error) {
       console.log('error bulk', error.message);
