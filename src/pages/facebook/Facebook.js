@@ -76,7 +76,7 @@ const Facebook = () => {
     setStatus(value);
   };
 
-  handleTypeChange = (value) => {
+  const handleTypeChange = (value) => {
     setType(value);
   };
 
