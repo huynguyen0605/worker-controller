@@ -71,7 +71,8 @@ const mappings = [
     productDescription: defaultProductDescription,
     productMap: {
       // 'Diêm mạch': 'https://ln.run/KfwEE',
-      'Diêm mạch': 'https://shope.ee/8pOHaZJy76',
+      // 'Diêm mạch': 'https://shope.ee/8pOHaZJy76',
+      'Diêm mạch': 'https://bit.ly/3TKFVjr',
     },
   },
   {
@@ -128,7 +129,8 @@ const mappings = [
     ],
     productDescription: defaultProductDescription,
     productMap: {
-      'Men biogaia': 'https://shope.ee/AUWLgyxoot',
+      // 'Men biogaia': 'https://shope.ee/AUWLgyxoot',
+      'Men biogaia': 'https://bit.ly/3vcLlKG',
     },
   },
   {
@@ -178,7 +180,8 @@ const mappings = [
       'dùng Nan tăng cân lại mát nữa m',
     ],
     productMap: {
-      'Sữa Nan': 'https://shope.ee/9UdoSopKVm',
+      // 'Sữa Nan': 'https://shope.ee/9UdoSopKVm',
+      'Sữa Nan': 'https://bit.ly/3VsXUMG',
     },
   },
   {
@@ -215,11 +218,14 @@ const mappings = [
     ],
     productMap: {
       // 'fys xanh': 'https://ln.run/zT6b7',
-      'fys xanh': 'https://shope.ee/AUWPEDboIS',
+      // 'fys xanh': 'https://shope.ee/AUWPEDboIS',
+      'fys xanh': 'https://bit.ly/3TKG3PX',
       // 'fys hồng': 'https://ln.run/QOV-K',
-      'fys hồng': 'https://shope.ee/2fnXtgDnsI',
+      // 'fys hồng': 'https://shope.ee/2fnXtgDnsI',
+      'fys hồng': 'https://bit.ly/3Vq9ms8',
       // 'fys vàng': 'https://ln.run/8qKKP',
-      'fys vàng': 'https://shope.ee/2q7AX0MQcr',
+      // 'fys vàng': 'https://shope.ee/2q7AX0MQcr',
+      'fys vàng': 'https://bit.ly/4cjodLf',
     },
   },
   {
@@ -236,7 +242,8 @@ const mappings = [
     ],
     productMap: {
       // dha: 'https://ln.run/G636T',
-      dha: 'https://shope.ee/7fCFIf334D',
+      // dha: 'https://shope.ee/7fCFIf334D',
+      dha: 'https://bit.ly/48Zlpjv',
     },
   },
   {
@@ -279,7 +286,8 @@ const mappings = [
     ],
     productMap: {
       // 'ngũ cốc lợi sữa': 'https://ln.run/Z71pL',
-      'ngũ cốc lợi sữa': 'https://shope.ee/7UsnfCS2vr',
+      // 'ngũ cốc lợi sữa': 'https://shope.ee/7UsnfCS2vr',
+      'ngũ cốc lợi sữa': 'https://bit.ly/492Q8w4',
     },
   },
   {
@@ -298,7 +306,8 @@ const mappings = [
     ],
     productMap: {
       // d3k2: 'https://ln.run/o6hYd',
-      d3k2: 'https://shope.ee/B69OxZ3XZ',
+      // d3k2: 'https://shope.ee/B69OxZ3XZ',
+      d3k2: 'https://bit.ly/4csqvYy',
     },
   },
   {
@@ -314,7 +323,8 @@ const mappings = [
     ],
     productMap: {
       // 'sữa non ildong': 'https://ln.run/Ko1tI',
-      'sữa non ildong': 'https://shope.ee/6pd6rqy4oS',
+      // 'sữa non ildong': 'https://shope.ee/6pd6rqy4oS',
+      'sữa non ildong': 'https://bit.ly/4apUK0n',
     },
   },
   {
@@ -333,7 +343,8 @@ const mappings = [
       'đã gọi là cơ địa thì sao dứt điểm đc, mom bôi dưỡng ẩm cho con đỡ là đc. dùng loại nắp xanh có vtm E',
     ],
     productMap: {
-      'vtm E loại nắp xanh': 'https://shope.ee/9za8h0CfCq',
+      // 'vtm E loại nắp xanh': 'https://shope.ee/9za8h0CfCq',
+      'vtm E loại nắp xanh': 'https://bit.ly/4a0tghL',
     },
   },
   {
@@ -353,7 +364,8 @@ const mappings = [
       'bị ngứa thì cứ bôi vtm E là đỡ nhé m. dùng loại nắp xanh có vtm E',
     ],
     productMap: {
-      'vtm E loại nắp xanh': 'https://shope.ee/9za8h0CfCq',
+      // 'vtm E loại nắp xanh': 'https://shope.ee/9za8h0CfCq',
+      'vtm E loại nắp xanh': 'https://bit.ly/4a0tghL',
     },
   },
   {
@@ -380,7 +392,8 @@ const mappings = [
       'sữa thì cứ dùng nan là tốt nhất. vừa tăng cân vừa mát mom ak.',
     ],
     productMap: {
-      'Sữa Nan': 'https://shope.ee/9UdoSopKVm',
+      // 'Sữa Nan': 'https://shope.ee/9UdoSopKVm',
+      'Sữa Nan': 'https://bit.ly/3VsXUMG',
     },
   },
   {
@@ -407,8 +420,10 @@ const mappings = [
       'Mom Cứ cho bé ăn no bữa trước khi đi ngủ. Bổ sung d3k2, sữa đêm đặc của Nga giúp no lâu',
     ],
     productMap: {
-      'sữa nga': 'https://shope.ee/4fYcKkMLdC',
-      d3k2: 'https://shope.ee/B69OxZ3XZ',
+      // 'sữa nga': 'https://shope.ee/4fYcKkMLdC',
+      'sữa nga': 'https://bit.ly/3INH5Va',
+      // d3k2: 'https://shope.ee/B69OxZ3XZ',
+      d3k2: 'https://bit.ly/4csqvYy',
     },
   },
   {
@@ -425,7 +440,8 @@ const mappings = [
       'bình sữa thì cứ dùng của tommeee tippie là đc m ak',
     ],
     productMap: {
-      'bình sữa tomme tippie': 'https://shope.ee/2VU4aIWGTZ',
+      // 'bình sữa tomme tippie': 'https://shope.ee/2VU4aIWGTZ',
+      'bình sữa tomme tippie': 'https://bit.ly/496WBGj',
     },
   },
   {
@@ -443,7 +459,8 @@ const mappings = [
       'ti giả cứ dùng của avent là đc mom ak',
     ],
     productMap: {
-      'ti Avent': 'https://shope.ee/B6R7JP8hw',
+      // 'ti Avent': 'https://shope.ee/B6R7JP8hw',
+      'ti Avent': 'https://bit.ly/493Z0Bq',
     },
   },
   {
@@ -461,7 +478,8 @@ const mappings = [
       'dùng canxi hữu cơ bioisland là ổn mom ak',
     ],
     productMap: {
-      'viên canxi bioisland': 'https://shope.ee/4fYqTnBUIS',
+      // 'viên canxi bioisland': 'https://shope.ee/4fYqTnBUIS',
+      'viên canxi bioisland': 'https://bit.ly/3PvjMD2',
     },
   },
   {
@@ -472,7 +490,8 @@ const mappings = [
     productDescription: defaultProductDescription,
     actions: ['xài cái này là đc'],
     productMap: {
-      'địu chân vòng kiềng': 'https://shope.ee/3Ajl8FlE67',
+      // 'địu chân vòng kiềng': 'https://shope.ee/3Ajl8FlE67',
+      'địu chân vòng kiềng': 'https://bit.ly/4cnfPu2',
     },
   },
 ];
