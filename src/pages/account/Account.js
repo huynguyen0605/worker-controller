@@ -96,7 +96,7 @@ const Accounts = () => {
   const handleEditSubmit = async () => {
     try {
       const values = await form2.validateFields();
-      await doPut(`/accounts/${editingInteraction._id}`, values);
+      await doPut(`/accounts/${editingAccount._id}`, values);
       await getAccounts();
       handleEditCancel();
     } catch (error) {
