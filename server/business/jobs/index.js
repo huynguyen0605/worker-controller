@@ -46,7 +46,7 @@ const jobs = (app) => {
       const { id } = req.query;
       console.log('done job', id);
       await Job.findByIdAndUpdate(id, { status: 'done' });
-      return true;
+      return res.status(200).json(true);
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
@@ -57,7 +57,7 @@ const jobs = (app) => {
       const { id } = req.query;
       console.log('failed job', id);
       await Job.findByIdAndUpdate(id, { status: 'failed' });
-      return true;
+      return res.status(200).json(true);
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
