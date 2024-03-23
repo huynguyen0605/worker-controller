@@ -250,7 +250,7 @@ const Accounts = () => {
 
       <Modal
         title="Sửa tài khoản"
-        visible={!!editingInteraction}
+        visible={!!editingAccount}
         onOk={handleEditSubmit}
         onCancel={handleEditCancel}
       >
