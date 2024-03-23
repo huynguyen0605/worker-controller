@@ -92,6 +92,27 @@ const Accounts = () => {
     setIsModalVisible(false);
   };
 
+  const [form2] = Form.useForm();
+  const handleEditSubmit = async () => {
+    try {
+      const values = await form2.validateFields();
+      await doPut(`/accounts/${editingInteraction._id}`, values);
+      await getAccounts();
+      handleEditCancel();
+    } catch (error) {
+      console.error('Validation failed', error);
+    }
+  };
+  const [editingAccount, setEditingAccount] = useState(null);
+  const handleEditClick = (record) => {
+    setEditingAccount(record);
+    form2.setFieldsValue(record);
+  };
+  const handleEditCancel = () => {
+    setEditingAccount(null);
+    form2.resetFields();
+  };
+
   return (
     <PageLayout title="Tài khoản">
       <>
@@ -197,6 +218,9 @@ const Accounts = () => {
               title: 'Hành động',
               render: (value, record) => (
                 <Space>
+                  <Button type="primary" onClick={() => handleEditClick(record)}>
+                    Sửa
+                  </Button>
                   <Button type="ghost" danger onClick={() => handleDelete(record._id)}>
                     Xóa
                   </Button>
@@ -215,6 +239,22 @@ const Accounts = () => {
         onCancel={handleCancel}
       >
         <Form form={form} onFinish={handleAddAccount}>
+          <Form.Item label="Tên" name="name">
+            <Input placeholder="Nhập tên tài khoản" />
+          </Form.Item>
+          <Form.Item label="Thông tin" name="info">
+            <Input placeholder="Nhập thông tin tài khoản (ví dụ username|password|2fa" />
+          </Form.Item>
+        </Form>
+      </Modal>
+
+      <Modal
+        title="Sửa tài khoản"
+        visible={!!editingInteraction}
+        onOk={handleEditSubmit}
+        onCancel={handleEditCancel}
+      >
+        <Form form={form2} initialValues={editingAccount}>
           <Form.Item label="Tên" name="name">
             <Input placeholder="Nhập tên tài khoản" />
           </Form.Item>
