@@ -1,4 +1,4 @@
-const defaultStarter = ['M', 'm', 'Mom', 'mom', 'cứ', 'Cứ', 'Chỉ cần'];
+const defaultStarter = ['Mom', 'mom', 'cứ', 'Cứ', 'Chỉ cần'];
 const defaultMiddle = ['thử', 'thử cho con', 'cho bé', 'cho con'];
 const actionConnector = [
   'kết hợp',
@@ -16,41 +16,107 @@ const actionConnector = [
 
 const actionConnector2 = ['&', 'và', ','];
 const defaultProductDescription = [
-  'Dùng các loại này nhé',
-  'Dùng loại này nhé',
-  'Mom tham khảo loại này nhé',
-  'M tham khảo loại này nhé',
-  'M dùng loại này xem',
-  'Dùng loại này nhé m',
-  'Mom dùng loại này',
-  'Mom thử loại này',
-  'M thử loại này xem',
-  'M dùng cái này xem',
-  'Mom dùng cái này nhé',
-  'Loại này nhé',
-  'Loại này này',
+  'Mom tham khảo bài viết này nhé',
+  'Mom xem thêm bài viết này',
+  'Mom đọc thêm bài này',
+  'Mom xem thêm bài này',
+  'Mom tham khảo thêm bài này',
+  'Mom tham khảo bài này',
+  'Mom đọc bài này nhé',
+  'Mom xem chi tiết ở bài này nhé',
+  'Mom xem bài này có nói chi tiết',
+  'Bài này có chi tiết nè mom',
 ];
 
+const allProductMap = {
+  DIEM_MACH: {
+    // 'Diêm mạch': 'https://ln.run/KfwEE',
+    // 'Diêm mạch': 'https://shope.ee/8pOHaZJy76',
+    // 'Diêm mạch': 'https://bit.ly/3TKFVjr',
+    '': 'http://kienthucnuoicon.top/post/huong-dan-an-dam-su-dung-thuc-pham-an-toan-cho-tre',
+  },
+  MEN_TIEU_HOA: {
+    // 'Men biogaia': 'https://shope.ee/AUWLgyxoot',
+    // 'Men biogaia': 'https://bit.ly/3vcLlKG',
+    '': 'http://kienthucnuoicon.top/post/tac-dung-cua-men-vi-sinh',
+  },
+  SUA: {
+    // 'Sữa Nan': 'https://shope.ee/9UdoSopKVm',
+    '': 'http://kienthucnuoicon.top/post/so-sanh-cac-loai-sua-cong-thuc-hang-djau',
+  },
+  NUOC_MUOI: {
+    // 'fys xanh': 'https://ln.run/zT6b7',
+    // 'fys xanh': 'https://shope.ee/AUWPEDboIS',
+    // 'fys xanh': 'https://bit.ly/3TKG3PX',
+    // 'fys hồng': 'https://ln.run/QOV-K',
+    // 'fys hồng': 'https://shope.ee/2fnXtgDnsI',
+    // 'fys hồng': 'https://bit.ly/3Vq9ms8',
+    // 'fys vàng': 'https://ln.run/8qKKP',
+    // 'fys vàng': 'https://shope.ee/2q7AX0MQcr',
+    // 'fys vàng': 'https://bit.ly/4cjodLf',
+    '': 'http://kienthucnuoicon.top/post/xu-li-benh-ho-hap-o-tre-em',
+  },
+  LOI_SUA: {
+    // 'ngũ cốc lợi sữa': 'https://ln.run/Z71pL',
+    // 'ngũ cốc lợi sữa': 'https://shope.ee/7UsnfCS2vr',
+    // 'ngũ cốc lợi sữa': 'https://bit.ly/492Q8w4',
+    '': 'http://kienthucnuoicon.top/post/goi-sua-ve-cho-me-djang-cho-con-bu',
+  },
+  DHA: {
+    // dha: 'https://ln.run/G636T',
+    // dha: 'https://shope.ee/7fCFIf334D',
+    // dha: 'https://bit.ly/48Zlpjv',
+    '': 'http://kienthucnuoicon.top/post/cach-phat-trien-tri-nao-cho-tre-hieu-qua-nhat',
+  },
+  D3K2: {
+    // d3k2: 'https://ln.run/o6hYd',
+    // d3k2: 'hhttps://bit.ly/4csqvYy',
+    // d3k2: 'https://bit.ly/4csqvYy',
+    '': 'http://kienthucnuoicon.top/post/cac-cach-tang-suc-dje-khang-cho-tre-em',
+  },
+  VTME: {
+    // 'vtm E loại nắp xanh': 'https://shope.ee/9za8h0CfCq',
+    // 'vtm E loại nắp xanh': 'https://bit.ly/4a0tghL',
+    '': 'http://kienthucnuoicon.top/post/cac-benh-ve-da-o-tre-em-va-cach-djieu-tri',
+  },
+  SUA_NGA: {
+    // 'sữa nga': 'https://shope.ee/4fYcKkMLdC',
+    // 'sữa nga': 'https://bit.ly/3INH5Va',
+    // d3k2: 'hhttps://bit.ly/4csqvYy',
+    // d3k2: 'https://bit.ly/4csqvYy',
+    '': 'http://kienthucnuoicon.top/post/cach-tri-quay-djem-o-tre-em',
+  },
+  BINH_SUA: {
+    // 'bình sữa tomme tippie': 'https://shope.ee/2VU4aIWGTZ',
+    // 'bình sữa tomme tippie': 'https://bit.ly/496WBGj',
+    '': 'http://kienthucnuoicon.top/post/so-sanh-cac-loai-binh-sua-hang-djau-tren-thi-truong',
+  },
+  TI_GIA: {
+    // 'ti Avent': 'https://shope.ee/B6R7JP8hw',
+    // 'ti Avent': 'https://bit.ly/493Z0Bq',
+    '':
+      'http://kienthucnuoicon.top/post/so-sanh-cac-loai-ti-gia-cho-tre-lua-chon-tot-nhat-cho-be-yeu',
+  },
+};
+
 const promotions = [
-  'Thời tiết thay đổi, các mom có con bị ngạt mũi, sổ mũi, bệnh hô hấp thì bôi dầu chàm giữ ấm chân và ngực con sau khi tắm, hút mũi, kết hợp với sử dụng nước muối fysoline để vệ sinh mũi & diệt khuẩn đường hô hấp cho con nhé. Nước muối fys: https://bit.ly/3TKG3PX',
-  'Các con khi thay đổi thời tiết dễ gặp tình trạng ngạt mũi, sổ mũi, viêm đường hô hấp. Các Mom hãy thường xuyên vệ sinh mũi & sát khuẩn đường hô hấp cho các con bằng nước muối fysoline nhé. https://bit.ly/3TKG3PX',
-  'Thay đổi thời tiết liên tục các con dễ gặp các bệnh về hô hấp. Các mom nhớ thường xuyên vệ sinh mũi & sát khuẩn đường hô hấp cho con bằng nước muối fysoline nhé. https://bit.ly/3TKG3PX',
-  'Thời tiết thay đổi liên tục khiến các bé dễ gặp các bệnh đường hô hấp. Các mom hãy phòng tránh bằng cách vệ sinh & sát khuẩn mũi cho con bằng nước muối fysoline nhé. https://bit.ly/3TKG3PX',
-  'Thời tiết thay đổi khiến các bé dễ gặp các bệnh đường hô hấp. Các mom hãy phòng tránh bằng cách vệ sinh & sát khuẩn mũi cho con bằng nước muối fysoline nhé. https://bit.ly/3TKG3PX',
-  'Các con hay gặp tình trạng táo bón, lười ăn, bỏ ăn, mom đừng lo lắng. chỉ cần cho con sử dụng men tiêu hóa biogaia là được. https://bit.ly/3vcLlKG',
-  'Mom có con gặp tình trạng táo bón, bỏ ăn, lười ăn ngay lập tức cho con sử dụng men tiêu hóa nhé. https://bit.ly/3vcLlKG',
-  'Mom có con gặp tình trạng bỏ ăn, lười ăn, táo bón ngay lập tức cho con sử dụng men tiêu hóa nhé. https://bit.ly/3vcLlKG',
-  'Khi các con gặp tình trạng chán ăn, lười ăn, táo bón, các mom ngay lập tức cho con sử dụng men tiêu hóa nhé. https://bit.ly/3vcLlKG',
-  'Mom muốn con tăng cân, dễ tiêu hóa thì cho con dùng sữa nan ngay nhé. https://bit.ly/3VsXUMG',
-  'Các mom có con khó tăng cân, đang muốn đổi sct cho con thì cho con dùng ngay sữa nan nhé. Dễ tăng cân lại mát. https://bit.ly/3VsXUMG',
-  'Mom nào ít sữa, có thể kết hợp kích sữa bằng máy với sử dụng ngũ cốc lợi sữa là đc ak. https://bit.ly/492Q8w4',
-  'Các mom ít sữa, chỉ cần kết hợp kích sữa bằng máy & sử dụng ngũ cốc là sữa về ầm ầm ạ. https://bit.ly/492Q8w4',
-  'Các mom muốn gọi sữa về thì sử dụng ngũ cốc là sữa về ầm ầm ngay ạ. https://bit.ly/492Q8w4',
-  'Mom ít sữa thì ngay lập tức kết hợp kích sữa bằng máy vs sử dụng ngũ cốc lợi sữa nhé. https://bit.ly/492Q8w4',
-  'Mom muốn tăng đề kháng cho con có thể cho con bổ sung d3k2 nhé. hhttps://bit.ly/4csqvYy',
-  'Mom nào muốn tăng sức đề kháng cho con thì ngay lập tức cho con bổ sung d3k2 kết hợp thêm sữa non ildong nhé. d3k2: hhttps://bit.ly/4csqvYy',
-  'Mom muốn con phát triển tốt & đề kháng cao thì cho con bổ sung sữa non ildong nhé. https://bit.ly/4apUK0n',
-  'Các mom muốn con tăng đề kháng, phát triển tốt thì chỉ cần cho con bổ sung d3k2 là đc ạ. hhttps://bit.ly/4csqvYy',
+  'Thời tiết thay đổi, các con liên tục gặp bênh về đường hô hấp, các mom tham khảo bài viết này để có phương pháp bảo vệ con hiệu quả nhé: http://kienthucnuoicon.top/post/xu-li-benh-ho-hap-o-tre-em',
+  'Các con khi thay đổi thời tiết dễ gặp tình trạng ngạt mũi, sổ mũi, viêm đường hô hấp. Các mom tham khảo ngay các phương pháp này để xử lí bênh hô hấp cho con nhé: http://kienthucnuoicon.top/post/xu-li-benh-ho-hap-o-tre-em',
+  'Thay đổi thời tiết liên tục các con dễ gặp các bệnh về hô hấp. Các mom cần tham kháo ngay các phương pháp này để xử lí dứt điểm cho con nhé: http://kienthucnuoicon.top/post/xu-li-benh-ho-hap-o-tre-em',
+  'Thời tiết thay đổi liên tục khiến các bé dễ gặp các bệnh đường hô hấp. Các mom tham khảo bài viết để xử lí dứt điểm cho bé nhé: http://kienthucnuoicon.top/post/xu-li-benh-ho-hap-o-tre-em',
+  'Thời tiết thay đổi khiến các bé dễ gặp các bệnh đường hô hấp. Các mom hãy tìm hiểu top 5 cách xử lí bệnh hô hấp cho con nhé: http://kienthucnuoicon.top/post/xu-li-benh-ho-hap-o-tre-em',
+  'Các con thường xuyên gặp tình trạng táo bón, lười ăn. Mom tham khảo ở bài này nhé http://kienthucnuoicon.top/post/tac-dung-cua-men-vi-sinh',
+  'Mom có con gặp tình trạng táo bón, bỏ ăn, lười ăn tham khảo bài viết này nhé http://kienthucnuoicon.top/post/tac-dung-cua-men-vi-sinh',
+  'Mom có con thường xuyên táo bón, bỏ ăn tham khảo bài này nhé http://kienthucnuoicon.top/post/tac-dung-cua-men-vi-sinh',
+  'Mom đang muốn đổi sữa cho con thì tham khảo bài này xem http://kienthucnuoicon.top/post/so-sanh-cac-loai-sua-cong-thuc-hang-djau',
+  'các mom muốn đổi sữa cho con thì xem bài này xem http://kienthucnuoicon.top/post/so-sanh-cac-loai-sua-cong-thuc-hang-djau',
+  'Các mom ít sữa đọc bài này nhé http://kienthucnuoicon.top/post/goi-sua-ve-cho-me-djang-cho-con-bu',
+  'Mom gọi sữa về thì tham khảo bài này ạ http://kienthucnuoicon.top/post/goi-sua-ve-cho-me-djang-cho-con-bu',
+  'Mom ít sữa xem bài này nhé http://kienthucnuoicon.top/post/goi-sua-ve-cho-me-djang-cho-con-bu',
+  'mom ít sữa xem bài này ạ http://kienthucnuoicon.top/post/goi-sua-ve-cho-me-djang-cho-con-bu',
+  'Con đề kháng kém thì mom tham khảo bài này nhé http://kienthucnuoicon.top/post/cac-cach-tang-suc-dje-khang-cho-tre-em',
+  'Mom tham khảo cách tăng đề kháng cho con nhé http://kienthucnuoicon.top/post/cac-cach-tang-suc-dje-khang-cho-tre-em',
+  'Mom có con đề kháng kém thử tham khảo bài này xem http://kienthucnuoicon.top/post/cac-cach-tang-suc-dje-khang-cho-tre-em',
 ];
 
 const mappings = [
@@ -69,11 +135,7 @@ const mappings = [
       'kết hợp diêm mạch là ổn nhé',
     ],
     productDescription: defaultProductDescription,
-    productMap: {
-      // 'Diêm mạch': 'https://ln.run/KfwEE',
-      // 'Diêm mạch': 'https://shope.ee/8pOHaZJy76',
-      'Diêm mạch': 'https://bit.ly/3TKFVjr',
-    },
+    productMap: allProductMap.DIEM_MACH,
   },
   {
     description: 'tiêu hóa',
@@ -128,10 +190,7 @@ const mappings = [
       'dùng men tiêu hóa là đc',
     ],
     productDescription: defaultProductDescription,
-    productMap: {
-      // 'Men biogaia': 'https://shope.ee/AUWLgyxoot',
-      'Men biogaia': 'https://bit.ly/3vcLlKG',
-    },
+    productMap: allProductMap.MEN_TIEU_HOA,
   },
   {
     description: 'uống sữa nào',
@@ -179,10 +238,7 @@ const mappings = [
       'uống nan tăng cân vs mát lắm',
       'dùng Nan tăng cân lại mát nữa m',
     ],
-    productMap: {
-      // 'Sữa Nan': 'https://shope.ee/9UdoSopKVm',
-      'Sữa Nan': 'https://bit.ly/3VsXUMG',
-    },
+    productMap: allProductMap.SUA,
   },
   {
     description: 'hô hấp',
@@ -216,17 +272,7 @@ const mappings = [
       'dùng nc muối fys vệ sinh mũi nhé. khò khè thì dùng fys vàng. ngạt mũi thì dùng fys xanh, bt thì dùng fys hồng nhé mom',
       'vs mũi bằng nc muối. dùng dầu chàm bôi ngực, lòng bàn chân sau tắm. khò khè thì dùng fys vàng. ngạt mũi thì dùng fys xanh, bt thì dùng fys hồng là đc mom',
     ],
-    productMap: {
-      // 'fys xanh': 'https://ln.run/zT6b7',
-      // 'fys xanh': 'https://shope.ee/AUWPEDboIS',
-      'fys xanh': 'https://bit.ly/3TKG3PX',
-      // 'fys hồng': 'https://ln.run/QOV-K',
-      // 'fys hồng': 'https://shope.ee/2fnXtgDnsI',
-      'fys hồng': 'https://bit.ly/3Vq9ms8',
-      // 'fys vàng': 'https://ln.run/8qKKP',
-      // 'fys vàng': 'https://shope.ee/2q7AX0MQcr',
-      'fys vàng': 'https://bit.ly/4cjodLf',
-    },
+    productMap: allProductMap.NUOC_MUOI,
   },
   {
     description: 'phát triển trí não',
@@ -240,11 +286,7 @@ const mappings = [
       'sử dụng dha thêm nhé',
       'sd dha bổ sung nhé',
     ],
-    productMap: {
-      // dha: 'https://ln.run/G636T',
-      // dha: 'https://shope.ee/7fCFIf334D',
-      dha: 'https://bit.ly/48Zlpjv',
-    },
+    productMap: allProductMap.DHA,
   },
   {
     description: 'kích sữa',
@@ -284,11 +326,7 @@ const mappings = [
       'kích sữa bằng máy hút vs sử dụng ngũ cốc là sữa về nhé',
       'kích sữa bằng máy hút vs sử dụng ngũ cốc là đc nhé',
     ],
-    productMap: {
-      // 'ngũ cốc lợi sữa': 'https://ln.run/Z71pL',
-      // 'ngũ cốc lợi sữa': 'https://shope.ee/7UsnfCS2vr',
-      'ngũ cốc lợi sữa': 'https://bit.ly/492Q8w4',
-    },
+    productMap: allProductMap.LOI_SUA,
   },
   {
     description: 'đề kháng d3k2',
@@ -304,29 +342,25 @@ const mappings = [
       'sd d3k2 là được nhé',
       'sd thêm d3k2 là tăng đề kháng',
     ],
-    productMap: {
-      // d3k2: 'https://ln.run/o6hYd',
-      // d3k2: 'hhttps://bit.ly/4csqvYy',
-      d3k2: 'https://bit.ly/4csqvYy',
-    },
+    productMap: allProductMap.D3K2,
   },
-  {
-    description: 'đề kháng ildong',
-    keywords: ['de khang', 'om vat', 'd3', 'hay om'],
-    starter: defaultStarter,
-    middle: defaultMiddle,
-    productDescription: defaultProductDescription,
-    actions: [
-      'sd sữa non ildong hỗ trợ tăng đk & pt',
-      'dùng sữa non ildong tăng đk & pt',
-      'sd ildong tăng đk & pt',
-    ],
-    productMap: {
-      // 'sữa non ildong': 'https://ln.run/Ko1tI',
-      // 'sữa non ildong': 'https://shope.ee/6pd6rqy4oS',
-      'sữa non ildong': 'https://bit.ly/4apUK0n',
-    },
-  },
+  // {
+  //   description: 'đề kháng ildong',
+  //   keywords: ['de khang', 'om vat', 'd3', 'hay om'],
+  //   starter: defaultStarter,
+  //   middle: defaultMiddle,
+  //   productDescription: defaultProductDescription,
+  //   actions: [
+  //     'sd sữa non ildong hỗ trợ tăng đk & pt',
+  //     'dùng sữa non ildong tăng đk & pt',
+  //     'sd ildong tăng đk & pt',
+  //   ],
+  //   productMap: {
+  //     // 'sữa non ildong': 'https://ln.run/Ko1tI',
+  //     // 'sữa non ildong': 'https://shope.ee/6pd6rqy4oS',
+  //     'sữa non ildong': 'https://bit.ly/4apUK0n',
+  //   },
+  // },
   {
     description: 'viêm da cơ địa',
     keywords: ['co dia', 'nhiem nam'],
@@ -342,10 +376,7 @@ const mappings = [
       'đã gọi là cơ địa thì sao dứt điểm đc, mom bôi dưỡng ẩm vtm E cho con đỡ là đc. dùng loại nắp xanh',
       'đã gọi là cơ địa thì sao dứt điểm đc, mom bôi dưỡng ẩm cho con đỡ là đc. dùng loại nắp xanh có vtm E',
     ],
-    productMap: {
-      // 'vtm E loại nắp xanh': 'https://shope.ee/9za8h0CfCq',
-      'vtm E loại nắp xanh': 'https://bit.ly/4a0tghL',
-    },
+    productMap: allProductMap.VTME,
   },
   {
     description: 'mẩn ngứa',
@@ -363,10 +394,7 @@ const mappings = [
       'bị ngứa thì cứ bôi vtm E là đỡ nhé mom. dùng loại nắp xanh',
       'bị ngứa thì cứ bôi vtm E là đỡ nhé m. dùng loại nắp xanh có vtm E',
     ],
-    productMap: {
-      // 'vtm E loại nắp xanh': 'https://shope.ee/9za8h0CfCq',
-      'vtm E loại nắp xanh': 'https://bit.ly/4a0tghL',
-    },
+    productMap: allProductMap.VTME,
   },
   {
     description: 'review',
@@ -391,10 +419,7 @@ const mappings = [
       'sữa thì cứ dùng nan là tốt nhất. vừa tăng cân vừa mát m ak.',
       'sữa thì cứ dùng nan là tốt nhất. vừa tăng cân vừa mát mom ak.',
     ],
-    productMap: {
-      // 'Sữa Nan': 'https://bit.ly/3VsXUMG',
-      'Sữa Nan': 'https://bit.ly/3VsXUMG',
-    },
+    productMap: allProductMap.SUA,
   },
   {
     description: 'quấy đêm',
@@ -419,12 +444,7 @@ const mappings = [
       'M Cứ cho bé ăn no bữa trước khi đi ngủ. Bổ sung d3k2, sữa đêm đặc của Nga giúp no lâu',
       'Mom Cứ cho bé ăn no bữa trước khi đi ngủ. Bổ sung d3k2, sữa đêm đặc của Nga giúp no lâu',
     ],
-    productMap: {
-      // 'sữa nga': 'https://shope.ee/4fYcKkMLdC',
-      'sữa nga': 'https://bit.ly/3INH5Va',
-      // d3k2: 'hhttps://bit.ly/4csqvYy',
-      d3k2: 'https://bit.ly/4csqvYy',
-    },
+    productMap: allProductMap.SUA_NGA,
   },
   {
     description: 'bình sữa',
@@ -439,10 +459,7 @@ const mappings = [
       'bình sữa thì cứ dùng của tommeee tippie là đc mom ak',
       'bình sữa thì cứ dùng của tommeee tippie là đc m ak',
     ],
-    productMap: {
-      // 'bình sữa tomme tippie': 'https://shope.ee/2VU4aIWGTZ',
-      'bình sữa tomme tippie': 'https://bit.ly/496WBGj',
-    },
+    productMap: allProductMap.BINH_SUA,
   },
   {
     description: 'ti giả',
@@ -458,10 +475,7 @@ const mappings = [
       'ti giả cứ dùng của avent là đc m ak',
       'ti giả cứ dùng của avent là đc mom ak',
     ],
-    productMap: {
-      // 'ti Avent': 'https://shope.ee/B6R7JP8hw',
-      'ti Avent': 'https://bit.ly/493Z0Bq',
-    },
+    productMap: allProductMap.TI_GIA,
   },
   {
     description: 'chiều cao',
@@ -469,31 +483,21 @@ const mappings = [
     starter: [defaultStarter],
     middle: [defaultMiddle],
     productDescription: defaultProductDescription,
-    actions: [
-      'bổ sung canxi thì dùng bioisland là đc mom nhé',
-      'dùng bioisland bổ xung canxi là đc mom nhé',
-      'dùng bioisland bổ sung canxi là đc m nhé',
-      'dùng bioisland bổ sung canxi là đc m ak',
-      'dùng canxi hữu cơ bioisland là ổn m ak',
-      'dùng canxi hữu cơ bioisland là ổn mom ak',
-    ],
-    productMap: {
-      // 'viên canxi bioisland': 'https://shope.ee/4fYqTnBUIS',
-      'viên canxi bioisland': 'https://bit.ly/3PvjMD2',
-    },
+    actions: ['dùng d3k2 là tăng hấp thụ canxi nhé', 'dùng d3k2 giúp tăng hấp thụ canxi là đc'],
+    productMap: allProductMap.D3K2,
   },
-  {
-    description: 'chân vòng kiềng',
-    keywords: ['kieng'],
-    starter: [defaultStarter],
-    middle: [defaultMiddle],
-    productDescription: defaultProductDescription,
-    actions: ['xài cái này là đc'],
-    productMap: {
-      // 'địu chân vòng kiềng': 'https://shope.ee/3Ajl8FlE67',
-      'địu chân vòng kiềng': 'https://bit.ly/4cnfPu2',
-    },
-  },
+  // {
+  //   description: 'chân vòng kiềng',
+  //   keywords: ['kieng'],
+  //   starter: [defaultStarter],
+  //   middle: [defaultMiddle],
+  //   productDescription: defaultProductDescription,
+  //   actions: ['xài cái này là đc'],
+  //   productMap: {
+  //     // 'địu chân vòng kiềng': 'https://shope.ee/3Ajl8FlE67',
+  //     'địu chân vòng kiềng': 'https://bit.ly/4cnfPu2',
+  //   },
+  // },
 ];
 
 module.exports = {

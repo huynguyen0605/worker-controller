@@ -14,7 +14,7 @@ const getMatchMapping = (content) => {
   if (matchedMappings.length <= 1) {
     return matchedMappings;
   } else {
-    return matchedMappings.slice(0, 2);
+    return matchedMappings.slice(0, 1);
   }
 };
 
@@ -67,12 +67,13 @@ const buildProductDescription = (mappings) => {
   let contentProductDescription = `. ${getRandomElementFromArray(
     mappings[0].productDescription,
   )}. `;
-  for (const mapping of mappings) {
-    const { productMap } = mapping;
-    for (const key of Object.keys(productMap)) {
-      contentProductDescription += `${key}: ${productMap[key]} `;
-    }
+  const mapping = mappings[0];
+  // for (const mapping of mappings) {
+  const { productMap } = mapping;
+  for (const key of Object.keys(productMap)) {
+    contentProductDescription += `${key}: ${productMap[key]} `;
   }
+  // }
   return contentProductDescription;
 };
 const buildContentAnswer = (mappings) => {
