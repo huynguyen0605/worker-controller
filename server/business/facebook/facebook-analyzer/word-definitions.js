@@ -15,17 +15,32 @@ const actionConnector = [
 ];
 
 const actionConnector2 = ['&', 'và', ','];
+// const defaultProductDescription = [
+//   'Mom tham khảo bài viết này nhé',
+//   'Mom xem thêm bài viết này',
+//   'Mom đọc thêm bài này',
+//   'Mom xem thêm bài này',
+//   'Mom tham khảo thêm bài này',
+//   'Mom tham khảo bài này',
+//   'Mom đọc bài này nhé',
+//   'Mom xem chi tiết ở bài này nhé',
+//   'Mom xem bài này có nói chi tiết',
+//   'Bài này có chi tiết nè mom',
+// ];
 const defaultProductDescription = [
-  'Mom tham khảo bài viết này nhé',
-  'Mom xem thêm bài viết này',
-  'Mom đọc thêm bài này',
-  'Mom xem thêm bài này',
-  'Mom tham khảo thêm bài này',
-  'Mom tham khảo bài này',
-  'Mom đọc bài này nhé',
-  'Mom xem chi tiết ở bài này nhé',
-  'Mom xem bài này có nói chi tiết',
-  'Bài này có chi tiết nè mom',
+  'Dùng các loại này nhé',
+  'Dùng loại này nhé',
+  'Mom tham khảo loại này nhé',
+  'M tham khảo loại này nhé',
+  'M dùng loại này xem',
+  'Dùng loại này nhé m',
+  'Mom dùng loại này',
+  'Mom thử loại này',
+  'M thử loại này xem',
+  'M dùng cái này xem',
+  'Mom dùng cái này nhé',
+  'Loại này nhé',
+  'Loại này này',
 ];
 
 const allProductMap = {
